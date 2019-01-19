@@ -13,7 +13,7 @@ obj/
 *.csproj.user
 
 # archives
-/diff
+/dist
 /Poderosa-4.3.5b_mwg*.tlz
 /Poderosa-4.3.5b_mwg*.tar.xz
 
