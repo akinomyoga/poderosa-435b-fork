@@ -9,7 +9,6 @@ obj/
 /Poderosa-4.3.5b/dist
 /Poderosa-4.3.5b/_upgrade
 
-
 # user configuration
 *.csproj.user
 
@@ -17,6 +16,12 @@ obj/
 /diff
 /Poderosa-4.3.5b_mwg*.tlz
 /Poderosa-4.3.5b_mwg*.tar.xz
+
+# materials
+*.lnk
+
+# cache files
+*.suo
 
 #------------------------------------------------------------------------------
 # Misc/CygTerm

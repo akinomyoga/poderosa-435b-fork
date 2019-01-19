@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mwg.Term", "mwg.Term\mwg.Term.csproj", "{72CADAE5-B494-4E07-83F9-5532F40983EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Executable|Any CPU = Executable|Any CPU
+		Release|Any CPU = Release|Any CPU
+		UIUnitTest|Any CPU = UIUnitTest|Any CPU
+		UnitTest|Any CPU = UnitTest|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.Executable|Any CPU.ActiveCfg = Release|Any CPU
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.Executable|Any CPU.Build.0 = Release|Any CPU
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.UIUnitTest|Any CPU.ActiveCfg = Release|Any CPU
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.UIUnitTest|Any CPU.Build.0 = Release|Any CPU
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.UnitTest|Any CPU.ActiveCfg = Release|Any CPU
+		{72CADAE5-B494-4E07-83F9-5532F40983EC}.UnitTest|Any CPU.Build.0 = Release|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.Debug|Any CPU.ActiveCfg = UIUnitTest|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.Debug|Any CPU.Build.0 = UIUnitTest|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.Executable|Any CPU.ActiveCfg = Executable|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.Executable|Any CPU.Build.0 = Executable|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.Release|Any CPU.ActiveCfg = UIUnitTest|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.Release|Any CPU.Build.0 = UIUnitTest|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.UIUnitTest|Any CPU.ActiveCfg = UIUnitTest|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.UIUnitTest|Any CPU.Build.0 = UIUnitTest|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.UnitTest|Any CPU.ActiveCfg = UnitTest|Any CPU
+		{9D114B8B-E62C-4FBF-B281-0227755C8091}.UnitTest|Any CPU.Build.0 = UnitTest|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.Executable|Any CPU.ActiveCfg = Release|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.Executable|Any CPU.Build.0 = Release|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.UIUnitTest|Any CPU.ActiveCfg = Release|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.UIUnitTest|Any CPU.Build.0 = Release|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.UnitTest|Any CPU.ActiveCfg = Release|Any CPU
+		{1BFB6127-8FEC-47B6-BEC0-B30DC71F4989}.UnitTest|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
