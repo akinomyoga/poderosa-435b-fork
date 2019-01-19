@@ -1,0 +1,28 @@
+# gitignore
+
+bin/
+obj/
+
+/_upgrade
+
+/Poderosa-4.3.5b/.vs
+/Poderosa-4.3.5b/dist
+/Poderosa-4.3.5b/_upgrade
+
+
+# user configuration
+*.csproj.user
+
+# archives
+/diff
+/Poderosa-4.3.5b_mwg*.tlz
+/Poderosa-4.3.5b_mwg*.tar.xz
+
+#------------------------------------------------------------------------------
+# Misc/CygTerm
+
+# backup files
+Poderosa-4.3.5b/Misc/CygTerm/cygterm.*.cc
+
+# generated files
+Poderosa-4.3.5b/Misc/CygTerm/*.exe
