@@ -138,10 +138,10 @@ namespace Poderosa.Protocols
 				psi.WindowStyle = ProcessWindowStyle.Hidden;
 
 				//mwg: Set working directory/mwg
-				string wdir=_param.Home;
-				if(wdir.StartsWith("/"))wdir=wdir.Substring(1);
-				wdir=System.IO.Path.Combine(CygwinUtil.CygwinRootDirectory,wdir);
-				psi.WorkingDirectory=wdir;
+				string wdir = _param.Home;
+				if (wdir.StartsWith("/")) wdir = wdir.Substring(1);
+				wdir = System.IO.Path.Combine(CygwinUtil.GuessRootDirectory(_param.CygwinDir), wdir);
+				psi.WorkingDirectory = wdir;
 
 				try {
 					_process = Process.Start(psi);
@@ -181,7 +181,7 @@ namespace Poderosa.Protocols
 					_listener.Listen(1);
 					break;
 				}
-				catch(Exception) {
+                catch (Exception) {
 					if(_localPort++==20360) throw new Exception("port overflow!!"); //さすがにこれはめったにないはず
 				}
 			} while(true);
@@ -189,19 +189,16 @@ namespace Poderosa.Protocols
 		}
 
 		protected static void PrepareEnv(ProcessStartInfo psi, ICygwinParameter p) {
-			string cygdir=p.CygwinDir;
-			if(string.IsNullOrEmpty(cygdir))
-				cygdir=CygwinUtil.GuessRootDirectory();
+			string cygdir = CygwinUtil.GuessRootDirectory(p.CygwinDir);
+			string cygbin = System.IO.Path.Combine(cygdir, "bin");
 
-			string cygbin=System.IO.Path.Combine(cygdir,"bin");
-
-			string path=psi.EnvironmentVariables["PATH"];
+			string path = psi.EnvironmentVariables["PATH"];
 			psi.EnvironmentVariables.Remove("PATH");
-			psi.EnvironmentVariables.Add("PATH",PathListAppend(path,cygbin));
+			psi.EnvironmentVariables.Add("PATH", PathListAppend(cygbin, path));
 		}
-		private static string PathListAppend(string list,string newpath){
-			if(string.IsNullOrEmpty(list))return newpath;
-			return list[list.Length-1]==';'?list+newpath:list+";"+newpath;
+		private static string PathListAppend(string list, string newpath) {
+			if (string.IsNullOrEmpty(list)) return newpath;
+			return list[list.Length-1] == ';' ? list + newpath : list + ";" + newpath;
 		}
 
 		public static void Terminate() {
@@ -342,6 +339,16 @@ namespace Poderosa.Protocols
 		public static string GuessRootDirectory(){
 			return CygwinRootDirectory;
 		}
+        /// <summary>
+        /// 指定した候補またはレジストリを検索し Cygwin のルートディレクトリを決定します。
+        /// </summary>
+        /// <param name="cygwinDirectory">ルートディレクトリの候補を指定します。</param>
+        /// <returns>Cygwin のルートディレクトリのパス候補を返します。</returns>
+        public static string GuessRootDirectory(string cygwinDirectory) {
+            if (!string.IsNullOrEmpty(cygwinDirectory))
+                return cygwinDirectory;
+            return GuessRootDirectory();
+        }
 		//--------------------------------------------------------------------------
 		static bool isOlderThan17=false;
 		static string cygdir=null;
