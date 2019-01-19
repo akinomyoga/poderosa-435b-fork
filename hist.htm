@@ -1,0 +1,2404 @@
+<?xml vesrion="1.0" encoding="utf-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>RosaTerm 更新履歴</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta http-equiv="Content-Script-Type" content="text/css" />
+  <link rel="stylesheet" type="text/css" charset="utf-8" href="http://padparadscha/agh/mwg.std.css" />
+  <link rel="stylesheet" type="text/css" charset="utf-8" href="http://padparadscha/agh/prog.std.css" />
+  <meta name="agh-fly-type" content="color" />
+  <script type="text/javascript" charset="utf-8" src="http://padparadscha/agh/agh.fly.js"></script>
+</head>
+<body>
+<h1>mwg.RosaTerm 更新履歴</h1>
+<!--########################################################################-->
+<h2>Original Poderosa</h2>
+<!--########################################################################-->
+<ul>
+<li><a href="http://ja.poderosa.org/download/source.html">download/source - Terminal Emulator Poderosa</a></li>
+<li><a href="http://sourceforge.net/projects/poderosa/files/beta/">Poderosa -  Browse /beta at SourceForge.net</a></li>
+<li><a href="http://sourceforge.net/projects/poderosa/forums/forum/455997">SourceForge.net: Poderosa: Open Discussion</a></li>
+<li><a href="http://blog.csdn.net/minico/article/details/3410830">Poderosa修改版 - Minico&#39;s blog - 博客频道 - CSDN.NET</a></li>
+</ul>
+<!--########################################################################-->
+<h2>実装1. 入力関連</h2>
+<!--########################################################################-->
+<h3>I1.1 Home End Insert PgUp PgDn Delete Backspace のキーにデフォルトで対応する [完]</h3>
+<ul>
+<li>調べてみた所、Insert Delete PgUp PgDn は問題なく動作している。</li>
+<li>Backspace は C-h で送られている? → これは標準の設定で設定出来る。</li>
+<li>Home/End は設定されていない?
+  <ul>
+  <li>一応、[オプション]-[操作]-[追加定義] に "Home=0x1B[1~, End=0x1B[4~" と指定すれば動作する様にはなった。</li>
+  <li>標準の設定 (チェックボックス) で設定できるようにする。
+  標準設定の表示領域が小さすぎるので、
+  大きくしてスクロールバーを表示する。
+  </li>
+  <li>原因が判明した。Poderosa.Terminal.XTerm#SequenceKeyData で、
+  Home=7 End=8 と指定されていた為であった。
+  仕様がないので、Home=1 End=4 に書き直す事にした。</li>
+  </ul>
+</li>
+</ul>
+<p>(結局、RosaTerm に移行する事にしたので、これらの設定はしなくても良いにした。)</p>
+<!--************************************************************************-->
+<h3>I1.2 Alt+上下左右 Alt+F1 等が効かない [完]</h3>
+<p>→RosaTerm の大幅な書換によって、取り敢えず対応した。</p>
+<!--************************************************************************-->
+<h3>I1.3 [バグ] Meta-Key が入力出来ない [完]</h3>
+<p>標準の設定で、Alt を Meta-Key として使用できるようにする物があったので、
+それを設定してみたが、何も起こらない。
+(設定する前は、Alt でメニューが表示されていたのが、それも表示されなくなったので、
+ちゃんと設定はされている様である。)
+</p>
+<ul>
+<li><kbd>cat &gt bbb</kbd> とやって、適当に M-^ 等を入力してから、bbb の中身を覗いた。
+  <p>ちゃんと de が入力されている。
+  と言う事は、cat には正しい文字が行き着いているという事になる。
+  bash や emacs にだけ行き着いていないという事はないだろうから、
+  実は、M-^ は標準入力から流し込む時は、0xde では無いという事だろうか。
+  其処で、今度はコマンドプロンプトから普通に M-^ を入力してみたら…
+  </p>
+</li>
+<li><kbd>cat &gt; ccc</kbd> とコマンドプロンプトの方から起動した bash でやった。
+  <p>
+  ccc の中身を見た所、de ではなくて、1b 5e と入力されていた。
+  つまり、M-^ と入力した時に送られるのは、文字 M-^ ではなくて、ESC ^ であったと言う事だ。
+  </p>
+</li>
+<li>つまり、Poderosa で、
+  <p>Alt を Meta-key として使用できるようにする設定ではなくて、
+  ESC を頭につける設定にしなければ行けなかったのである。
+  実際に、そういう風に設定してみた所、普通に動作する様になった。
+  </p>
+</li>
+</ul>
+<p>(Poderosa に対する設定の問題であった。)</p>
+<!--************************************************************************-->
+<h3>I1.4 右クリックだけで、コピー・貼り付けができる様にする。 [完]</h3>
+<p>設定によって貼付は右クリックだけでできる様になる。
+コピーは、設定によって範囲を選択しただけで実行される様にできる。
+</p>
+<p>コマンドプロンプトの場合は、範囲を選択してその後範囲の選択が解除される瞬間にコピーが実行された。
+然し、一旦範囲が選択されたら必ず最期にはコピーが為されるので、
+範囲を選択した瞬間にコピーが実行されても構わない。
+</p>
+<p>寧ろ、範囲を選択しただけでコピーが実行される方が、右クリックを押す回数が少なくて良い。
+また、多くの Linux でもそう言う設定になっているので、慣れの具合が良い。
+</p>
+<!--************************************************************************-->
+<h3>I1.5 Terminal マウス位置判定の修正 [完 2012/10/07]</h3>
+<p>発端「文字列を選択する際に、範囲がずれている様な気がする。」</p>
+<p>特に範囲を選択する時のマウス位置の判断が不自然である。
+マウスカーソルが載っている文字の左端を範囲の端点とするのではなく、
+マウスカーソルから一番近い文字境界を範囲の端点とする方が良い。
+</p>
+<p>範囲選択の際のマウス位置の計算は、
+MousePosToTextPos(_AllowNegative) で行われている様子である。
+</p>
+<pre class="diff agh-prog-cs">
+   private void MousePosToTextPos(int mouseX, int mouseY, out int textX, out int textY) {
+-    SizeF pitch = _viewer.GetRenderProfile().Pitch;
+-    textX = RuntimeUtil.AdjustIntRange((int)Math.Floor((mouseX-CharacterDocumentViewer.BORDER) / pitch.Width), 0, Int32.MaxValue);
+-    textY = RuntimeUtil.AdjustIntRange((int)Math.Floor((mouseY-CharacterDocumentViewer.BORDER) / (pitch.Height + _viewer.GetRenderProfile().LineSpacing)), 0, Int32.MaxValue);
++    MousePosToTextPos_AllowNegative(mouseX,mouseY,out textX,out textY);
++    textX=textX.Clamp(0,int.MaxValue);
++    textY=textY.Clamp(0,int.MaxValue);
+   }
+   private void MousePosToTextPos_AllowNegative(int mouseX, int mouseY, out int textX, out int textY) {
++    SizeF pitch = _viewer.GetRenderProfile().Pitch;
++    float x=(mouseX-CharacterDocumentViewer.BORDER)/pitch.Width;
++    float y=(mouseY-CharacterDocumentViewer.BORDER)/(pitch.Height+_viewer.GetRenderProfile().LineSpacing);
++    textX=(int)Math.Floor(x+0.5f);
++    textY=(int)Math.Floor(y+0.5f);
+-    SizeF pitch = _viewer.GetRenderProfile().Pitch;
+-    textX = (int)Math.Floor((mouseX-CharacterDocumentViewer.BORDER) / pitch.Width);
+-    textY = (int)Math.Floor((mouseY-CharacterDocumentViewer.BORDER) / (pitch.Height + _viewer.GetRenderProfile().LineSpacing));
+   }
+</pre>
+<!--************************************************************************-->
+<h3>I1.6 選択範囲のコピー機能の拡張 [完 2012/10/07]</h3>
+<ul>
+<li>行末の空白を削除する機能 (Ctrl でオフ)</li>
+<li>矩形選択をしてコピーする機能 (Alt でオン)</li>
+<li>デフォルトで TextFormatOptions.AsLook に (Shift でオフ)</li>
+</ul>
+<pre class="diff agh-prog-cs">
+@@ TextSelection.cs/Poderosa.View.TextSelection.GetSelectedText
+-    public string GetSelectedText(TextFormatOption opt) {
+-      //if(_owner==null || _disabledTemporary) return null;
+-
+-      StringBuilder bld = new StringBuilder();
+-      TextPoint a = HeadPoint;
+-      TextPoint b = TailPoint;
+-
+-      GLine l = _owner.CharacterDocument.FindLineOrEdge(a.Line);
+-      int pos = a.Column;
+-      if(pos&lt;0) return "";
+-
+-      do {
+-        bool eol_required = ((opt&amp;TextFormatOption.AsLook)!=0 || l.EOLType!=EOLType.Continue);
+-        if(l.ID==b.Line) { //最終行
+-          //末尾にNULL文字が入るケースがあるようだ
+-          AppendTrim(bld, l.Text, pos, b.Column-pos);
+-          if(_pivotType==RangeType.Line &amp;&amp; eol_required)
+-            bld.Append("\r\n");
+-          break;
+-        }
+-        else { //最終以外の行
+-          if(l.Length-pos&gt;0) { //l.CharLength==posとなるケースがあった。真の理由は納得していないが
+-            AppendTrim(bld, l.Text, pos, l.Length-pos);
+-          }
+-          if(eol_required &amp;&amp; bld.Length&gt;0) //bld.Length&gt;0は行単位選択で余計な改行が入るのを避けるための処置
+-            bld.Append("\r\n"); //LFのみをクリップボードに持っていっても他のアプリの混乱があるだけなのでやめておく
+-          l = l.NextLine;
+-          if(l==null) break; //!!本来これはないはずだがクラッシュレポートのため回避
+-          pos = 0;
+-        }
+-      } while(true);
+-
+-      //Debug.WriteLine("Selected Text Len="+bld.Length);
+-
+-      return bld.ToString();
+-    }
+-    private void AppendTrim(StringBuilder bld, char[] text, int pos, int length) {
+-      Debug.Assert(pos&gt;=0);
+-      if(text[pos]==GLine.WIDECHAR_PAD) { //日本語文字の右端からのときは拡大する
+-        pos--;
+-        length++;
+-      }
+-
+-      while(length-- &gt; 0) {
+-        if(pos&gt;=text.Length) break;
+-        char ch = text[pos++];
+-        if(ch!=GLine.WIDECHAR_PAD &amp;&amp; ch!='\0') bld.Append(ch);
+-      }
+-    }
++    public string GetSelectedText(TextFormatOption opt){
++      System.Text.StringBuilder b=new StringBuilder();
++      TextPoint head=HeadPoint;
++      TextPoint tail=TailPoint;
++
++      GLine l=_owner.CharacterDocument.FindLineOrEdge(head.Line);
++      int p0=head.Column;
++      if(l.Text[p0]==GLine.WIDECHAR_PAD)p0--;
++      if(p0&lt;0)return "";
++
++      bool isrect=(opt&amp;TextFormatOption.Rectangle)!=0;
++      int p1=0;
++      if(isrect){
++        p1=tail.Column;
++        GLine tl=_owner.CharacterDocument.FindLineOrEdge(tail.Line);
++        if(tl.Text[p1]==GLine.WIDECHAR_PAD)p1--;
++
++        if(p0==p1)return "";
++
++        if(p0&gt;p1){
++          l=tl;
++          int p3=p0;p0=p1;p1=p3;
++        }
++      }
++
++      int start=p0;
++      for(;l!=null&amp;&amp;l.ID&lt;=tail.Line;l=l.NextLine){
++        //note: 本来 l==null はないはずだがクラッシュレポートのため回避
++
++        bool fCRLF=
++          (opt&amp;(TextFormatOption.AsLook|TextFormatOption.Rectangle))!=0||
++          l.EOLType!=EOLType.Continue;
++
++        char[] text=l.Text;
++
++        int end;
++        if(isrect){
++          start=p0;
++          if(text[start]==GLine.WIDECHAR_PAD)start--;
++          end=p1&lt;l.Length?p1:l.Length;
++        }else{
++          if(l.ID==tail.Line){ //最終行
++            end=tail.Column;
++            fCRLF=fCRLF&amp;&amp;_pivotType==RangeType.Line;
++          }else{ //最終以外の行
++            end=l.Length;
++
++            //nl=eol_required&amp;&amp;b.Length&gt;0; //b.Length&gt;0は行単位選択で余計な改行が入るのを避けるための処置
++            //↑KM: 意図して先頭の改行も含む様に囲まなければ、これらの行は入らないのでは?
++          }
++        }
++
++        if(end&gt;text.Length)end=text.Length;
++        if(fCRLF&amp;&amp;(opt&amp;TextFormatOption.TrimEol)!=0&amp;&amp;l.ID!=tail.Line){
++          // TrimEol
++          for(;end&gt;start;end--)
++            if(!char.IsWhiteSpace(text[end-1])&amp;&amp;text[end-1]!=GLine.WIDECHAR_PAD&amp;&amp;text[end-1]!='\0')
++              break;
++        }
++
++        for(int i=start;i&lt;end;i++){
++          char ch=text[i];
++          if(ch!=GLine.WIDECHAR_PAD&amp;&amp;ch!='\0')
++            b.Append(ch);
++          //末尾にNULL文字が入るケースがあるようだ
++        }
++
++        //note: LFのみをクリップボードに持っていっても他のアプリの混乱があるだけなのでやめておく
++        if(fCRLF)b.Append("\r\n");
++
++        start=0;
++      }
++
++      return b.ToString();
++    }
+</pre>
+
+<h4>ドラッグ中に矩形領域で反転</h4>
+<p>Alt 修飾をしている時は最終的にコピーされる文字列は矩形領域である。
+しかし、現状ではドラッグしている途中は Alt 修飾をしてもしなくても、
+通常の範囲選択で反転表示している。
+これは分かりにくいので Alt 修飾している時には
+反転表示する領域も矩形にしたい。
+という事で幾らか書き換えた。
+</p>
+<pre class="diff agh-prog-cs">
+@@ CharacterDocumentViewer,cs/Poderosa.View.CharacterDocumentViewer.BuildTransientDocument @ 2012/10/07 22:19:15
+       //選択領域の描画
+       if(!_textSelection.IsEmpty) {
+         TextSelection.TextPoint from = _textSelection.HeadPoint;
+         TextSelection.TextPoint to   = _textSelection.TailPoint;
+         l = _document.FindLineOrNull(from.Line);
+         GLine t = _document.FindLineOrNull(to.Line);
++
++        bool isrect=(Control.ModifierKeys&amp;Keys.Alt)!=0;
++
+         if(l!=null &amp;&amp; t!=null) { //本当はlがnullではいけないはずだが、それを示唆するバグレポートがあったので念のため
+           t = t.NextLine;
+-          int pos = from.Column; //たとえば左端を越えてドラッグしたときの選択範囲は前行末になるので pos==TerminalWidthとなるケースがある。
+-          do {
++          int p0=from.Column;
++          //TODO: 全角文字調整?
++
++          int p1=0;
++          if(isrect){
++            p1=to.Column;
++            //TODO: 全角文字調整?
++            if(p0&gt;p1){
++              int p2=p0;p0=p1;p1=p2;
++            }
++          }
++
++          int start = from.Column; //たとえば左端を越えてドラッグしたときの選択範囲は前行末になるので pos==TerminalWidthとなるケースがある。
++          do{
+             int index = l.ID-(topline_id+param.LineFrom);
+-            if(pos&gt;=0 &amp;&amp; pos&lt;l.DisplayLength &amp;&amp; index&gt;=0 &amp;&amp; index&lt;_transientLines.Count) {
+-              GLine r = null;
+-              if(l.ID==to.Line) {
+-                if(pos!=to.Column) r = _transientLines[index].InverseRange(pos, to.Column);
++            if(0&lt;=start &amp;&amp; start&lt;l.DisplayLength &amp;&amp; 0&lt;=index &amp;&amp; index&lt;_transientLines.Count) {
++
++              int end=0;
++              if(isrect){
++                start=p0;
++                end=p1;
++                //TODO: 全角文字調整?
++              }else{
++                if(l.ID==to.Line){
++                  if(start!=to.Column)
++                    end=to.Column;
++                }else
++                  end=l.DisplayLength;
+               }
+-              else
+-                r = _transientLines[index].InverseRange(pos, l.DisplayLength);
+
+-              if(r!=null) {
++              if(start&lt;end){
++                GLine r = _transientLines[index].InverseRange(start, end);
++                if(r!=null)
+                 _transientLines[index] = r;
+               }
+             }
+-            pos = 0; //２行目からの選択は行頭から
++
++            start = 0; //２行目からの選択は行頭から
+             l = l.NextLine;
+-          } while(l!=t);
++          }while(l!=t);
+         }
+       }
+</pre>
+<p>※ 全角文字がある時に選択範囲とコピー範囲が一致しているか?
+→余り意識しなかったが、
+実際にやってみるとうまく一致している様なので良しとする。
+</p>
+
+<h4>文字のない場所を矩形領域の端点にする</h4>
+<p>選択範囲は TextPoint をベースにしている為、
+四隅を文字の存在しない場所に選択する事が不可能。
+</p>
+<p>例: 以下の様な囲み方ができない。</p>
+<pre>
+|aa  |
+|bbbb|
+|ccc |
+</pre>
+<p>と思ったが TextPoint を算出する時に制限を無視する様にすれば良いだけであった。
+(結局、最後に選択範囲を読み取って文字列を取得する際に、
+行の文字数に満たない分は無視されるので。)
+</p>
+<pre class="diff agh-prog-cs">
+@@ TextSelection.cs/Poderosa.View.TextSelection @ 2012/10/07 22:08:45
+     public TextPoint ConvertSelectionPosition(GLine line, int column) {
+       TextPoint result = new TextPoint(line.ID, column);
+       
+       int line_length = line.DisplayLength;
+       if(_pivotType==RangeType.Line) {
+         //行選択のときは、選択開始点以前のであったらその行の先頭、そうでないならその行のラスト。
+         //言い換えると(Pivot-Destination)を行頭・行末方向に拡大したものになるように
+         if(result.Line&lt;=_forwardPivot.Line)
+           result.Column = 0;
+         else
+           result.Column = line.DisplayLength;
+       }else{ //Word,Char選択
+         if(result.Line&lt;_forwardPivot.Line) { //開始点より前のときは
+           if(result.Column&lt;0)
+             result.Column = 0; //行頭まで。
+           else if(result.Column&gt;=line_length) { //行の右端の右まで選択しているときは、次行の先頭まで
+             result.Line++;
+             result.Column = 0;
+           }
+         }
+         else if(result.Line==_forwardPivot.Line) { //同一行内選択.その行におさまるように
+           result.Column = RuntimeUtil.AdjustIntRange(result.Column, 0, line_length);
+         }
+         else { //開始点の後方への選択
+           if(result.Column&lt;0) {
+             result.Line--;
+             result.Column = line.PrevLine==null? 0 : line.PrevLine.DisplayLength;
+           }else if(result.Column&gt;=line_length){
+-            result.Column = line_length;
++            //result.Column = line_length;
+           }
+         }
+       }
+
+       return result;
+     }
+</pre>
+
+<!--########################################################################-->
+<h2>実装2. 出力動作</h2>
+<!--########################################################################-->
+<h3>I2.0 昔の物</h3>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>背景画像を設定すると描画が重い [完]</h4>
+<p>場所</p>
+<ul>
+<li>背景画像の読み込み
+  <ul>
+  <li>Poderosa.View.RenderProfile.GetImage</li>
+  </ul>
+</li>
+<li>描画
+  <ul>
+  <li>Poderosa.View.CharacterDocumentViewer.DrawBackgroundImage_Scaled</li>
+  <li>Poderosa.View.CharacterDocumentViewer.DrawBackgroundImage_Normal</li>
+  </ul>
+</li>
+</ul>
+<ol>
+<li>スケーリングを予め実行しておく
+  <p>これをした所、少し速くなったが、それでも未だ遅い様な気がする。
+  DrawImage は遅いのだろうか?
+  (DrawImageUnscaledAndClipped は何故か引数が少なくて使えない)
+  </p>
+</li>
+<li>BitBlt で転送する
+  <p>仕様がないので BitBlt を使用するようにしてみた所、
+  とても速くなった。
+  </p>
+  <p>BitBlt する時の注意は、Bitmap から作成した Graphics から直接 dc を取得しても
+  元の Bitmap にアクセスできないことである。
+  正しく行う為には CreateCompatibleDC で得た dc に
+  Bitmap から作成した HBITMAP を設定すれば良い。
+  </p>
+</li>
+</ol>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>時々更新されても描画されない行がある [完]</h4>
+<p>可能性</p>
+<ul>
+<li>Invalidate が正しく行われていない。</li>
+<li>Invalidate されているのに描画されていない。</li>
+<li>描画される前に invalidate が解除されている。</li>
+</ul>
+<p>他の Poderosa の改造版では修正されているらしい
+→ Poderosa4.3.5b に乗り換えて以降問題は生じていない。
+</p>
+<!--************************************************************************-->
+<h3>I2.1 [バグ] emacs で Ctrl+l した後に一行ずれている [完]</h3>
+<ul>
+<li>というか、よく見てみたら、起動した時点で既に
+  一行ずれて表示されている。
+</li>
+<li>画面幅と丁度同じ幅の文字列を出力した後に改行を出力した時の動作
+  <ul>
+  <li>Poderosa: 一行下に移る。
+    <p>画面と同じ幅の文字列が出力された時点で、その行の一番右端に留まる。
+    新しい文字が来て初めて新しい行へ移る。</p>
+  </li>
+  <li>他の物: 二行下に移る。
+    <p>画面と同じ幅の文字列が出力された時点で一行下に移動し、
+    更に改行が来た時にもう一度一行下へ移動する。
+    </p>
+  </li>
+  </ul>
+</li>
+</ul>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>修正</h4>
+<pre class="agh-prog-cs diff">
+@ Core\TerminalEmulator.cs
+    protected virtual ProcessCharResult ProcessNormalChar(char ch) {
+      //既に画面右端にキャレットがあるのに文字が来たら改行をする
+      int tw = GetDocument().TerminalWidth;
+      if(_manipulator.CaretColumn+GLine.CalcDisplayLength(ch) > tw) {
+        GLine l = _manipulator.Export();
+        l.EOLType = EOLType.Continue;
+        this.LogService.TextLogger.WriteLine(l); //ログに行をcommit
+        GetDocument().ReplaceCurrentLine(l);
+        GetDocument().LineFeed();
+        _manipulator.Load(GetDocument().CurrentLine, 0);
+      }
+
+      //画面のリサイズがあったときは、_manipulatorのバッファサイズが不足の可能性がある
+      if(tw > _manipulator.BufferSize)
+        _manipulator.ExpandBuffer(tw);
+
+      //通常文字の処理
+      _manipulator.PutChar(ch, _currentdecoration);
+
++     //*** MWG_MOD ************************************************************
++     // 一番右端にいたら、新しい文字が来なくても、下の行へ移動する
++     // これがないと、emacs/vi で表示が崩れる (行がずれる)
++     if(_manipulator.CaretColumn+GLine.CalcDisplayLength(ch) > tw) {
++       GLine l = _manipulator.Export();
++       l.EOLType = EOLType.Continue;
++       this.LogService.TextLogger.WriteLine(l); //ログに行をcommit
++       GetDocument().ReplaceCurrentLine(l);
++       GetDocument().LineFeed();
++       _manipulator.Load(GetDocument().CurrentLine, 0);
++     }
++     //************************************************************************
+      
+      return ProcessCharResult.Processed;
+    }
+</pre>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>追記</h4>
+<p>世の中には、上記の状況でどの様に動作するかで、
+二種類の terminal が存在する。その性質を表示するのが、terminfo の xenl Capability である。
+vt100/xterm/kterm は xenl が on であり、cygwin 等は xenl が off である。
+</p>
+<p>これは模倣する terminal の種類に応じて動作を切り替える必要がある。
+(現在の実装はちゃんと TerminalType に応じて動作を変えているので OK)
+</p>
+<!--************************************************************************-->
+<h3>I2.2 消去エスケープシーケンス関連 [完]</h3>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>細かい動作の違い</h4>
+<p>emacs 終了時に勝手に設定しているエスケープシーケンスがあるが、
+それが動作していない?</p>
+<ul>
+<li>[完] \e[0M の動作が違う (\e[1M と同じになる必要がある)</li>
+<li>[完] \e[1K の動作が違う (今カーソルがある所も消去すべき)</li>
+<li>[完] \e[1J の動作が違う (今カーソルがある所も消去すべき)</li>
+<li>[完] \e[H\e[A\e[B 後のカーソルの位置が異なる
+  <p>cygwin\bash では、\e[A した時点で画面が一つ上にスクロールして、
+  \e[B した時に二行目に下がる。
+  所が、Poderosa では、\e[A した時点で一つ上にカーソルが隠れてしまい、
+  その後に、\e[B すると、一行目に戻ってきてしまう。
+  </p>
+</li>
+</ul>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>bce (terminfo capability)</h4>
+<p>現在 xterm の動作に合わせて背景色と同じ色で塗り潰す様にしている。
+然し、これは設定可能でも良いのではないか (bce)
+→TerminalState に TerminalType に応じて真偽値を返す TerminfoBceCap を用意した。
+それを元にして塗り潰す色を選択している。
+</p>
+<p>更に、塗り潰す際に、FillSpace を用いて今いる位置から右側を全て空白で埋める様にしているが、
+これだと、コピーした時に沢山空白が入ってしまって使い物にならない。
+→其処で、FillSpace 関数と似た FillBlank 関数を用意してそれを呼び出す事にした。
+これは、右側に何も文字がなく且つ塗り潰し色が背景色の場合に、
+空白で埋める代わりに文字を全て削除してしまう物である。
+→案外簡単に、これだけで対応出来た様である。
+</p>
+<!--************************************************************************-->
+<h3>I2.3 [バグ] less で上に移動する事ができない [完 2011/11/05]</h3>
+<p>どうやら、書換の途中で \eM \eH \eE \eD を認識する部分が消えてしまっていた様である。
+ProcessControlChar 及び ProcessEscapeChar に追加した。
+</p>
+<!--************************************************************************-->
+<h3>I2.4 [バグ] ScrollDown の動作 [完 2011/11/06]</h3>
+<h4>状況</h4>
+<p>長いファイルを cat しても上の方が出力されていない。</p>
+<p>描画を高速にする為に、スクロールのアニメーションを省くだけなら分かるが、
+出力その物を省略するというのは、良くないと思う。
+</p>
+<ul>
+<li>再度やってみても再現しない。
+  <p>再現する為の条件は何であろう。</p>
+</li>
+<li>再現した。
+  <p>どうやら、何かの拍子に
+  スクロールが表示画面内でスクロールするモードに変化してしまう様である。
+  然し、どの様な時に表示画面内でスクロールするモードに変化するのかは分からない。
+  表示画面内でスクロールする設定は何処に保持されているのだろう…。
+  </p>
+</li>
+<li>どうやら、\e[1S \e[1T \e[1L \e[1M 等のシーケンスが来た時に、
+  部分スクロールをする為に設定した scrollRegion の所為である様だ。
+  (何故設定しているのか分からない。)
+  <p>茲で、ScrollRegion の設定を省略すると行番号のエラーか何かで
+  キャレットの表示の際に大変な事になる。
+  </p>
+</li>
+<li>そもそも SetScrollRegion 等という事をする必要があるのかと思っていたら、
+  \e[#;#r シーケンス (DECSTBM) が来たら Set Scroll Region をしなければならない様である。
+</li>
+</ul>
+
+<h4>原因</h4>
+<p>取り敢えず、DECSTBM における xterm の動作を調べてみる。</p>
+<ul>
+<li>指定した範囲でスクロールが行われる様になる。</li>
+<li>_scrollingTop が 1 の場合には、一番上から消えたデータは上へ流れていく。
+  _scrollingTop が 2 以上の場合は、一番上から消えたデータは消えて無くなる。
+  (この動作は、一旦 2 以上にしてから 1 に戻しても変わらない。)
+  <p><del>_scrollingTop はバッファ内の位置ではなく、
+  ウィンドウ内の位置と考えた方が正しい。</del>
+  これは、やはり間違い。
+  </p>
+</li>
+<li>window のサイズが変更されると範囲はクリアされる。(或いは、window のサイズに変更される。)</li>
+<li>デフォルトは「_scrollingTop が設定されていない」というよりは、
+  「window 全体に設定されている」と考えた方が良いかも知れない。
+  (実際に、xtermの全体に設定されている状態、Poderosaの設定されていない状態は同じ動作になる。)
+</li>
+<li>\e[1;1H での移動先は region に関係ない。
+  (これは現状の Poderosa でもそうなっている。)
+</li>
+<li>\e[M は「その行を削除する」という意味かと考えていたが、
+  一番上の行にいる時に実行すると、そのまま上に流れていく様である。
+</li>
+</ul>
+<p>何が間違っているのか?</p>
+<ol style="list-style-type:lower-alpha;">
+<li>本来は、\e[M で set scrolling region は実行されない?
+  <p>× 初めはこの辺りから疑っていたが、多分、これは OK。
+    本来は、\e[M をする前から ScrollingRegion は設定されているべきなのだが、
+    Poderosa の実装上、必要になった時に初めて設定している様である。
+  </p>
+</li>
+<li>ScrollingRegion の動作が誤っている?
+  <p>  少なくとも、動作は xterm と異なる。
+  その他の状況でも問題が生じるのもこれが原因であるという説が、
+  現在一番有力である。
+  </p>
+</li>
+</ol>
+
+<h4>修正</h4>
+<ul>
+<li>_scrollingTop の値はバッファ内の位置ではなく、
+  window 内の行番号を表す物に変更する?
+  <p>→と思ったが、xterm で ScrollingRange を指定した後に、
+  手でバッファをスクロールして、その後に何かを入力すると、
+  バッファ上の元々設定していた場所がスクロールされた。
+  と言う事は、バッファ内の位置で保持するのでやはり正しい。
+  </p>
+</li>
+<li>本来 _scrollingTop = -1 等という状態は存在しない筈
+  _scrollingTop = -1 の状態の時には、
+  scrollingTop = 1 (window 先頭) と解釈する事にする。
+  <p>→これは、基本的に既存の実装が何とかそうなる様になっているので触らない。</p>
+</li>
+<li>ScrollDown だけ修正すれば何とかなりそうである。
+  <p>→と思ったのだが、実際に変更してみると良く分からない動作をする。
+  <del>現在の所、保留中。</del>
+  </p>
+  <p>→良く考えてみたら、_scrollingTop/_scrollingBottom を更新するのを忘れていた。
+  取り敢えず、今の所は動いている様な気がするので OK
+  </p>
+</li>
+</ul>
+<pre class="agh-prog-cs diff">
+--- b.txt  2011-11-06 00:46:42.718750000 +0900
++++ a.txt  2011-11-06 00:46:24.078125000 +0900
+@@ -233,18 +213,30 @@
+         _currentLine=top;
+         _currentLine.Clear();
+       }else{
+-        Remove(top); //_topLineの調整は必要ならここで行われる
++        bool removed=Remove(top); //_topLineの調整は必要ならここで行われる
+         
+         _currentLine = new GLine(_width);
+         InsertAfter(bottom, _currentLine);
+ 
+         //id maintainance
++        if(removed){
+         GLine c = newtop;
+         GLine end = _currentLine.NextLine;
+         while(c != end) {
+           c.ID = top_id++;
+           c = c.NextLine;
+         }
++        }else{
++          GLine line=_currentLine;
++          GLine lineM=_lastLine;
++          for(;;){
++            line.ID=line.PrevLine.ID+1;
++            if(line==lineM)break;
++            line=line.NextLine;
++          }
++          _scrollingTop++;
++          _scrollingBottom++;
++        }
+       }
+       
+       _invalidatedRegion.InvalidatedAll = true;
+@@ -286,31 +278,42 @@
+       }
+     }
+ 
+-    private void Remove(GLine line) {
+-      if(_size&lt;=1) {
+-        Clear();
+-        return;
+-      }
+-
+-      if(line.PrevLine!=null){
++    /// &lt;summary&gt;
++    /// 
++    /// &lt;/summary&gt;
++    /// &lt;param name="line"&gt;&lt;/param&gt;
++    /// &lt;returns&gt;実際に削除が実行された場合に true を返します。
++    /// false が返された場合は、表示領域の外に送られた事を表します。
++    /// &lt;/returns&gt;
++    private bool Remove(GLine line) {
++      bool ret=false;
++      if(line==_topLine){
++        // 裏へ送る/mwg
++        _topLine=line.NextLine;
++      }else{
++        // 削除/mwg
++        if(line.PrevLine!=null)
+         line.PrevLine.NextLine=line.NextLine;
+-      }
+-      if(line.NextLine!=null){
++        if(line.NextLine!=null)
+         line.NextLine.PrevLine=line.PrevLine;
+-      }
++        if(line==_firstLine)
++          _firstLine=line.NextLine;
++        if(line==_lastLine)
++          _lastLine =line.PrevLine;
+ 
+-      if(line==_firstLine) _firstLine = line.NextLine;
+-      if(line==_lastLine)  _lastLine = line.PrevLine;
+-      if(line==_topLine)  {
+-        _topLine = line.NextLine;
++        _size--;
++        ret=true;
+       }
++
+       if(line==_currentLine) {
+-        _currentLine = line.NextLine;
+-        if(_currentLine==null) _currentLine = _lastLine;
++        _currentLine=line.NextLine;
++        if(_currentLine==null)
++          _currentLine=_lastLine;
+       }
+       
+-      _size--;
+-      _invalidatedRegion.InvalidatedAll = true;
++      //TODO: 全部 invalidate する必要はあるのか/mwg
++      _invalidatedRegion.InvalidatedAll=true;
++      return ret;
+     }
+ 
+     /// 最後のremain行以前を削除する
+</pre>
+<ul>
+<li>他、ウィンドウのサイズを更新した時の動作の変更</li>
+</ul>
+<pre class="agh-prog-cs diff">
+@ TerminalControl.cs/TerminalControl.ResizeTerminal
+     private void ResizeTerminal(int width, int height) {
+       //Debug.WriteLine(String.Format("Resize {0} {1}", width, height));
+
+       //Documentへ通知
+       GetDocument().Resize(width, height);
+
+       if(_session.Terminal.CurrentModalTerminalTask!=null) return; //別タスクが走っているときは無視
+-      if(GetTerminal().TerminalMode==TerminalMode.Application) //リサイズしてもスクロールリージョンも更新されるかは分からないが、一応全画面を更新する
+-        GetDocument().SetScrollingRegion(0, height-1);
++      //if(GetTerminal().TerminalMode==TerminalMode.Application)
++      GetDocument().SetScrollingRegion(0, height-1);
+
+       GetTerminal().Reset();
+       if(_VScrollBar.Enabled) {
+         bool scroll = IsAutoScrollMode();
+         _VScrollBar.LargeChange = height;
+         if(scroll)
+           MakeCurrentLineVisible();
+       }
+
+       //接続先へ通知
+       GetTerminalTransmission().Resize(width, height);
+       InvalidateEx();
+     }
+</pre>
+<!--************************************************************************-->
+<h3>I2.5 ACS (alt_charset, Alternate Character Set) の処理</h3>
+<pre class="sh">
+eval echo '$'"'\e(0\1"{4,5,6,7}{0,1,2,3,4,5,6,7}"\e(B'"
+</pre>
+<p>これをすると上下ががたがたになる。</p>
+<p>ちゃんと解釈出来ているのは、多分、\e(0\e(B が特定の文字セットを呼び出しで、
+decoder がこれを正しく処理しているから?
+従って、こちらでするべき事は「変化した後の文字」をつかまえる事。
+</p>
+<p>→と思っていたのだが \e(0 に対応する文字コードは定義されているのか?
+前に自分で作った一覧表を見てみたが 0 に対応する物はなかった。
+上下ががたがたになっているのは「変化した後の文字」の中に \v が含まれている為であった。
+どういう変換によって \v が出て来るのか調べる必要がある。
+</p>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>本来の定義について</h4>
+<pre>
+00 ACS_DIAMOND    +          `          ◆♦
+01 ACS_CKBOARD    :          a          ▓░▒▓
+                                        HT
+                                        FF
+                                        CR
+                                        LF
+06 ACS_DEGREE     \          f          °
+07 ACS_PLMINUS    #          g          ±
+08 ACS_BOARD      #          h          NL (␤) █2588
+09 ACS_LANTERN    #          i          VT (␋) 1F383 1F3EE 灯 ☼263C 
+                                        (VT = V が手で T がランプに見える?) 
+0A ACS_LRCORNER   +          j          ╝255D
+0B ACS_URCORNER   +          k          ╗2557
+0C ACS_ULCORNER   +          l          ╔2554
+0D ACS_LLCORNER   +          m          ╚255A
+0E ACS_PLUS       +          n          ╬256C
+0F ACS_S1         ~          o          ~
+10 ACS_S3         -          p          ~
+11 ACS_HLINE      -          q          ═2550 ▬25AC
+12 ACS_S7         -          r          _
+13 ACS_S9         _          s          _
+14 ACS_LTEE       +          t          ╠2560
+15 ACS_RTEE       +          u          ╣2563
+16 ACS_BTEE       +          v          ╩2569
+17 ACS_TTEE       +          w          ╦2566
+18 ACS_VLINE      |          x          ║2551
+19 ACS_LEQUAL     <          y          ≤
+1A ACS_GEQUAL     >          z          ≥
+1B ACS_PI         *          {          π ⊓2293
+1C ACS_NEQUAL     !          |          ≠
+1D ACS_STERLING   f          }          ￡ 
+1E ACS_BULLET     o          ~          ・ ▪25AA ◦25E6 ￭FFED ￮FFEE
+
+   ACS_RARROW     >          +          → ￫FFEB
+   ACS_LARROW     <          ,          ← ￩FFE9
+   ACS_UARROW     ^          -          ↑ ￪FFEA
+   ACS_DARROW     v          .          ↓ ￬FFEC
+   ACS_BLOCK      #          0          █  ▯25AF ☐
+</pre>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>文字の変更</h4>
+<p>acs に対応する文字コードは DECLineByteProcessor で定義されている。
+</p>
+<p>表示ががたがたになっている原因が分かった。
+BOARD を表す絵文字として NT を使用して、
+LANTERN を表す絵文字として VT が使われる様であるのだが、
+それが本当の改行・垂直タブとして出力されてしまっているのである。
+rulechars.resx で殆ど設定できるようなので、そちらで設定する事にする。
+後、rulechars で全角の物を半角に変更する(可能ならば)。
+</p>
+<p>変更:</p>
+<ul>
+<li>rulechars.resx/Poderosa.TerminalEmulator.rulechars</li>
+<li>CharDecoder.cs/DECLineByteProcessor.DECLineByteProcessor</li>
+<li>CharDecoder.cs/DECLineByteProcessor.ProcessByte</li>
+</ul>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>完全に別の処理?</h4>
+<p>然し、それでも全角で表示されてしまうと言う問題が残っている。
+恐らくこれを使っているプログラムは、出力する文字が半角である事を想定するだろう。
+なので、半角で表示しなければならないはずである。
+</p>
+<p>そもそも、既存の Unicode の文字で表現する必要性もあるのかどうか疑問である。
+一旦私用領域の文字に変換して、それから描画の際に適当に文字を選んで描画するというのは?
+→これは現在どの様にして描画しているかに依存している。
+一文字ずつ描画しているのであれば対応は簡単である。
+</p>
+<p>調べてみた所、全角文字になっている物に関しては一文字ずつ描画することになっている様である。
+逆に言えば、半角文字で一文字ずつ判定しながら表示したい場合にはきついという事である。
+terminal のやりとりは殆ど半角文字であるので、半角文字さえ高速に描画出来ればよい。
+今は半角文字は一気に書く事になっているので、速度的に問題はない。
+所が、半角文字自体も一文字ずつ書く事にすると速度的に不安である。
+</p>
+<p>一つの解決方法は、Hankaku, Zenkaku の他に CustomHankaku 的なカテゴリを用意して、
+Hankaku は今迄通りに一気に書き、Zenkaku も今迄通りに処理する。
+そして、CustomHankaku は描画以外の所では Hankaku として扱い、
+描画の時だけ Zenkaku の様に一文字ずつ描画する様にするのである。
+</p>
+<p>GWord はどうやら、GLine.cs の中だけで閉じている様なので、
+書換は GLine.cs だけで済みそうである。
+</p>
+<p>うーん。誰も使わなそうな所に適当に AcsHankaku をつっこもうかしら。
+\u26E0-\u26FF は未だ Unicode でも定義されていない。
+隙間としても微妙な所だから、ここに大幅に文字が追加される可能性は小さい?
+万が一ぶつかったときのために、簡単に場所を移動ができる様に何処かに定数で記録しておく。
+</p>
+<p>最終的にこの方針で何とかうまく動いている様なので良しとする。
+</p>
+<!--************************************************************************-->
+<h3>I2.6 色エスケープシーケンスの対応</h3>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>16色を設定する</h4>
+<p>何かやっぱり、自分の知っている色と違う。
+自分で設定し直す。
+</p>
+<ul>
+<li>silver: 192 192 192 #C0C0C0 = Color.Silver</li>
+<li>gray  : 128 128 128 #808080 = Color.Gray</li>
+<li>cyan  : 0   220 220 #00DCDC -&gt; Color.DarkTurquoise?</li>
+<li>lime  : 0   200 0   #00C800 -&gt; Color.LimeGreen</li>
+<li>olive : 100 100 0   #646400 </li>
+<li>yellow: 180 180 0   #B4B400 -&gt; Color.Gold ?</li>
+</ul>
+<p>これは取り敢えず実装してみた。
+後、色々な 16 色の選択肢も作っておいた。(mwg.Rosa/Colors.cs)
+</p>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>terminfo: colors#256 対応</h4>
+<p>setf setaf setb setab: 16以上か以下かで条件分岐させる。
+xterm+256color が参考になる。
+更に、emacs で使用する為には、
+どうやら term/rosaterm.el に以下を追加しなければならない様子。
+<a href="http://www.xvx.ca/~awg/emacs-colors-howto.txt"></a>
+</p>
+<pre class="agh-prog-el">
+;;; This is for GNU Emacs 22
+(defun terminal-init-screen ()
+  "Terminal initialization function for screen."
+  ;; Use the xterm color initialization code.
+  (load "term/xterm")
+  (xterm-register-default-colors)
+  (tty-set-up-initial-frame-faces))
+
+;;; This is for GNU Emacs 21
+(if (= 21 emacs-major-version)
+    (load "term/xterm-256color"))
+</pre>
+<!--************************************************************************-->
+<h3>I2.7 描画モードと terminfo</h3>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h4>Xterm 256 Colors の表示に対応</h4>
+<h4>[terminfo] bold, dim, blink を明暗の指定から修飾の指定に変更。</h4>
+<p>前景色・背景色の明るさを \e[1m (bold) \e[2m (dim) \e[5m (blink) で変更する様にしていた。
+これは TERM=cygwin の名残である。しかし、bold, dim, blink を使用していると、
+「色を既定に戻す操作」をしても screen が bold, dim, blink の解除をしないので、
+表示の明るさが変になったりしていた。
+</p>
+<p>なので、色を指定する時には、毎回直接一意に指定する事にする。
+つまり、明るい時は \e[9?m で設定し、暗い時は \e[2;3?m と設定する。
+</p>
+<p>一方で、この設定により明るさを調整する為に bold, dim, blink を使用しなくても良くなった。
+従って、bold (太字), dim (薄く表示), blink (点滅) を、
+明るさ調整に使う代わりにオリジナルの用途 (或いは別の用途) に利用する事ができる。
+これを正しく設定し直す。
+取り敢えず bold→bold, dim→strike, blink→overline とした。
+</p>
+<p>他に screen で使える SGR は全部対応する物を作りたい…。
+例えば standout: 現在の設定では smso=\E[7m, rmso=\E[27m で反転と同じになっている。
+これを別の表示にする事は出来ないだろうか。(然し、これが一番「強調」になっている?)
+これは後で考える。
+</p>
+<!--************************************************************************-->
+<h3>I2.8 背景画像メモリリーク</h3>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<p>どうも背景画像周りで盛大にメモリリークしている。
+RenderProfile の Image _backgroundImage 周りの管理が怪しい。
+というか、Load したら最後、Dispose されていない気がする。
+</p>
+<h4>1. 状況確認</h4>
+<ol>
+<li>取り敢えず、set_BackgroundImageFileName で、
+  使わなくなった画像を Release する様にする。
+  GetImage の null を代入している部分でも Dispose を呼び出す。
+</li>
+<li><del>terminal ウィンドウを閉じる時に、削除する様にする。</del></li>
+</ol>
+<p><del>前提 "RenderProfile は 1 Terminal ウィンドウに対し 1 つ"</del>
+これは正しいか? → 調べてみたら全然違った。
+ちゃんと動作を調べて対策をする必要がある。
+メンバ変数として RenderProfile 型の物を保持するクラスは以下の通り。
+これらの寿命などがそれぞれどうなっているかは詳しく調べる必要がある:
+</p>
+<ul>
+<li>Poderosa.View.CharacterDocumentViewer
+  <p>_privateRenderProfile. これを設定しているのは SetPrivateRenderProfile メソッドだけ。
+  SetPrivateRenderProfile を呼び出しているのは、CharacterDocumentViewer から派生したクラスの SetParent メソッド。
+  該当する派生クラスは PoderosaLogViewControl, CommandResultPopupSession。
+  これらは関係ない?
+  </p>
+  <p>他にあるとすれば CharacterDocumentViwer が盛んに生成される場合?
+  しかし、だとしてもここに値が設定される為には派生クラスから呼び出されなければならない。
+  実際に実行してみた所、SetPrivateRenderProfile は呼び出されなかった。
+  よって、_privateRenderProfile メンバは、今回のメモリリークとは関係ない。
+  (とは言っても、派生クラスで頻繁に SetParent が実行されればやはりメモリリークに繋がる。)
+  </p>
+</li>
+<li>Poderosa.ConnectionParam.TerminalParam</li>
+<li>Poderosa.Terminal.CommandResultSession</li>
+<li>Poderosa.GEnv (static)</li>
+<li>Poderosa.Terminal.TerminalSettings</li>
+<li>Poderosa.Forms.EditRenderProfile</li>
+</ul>
+
+<h4>2. GEnv</h4>
+<p>というか、実際に RenderProfile のコンストラクタにブレークポイントを仕掛けて
+何処で RenderProfile が生成されているかを調べれば良い。
+で、実際に調べてみた所 RenderProfile は、背景画像の設定を変更するたびに生成されている様子である。
+そして、生成場所は TerminalSettings.CreateRenderProfile である。
+しかも、呼出元は GEnv.DefaultRenderProfile を設定する為に RenderProfile を生成している様子。
+</p>
+<p>取り敢えず、GEnv.DefaultRenderProfile で元々設定されていた RenderProfile だけでも解放するようにする。
+先ずは、RenderProfile に IDisposable を実装する。ここから背景画像の解放と、フォントの解放を実行する。
+</p>
+<ul>
+<li>[確認] GEnv.DefaultRenderProfile インスタンスは他の箇所に参照が複製されていないか?
+  <p>DefaultRenderProfile を介して外部からはアクセスされる。
+  そして、get_DefaultRenderProfile を呼び出しているのは、三つのクラスの GetRenderProfile メソッドだけ。
+  これらの GetRenderProfile は実際に描画をする際に一時的に情報を取得するのに使用されるだけで、
+  何処かに参照を保持したりするようには作られていない様である。
+  従って、他の場所に参照が複製されているという事はないとして良いと思われる。
+  </p>
+  <p>※一箇所 Clone メソッドを使って値コピーとして生成されている箇所があった。
+  参照を複製するのではなく、異なるインスタンスとして複製する方針で設計されたという事だろうか。
+  </p>
+</li>
+</ul>
+
+<h4>3. TerminalControl</h4>
+<p>更に、TerminalControl.ApplyTerminalOptions で RenderProfile が生成されて、
+ApplyRenderProfile が呼び出され、挙げ句に値を幾つか読み取った後にその儘使用されずに放置、という事が起こっている。
+これもメモリリークの原因となる (といっても、実際にはリソースを初期化する前に使用されなくなるので、
+これは無視しても変わらない、が、IDisposable を実装した以上はちゃんと Dipose するようにしておかないと、
+将来的に変更を受けた時にやはりメモリリークしてしまうかも知れないし…。
+取り敢えず、「ApplyRenderProfile はその儘 RenderProfile の参照を保持する事はない」という前提で、
+ApplyRenderProfile 呼び出し直後に Dispose を呼び出す事にする。
+</p>
+<ul>
+<li>TerminalControl.cs/Poderosa.Terminal.TerminalControl.ApplyTerminalOptions</li>
+</ul>
+
+<h4>4. 一時オブジェクトとしての RenderProfile</h4>
+<p>他にも、生成して一瞬で参照を捨てるという箇所が幾つかある様なのでこれらを修正する。</p>
+<ul>
+<li>MacroExec.cs/Poderosa.MacroInternal.MacroUtil.InvokeOpenSessionOrNull</li>
+<li>ShortcutFileCommands.cs/Poderosa.Sessions.ShortcutFileCommands.OpenShortcutFile</li>
+</ul>
+
+<h4>5. EditRenderProfile</h4>
+<p>元々 EditRenderProfile はメンバ変数として RenderProfile を保持しているが、
+ここから他に参照が複製されたりする事はないだろうか。
+(初期化の際に渡された RenderProfile は Clone しているので問題はない)
+</p>
+<ul>
+<li>TerminalUICommands.cs/Poderosa.Usability.TerminalUICommands.CmdEditRenderProfile
+  <ul>
+  <li>EditRenderProfile.cs/EditRenderProfile.Result</li>
+  <li>TerminalSettings.cs/Porderosa.Terminal.TerminalSettings.set_RenderProfile</li>
+  </ul>
+</li>
+</ul>
+<p>と思ったら、呼出元で Result プロパティを通して、TerminalSettings クラスのメンバに設定されている。
+しかし、構造としては EditRenderProfile で RenderProfile を生成して、
+その生成結果を TerminalSettings に渡して、EditRenderProfile は処分するという形になっている。
+EditRenderProfile を初期化している箇所も他にないので、    
+TerminalSettings クラスのメンバの寿命管理をすれば問題はない。
+しかし、設計上やはり問題が生じるといけないので、EditRenderProfile 内でちゃんと寿命管理をして、
+TerminalSettings に設定するのは Clone という事にする。
+</p>
+<ul>
+<li>EditRenderProfile.cs/EditRenderProfile.Dispose
+  <p>←というか、元々 Forms.Form であり、IDisposable なのだからちゃんと解放しなくては駄目だ。。</p>
+</li>
+<li>TerminalUICommands.cs/Poderosa.Usability.TerminalUICommands.CmdEditRenderProfile</li>
+</ul>
+
+<h4>6. LoginDialogBase</h4>
+<p>GetInitialRenderProfile で生成された RenderProfile は LoginDialogBase.OnOK で使用されて、
+そこですぐ消えるので Dispose を呼ぶ。
+</p>
+<ul>
+<li>LoginDialogBase.cs/Poderosa.Sessions.LoginDialogBase.OnOK</li>
+<li>LoginDialogBase.cs/Poderosa.Sessions.LoginDialogBase.GetInitialRenderProfile</li>
+</ul>
+
+<h4>7. TerminalSettings.RenderProfile</h4>
+<p>ここから色々な所に参照がコピーされていく気がする…これをちゃんと確かめるのは大変だ…。
+</p>
+<p>→調べてみた所、色々な所で使用はされているが参照が恒久的に保持される事はないようだ。
+更に、初期化の際にも Deserialize で新しく生成した物の他には、別の所から参照を貰ってくる事はない様だ。
+唯一の例外は、MacroUtil の CreateTerminalSettings の中で。まあ、これは Clone してしまう事にしよう…。
+なので、勝手に dispose しても大丈夫の筈。
+</p>
+<p>気になる所。考えるのが面倒臭いので Clone する事にする。
+</p>
+<ul>
+<li>MacroExec.cs/Poderosa.MacroInternal.MacroUtil.CreateTerminalSettings</li>
+</ul>
+
+<h4>8. 以下の箇所も修正。</h4>
+<ul>
+<li>PoderosaLogViewerSession.cs/Poderosa.LogViewer.PoderosaLogViewerSession.DefaultWidth</li>
+<li>CharacterDocumentViewer.cs/Poderosa.View.CharacterDocumentViewer.Dispose</li>
+<li>CommandResultPopupSession.cs/Poderosa.Terminal.CommandResultViewerControl.SetParent</li>
+</ul>
+
+<h4>9. TerminalSettings/TerminalParam</h4>
+<p>然し、TerminalSettings は色々な所で使用されているので、
+これを IDiposeable に変更するのは大変である。
+もし機会があったら IDiposeable にして _renderProfile を Dispose する様にする。
+TerminalParam.cs/Poderosa.ConnectionParam.TerminalParam についても同様
+</p>
+
+<h4>10. [所感]</h4>
+<p>背景画像を読み込むだけ読み込んで Dispose しなかったり、
+Font を沢山生成してやはり Dispose しなかったり、
+しかし、IDisposable であるはずの Form を次から次へと生成して Dispose しなかったり、
+全体的にリソースの使い方が杜撰である。
+今回は背景画像を沢山設定している時に、メモリリークが目に見えて問題になっていたので修正したが、
+全部を修正するのは不可能に近い。今後も、問題になったら修正するという形で対応していくしかない。
+</p>
+<!--************************************************************************-->
+<h3>I2.9 [バグ] ApplicationMode で画面が跳ぶ [完 2012/10/10]</h3>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<p>[アプリケーションモードでもスクロールを許可する] のチェックを外していると
+screen 起動中に変な動作をする。screen は Application Mode で動作するが、
+その中で、大量の行を表示した後にカーソルキーを押すと表示がぴょんぴょん跳ぶ。
+PgUp しているのだろうか? 使い物にならない。
+→カーソルキーで移動する動作がアプリケーションモードの場合に何か変な方法になっているのでは?
+</p>
+<p>どうやら a など簡単なキーを押しても再現する様子。再現方法は、</p>
+<ol>
+<li>起動する。</li>
+<li>余りスクロールしない内に screen を起動する。</li>
+<li>screen の中で長い出力のあるコマンドを実行して、沢山スクロールさせる。</li>
+<li>C-l で clear-screen</li>
+<li>その状態で一文字でも入力しようとすると画面が跳ぶ。</li>
+</ol>
+
+<h4>応急処置 [2012/10/10]</h4>
+<p>犯人は TerminalBase.cs/AbstractTerminal.OnReception にある
+これの int n を計算して、IsAutoScrollMode で判定をする辺り。
+</p>
+<p>→と思ったら勘違いだった様だ。
+画面が毎回跳ぶ訳ではないから注意深く判断しないと行けなかった。
+そもそも、データの受信を完全に無視したとしても画面が跳んでいる事から、
+やはり入力を実行した時点で何か起こっていると言うことのような気がする。
+</p>
+<p>→今度は C-q の送信部分 mwgSendBytes を止めたり再開したりしたが…
+mwgSendBytes を実行するかしないかで動作が変わっている様である。
+じゃあ、やっぱり向こうからの返答によって何か変な動作が誘導されているのか、
+と思ったのが向こうからはやはり何も返答が来ていない様子である。
+</p>
+<p>→と思って mwgSendBytes の中を覗いたら本当の犯人はここにいた。
+(これが本当の犯人の筈…)。
+普通に mwgSendBytes の中で MakeCurrentLineVisible が呼び出されていたのだ。
+今回の問題点は、既に CurrentLine が Visible であるのにも拘わらず、
+行番号が移動されてしまう所にある。
+</p>
+<p>→MakeCurrentLineVisible の中では現在の表示位置を _VScrollBar.Value
+を用いて取得しているが、ApplicationMode でスクロール禁止になると、
+_VScrollBar の値は ApplicationMode を開始した時の値の儘更新されなくなる様だ。
+その所為で現在の表示領域を誤認識して画面が跳んでしまう様子。
+</p>
+<p>取り敢えず、応急処置として、ApplicationMode の時には、
+MakeCurrentLineVisible の処理を実行しない事にしてみた。
+(もしかすると何かの拍子に CurrentLine が画面外へ行くと
+一切何も表示されないという事になりかねない。)
+→しかし、実際に色々やってみた所問題は発生しない様子である。。
+</p>
+<p>これについては根本的に解決する必要があるかも知れないが、
+現在の所は一応動作している様子なので放置しておく事にする。
+</p>
+
+<h4>解決 [完 2012/10/10]</h4>
+<p>動かしていて分かった様な気がする。
+昔、xterm の動作を真似して「スクロール領域を制限した時でも、
+スクロール領域の一番上の端がターミナルの表示領域の一番上端と一致している時には、
+スクロール領域の上へ流れて出て行く行を削除せずにスクロールする」という動作に
+変更した。その所為で、ApplicationMode に入った瞬間の _VScrollBar.Value の値がその儘で、
+実際の値とスクロールする度にずれてしまっていたのである。
+→と思ったら、ApplicationMode であっても _VScrollBar.Value の値は更新されている様であった。
+しかしながら、_VScrollBar.Maximum の方が更新されない為に _VScrollBar.Value が
+_VScrollBar.Maximum よりも大きくなれず天井で頭を打って止まっているというのが原因であった。
+</p>
+<p>本来は、_VScrollBar.Maximum は以下の手順で更新される。</p>
+<ol>
+<li>_scrollBarValues.Maximum が 設定される
+  <ul>
+  <li>@ AbstractTerminal.AdjustTransientScrollBar</li>
+  <li>@ AbstractTerminal.OnReception (データ受信直後)</li>
+  </ul>
+</li>
+<li>_scrollBarValues.Maximum から _VScrollBar.Maximum に値がコピーされる。
+  <ul>
+  <li>@ AbstractTerminal.CommitScrollBar</li>
+  <li>@ CharacterDocumentView.OnPaint</li>
+  </ul>
+</li>
+</ol>
+<p>然し、ApplicationMode without scroll では、
+初めの 1 が実行されない様に条件分岐している。
+</p>
+<pre class="diff agh-prog-cs">
+@@ TerminalBase.cs/Poderosa.Terminal.AbstractTerminal.AdjustTransientScrollBar @@ 2012/10/10 23:28:40
+     public void AdjustTransientScrollBar() {
+       TerminalDocument document = _document;
+       int paneheight = document.TerminalHeight;
+       int docheight = Math.Max(document.LastLineNumber, document.TopLineNumber+paneheight-1)-document.FirstLineNumber+1;
+
+       _scrollBarValues.Dirty = true;
+       if((_terminalMode==TerminalMode.Application &amp;&amp; !GEnv.Options.AllowsScrollInAppMode)
+         || paneheight &gt;= docheight) {
+         _scrollBarValues.Enabled = false;
+         _scrollBarValues.Value = 0;
++
++        //KM: I2.9 バグ対策
++        _scrollBarValues.Maximum=Math.Max(docheight-1,paneheight);
+-      }
+-      else {
++      }else{
+         _scrollBarValues.Enabled = true;
+         _scrollBarValues.Maximum = docheight-1;
+         _scrollBarValues.LargeChange = paneheight;
+       }
+       //Debug.WriteLine(String.Format("E={0} V={1}", _transientScrollBarEnabled, _transientScrollBarValue));
+     }
+@@ TerminalControl.cs/Poderosa.Terminal.TermjnalControl.MakeCurrentLineVisible @@ 2012/10/10 23:28:40
+     private void MakeCurrentLineVisible() {
+-      /* mwg 2012/10/10: ApplicationMode で画面が跳ぶ事の応急処置。
+-       * [問題] ApplicationMode (スクロール不許可設定時) に画面が跳ぶ
+-       *        再現方法: 起動してすぐに screen を立ち上げ大量の行を出力し、
+-       *        C-l で clear-screen した後に、何かのキーを押すと画面が跳ぶ。
+-       * [原因] _VScrollBar.Maximum の値が ApplicationMode の時に更新されない。
+-       *        その為、_VScrollBar.Value の値が Maximum で頭打ちしてそれより大きくなれない。
+-       *        _VScrollBar を参照すると、常に Document の上の方が表示されている様に見える。
+-       * [解決] スクロールを許可していない時は、常に現在行が見えていると仮定。
+-       */
+-      if(GetTerminal().TerminalMode==TerminalMode.Application&amp;&amp;!GEnv.Options.AllowsScrollInAppMode)return;
+-      
+       TerminalDocument document = GetDocument();
+       if(document.CurrentLineNumber-document.FirstLineNumber &lt; _VScrollBar.Value) { //上に隠れた
+         document.TopLineNumber = document.CurrentLineNumber;
+         _session.Terminal.TransientScrollBarValues.Value = document.TopLineNumber-document.FirstLineNumber;
+       }
+       else if(_VScrollBar.Value + document.TerminalHeight &lt;= document.CurrentLineNumber-document.FirstLineNumber) { //下に隠れた
+         int n = document.CurrentLineNumber-document.FirstLineNumber - document.TerminalHeight + 1;
+         if(n &lt; 0) n = 0;
+         GetTerminal().TransientScrollBarValues.Value = n;
+         GetDocument().TopLineNumber = n + document.FirstLineNumber;
+       }
+     }
+</pre>
+
+<!--########################################################################-->
+<h2>計画2. Poderosa-4.1.1 から Poderosa 4.3.5b に移行をするという事 [20111106]</h2>
+<!--########################################################################-->
+<p>今迄のコードは Poderosa4.1.0 をベースにした物であった。
+しかし、Poderosa4.3.5b にて沢山の修正・拡張が為されている様であるので、
+そちらに移行する事にした。
+</p>
+<p>今迄 4.1.0 に加えた変更を 4.3.5 にも適用する事にする。
+diff によって差分は取った。
+</p>
+<p>※ 4.1.0 → 4.3.5b の変更点と 4.1.0 → mwg.Rosa の変更点が被っていない部分でも、
+両者の整合性が崩れてバグが生じる可能性はある。
+今の所は動いているが、潜在的にバグが新しくできたかもしれない。
+</p>
+<!--************************************************************************-->
+<h4>1. Project の構成</h4>
+<p>Poderosa はどうもプロジェクトを分割しすぎているので、適当に纏める事にした。
+纏めた結果、プラグインの初期化に失敗する様になった。
+色々調べた所、ProtocolsPlugin の依存性の指定が足りていない様であったので、追加した。
+</p>
+<pre class="cs diff">
+-  [PluginInfo(ID=ProtocolsPlugin.PLUGIN_ID, Version=VersionInfo.PODEROSA_VERSION,Author=VersionInfo.PROJECT_NAME,Dependencies="org.poderosa.core.preferences;org.poderosa.core.serializing")]
++  [PluginInfo(ID=ProtocolsPlugin.PLUGIN_ID, Version=VersionInfo.PODEROSA_VERSION,Author=VersionInfo.PROJECT_NAME,
++    Dependencies="org.poderosa.core.preferences;org.poderosa.core.serializing;org.poderosa.core.window")]
+</pre>
+<!--************************************************************************-->
+<h4>2. TextDecoration の拡張</h4>
+<p>少し違う方向性で拡張されていたので、改めて設計し直した。
+4.3 ではメンバを readonly にして、パフォーマンスを向上させようと言った感じの設計になっていた。
+一方で、自分の方では色々な属性を保持できるように拡張していた。
+</p>
+<p>問題は readonly にした所為で、インスタンス生成時に色々な属性毎に指定しなければならなくなってしまった事である。
+また、\e[#;#;#+#;#m の処理中に属性を変更するたびにインスタンスを生成し直すのも問題である。
+其処で、struct TextDecorationConstructor を定義して
+変更中はそのインスタンス (struct なのでスタック上に確保される) を変更し、
+最後に _currentdecoration に新しいインスタンスを設定する様にした。
+</p>
+<!--************************************************************************-->
+<h4>3. RosaTerminal 移行</h4>
+<p>自分の追加した .cs ファイルも、それの依存している他の部分の変更によって
+コンパイル出来なくなっている部分があったので修正する必要があった。
+</p>
+<p>一部の文字削除関数が TextDecoration を要求する様になったので、_currentdecoration を指定する様にした。
+(cygwin@cmd で色々試してみた所、\e[J \e[K 等の削除命令は既定の背景色ではなくて、
+現在の背景色で塗り潰す動作になっていたので、_currentdecoration を指定するやり方で OK。
+但し、この事によって空白文字で領域が埋められる事になり、
+コピーする時に無駄に長い空白が入る様になってしまった。)
+</p>
+<p>新しい CSI シーケンスへの対応はない様である。</p>
+<!--************************************************************************-->
+<h3>各ファイルに対する修正</h3>
+<!--************************************************************************-->
+<h4>4. CharacterDocumentViewer の変更</h4>
+<p>自分の方のコードでは背景描画を高速化してある。
+一方で、4.3 のコードでは背景画像配置についてのオプションを増やしていた。
+</p>
+<p>背景画像配置についてのオプションの分だけ、
+指定を書き直さなければならなかったが無事に設定が終わった。
+</p>
+<h5>初期化に失敗する問題 @ mwg.RosaTerm.View.BackgroundDrawer</h5>
+<p>これは、一番初めの背景描写の時には未だ Control のサイズが初期化されておらず負の値になる事によって起こっていた。
+なので、幅または高さが負の値になっている時には 1 だと思って処理する様にした。
+</p>
+<p>また、Bitmap 初期化時に小数で指定すると切り捨てになって、際どいサイズの場合 0 になってしまったりする様であった。
+なので、Bitmap のサイズを指定する時には切り捨てではなくて四捨五入になる様に変更した。
+</p>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h5>表示がずれているという事</h5>
+<p>今迄も何かずれている様な気がしていたが、
+従来のコードとの比較によって明らかにずれているという事が分かったので、問題を探した。
+</p>
+<p>実は、既に offset の分だけずらして cache を初期化していたのに、
+描画 (BitBlt) の際に再び offset の分だけずらして転送していた為に起こっていた。
+これは修正した。
+</p>
+<p>と思っていたら、今度は別の場所で表示位置がずれて、画像が切れる様になってしまっている。
+もう一度落ち着いて色々見ていると、
+</p>
+<ol style="list-style-type:lower-alpha;">
+<li>画像が描画領域をはみ出ている時(offsetX<0)は画像の一部が cache に入る。
+  既に、cache の左端 (or 上端) は表示領域の左端(上端)と一致しているので、
+  offset の引き算をする必要性はない。</li>
+<li>画像が描画領域内に入っている時(offsetX>0)は丁度画像の大きさの cache が作られる。
+  cache の左端は、表示領域では offset の位置から始まっている。
+  従って、cache 内の位置を指定するには offset の分だけ引き算する必要がある。</li>
+</ol>
+<p>つまり、offset が正の時だけ、引き算を実行する様にすれば良いのである。
+</p>
+<p>※今迄問題が生じていなかったのは、オプションとして選択出来る物の中に、
+画像が描画領域をはみ出てしまう様な設定が存在していなかったからである。
+所が、4.3 でははみ出る様な設定も可能になった為に、当初のずれが出てきたのである。
+</p>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h5>背景の表示方法</h5>
+<p>背景の配置方法毎の処理がぐちゃぐちゃしていたので整理した。
+また、自分の作った配置方法も追加しておいた。
+</p>
+<!--::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::-->
+<h5>Caret の描画に関して</h5>
+<p>Caret の種類を追加する。以下を変更</p>
+<ul>
+<li>Core/Caret.cs</li>
+<li>Usability/DisplayOptionPanel.cs
+  <ul>
+  <li>GetCaretStyleDescriptions</li>
+  <li>CaretTypeToIndex</li>
+  <li>IndexToCaretType</li>
+  </ul>
+</li>
+</ul>
+<p>背景を黒くすると Caret が見えなくなってしまう。
+取り敢えず、今は「既定の色」の時は「反転」によって色を表示する様にしている。
+(今迄は TerminalDocument の TextColor で描画する様になっていた。)
+</p>
+<!--************************************************************************-->
+<h4>5. GLine.cs の修正</h4>
+<p>下線や打ち消し線の表示を更新</p>
+<p>選択・キャレットなどによる反転は Inverted で対応すると変な表示になってしまったので、
+取り敢えず既存の様に背景色と前景色を本当に入れ替える方向で対応する事にした。
+(後々の状態に影響を与えるという事も無さそうなので、問題ないと思う。
+_currentdecoration だと二回 inverted をすると、元に戻ってしまう問題が生じるが。)
+</p>
+<p>もしかすると、Inverted を正しく読んで描画する様に変更すれば
+何の問題もないのかも知れない。<del>これは後の更新の後で再度考える。</del>
+→と思ったけれども現状問題は生じていないし、気にしない事にした??
+  そういえば、現状問題が生じていないかどうか本当には確認していない。
+</p>
+<!--************************************************************************-->
+<h4>6. RenderProfile.cs</h4>
+<p>ColorType の特別色に対する分岐を取得。
+→これは、特定の 8 色に対して「明るい色」と「暗い色」を有効にする為。
+</p>
+<p>EscapesequenceColorSet を独自に 8 色から 16 色に拡張していたが、
+どうやら 4.3 でも 256 色 (xterm/x11 color) に拡張していた様である。
+然し、4.3 の 256 色は明るすぎる様に思うので、
+勝手に自分の使っている設定の色に書き換えた。
+</p>
+<p>然し、これは x11 color ではない。正しい色で表示して欲しい「絵」等の場合はどうすれば良いのか?
+…などと考えていたが、実際に、xterm を実行して試してみた所、
+通常の 16 色は x11 256 色とカラーテーブルを共有している様であった。
+つまり、設定で通常の 16 色を変更すると、x11 256 色の初めの 16 色も影響を受けるという事である。
+→従って「絵」の様な物を表示したい時には別の方法で色を指定しなければならないという事である。
+</p>
+<!--************************************************************************-->
+<h4>7. Protocols/LocalShell.cs</h4>
+<ul>
+<li>LocalShellUtil.PrepareEnv
+  <p>4.3 ではプロセス毎に cygwin ディレクトリを選択できるようになっていた。
+  それに伴って、毎回プロセス毎に PATH 環境変数に cygwin/bin を追加する様になっている。
+  ちょっと書換。(結局本質的な変更はないが。)
+  </p>
+</li>
+<li>Cygwin path を検索する部分も 4.3 で対処されていたが、
+  自動で Encoding の判定も行う様にしてある自分の書いた物に置き換えた。
+  また、それに伴って、strings.resx strings_ja.resx も更新
+</li>
+</ul>
+<!--************************************************************************-->
+<h4>8. TerminalEmulator/GEnv.cs</h4>
+<p>private を internal にしてある。
+でも、他の場所からは参照していない。何の為の変更か謎。
+(多分、デバグの仮定で変更した物が残っていただけだろう…。)
+</p>
+<!--************************************************************************-->
+<h4>9. TerminalEmulator/OldTerminalParam.cs</h4>
+<p>これは既に更新した。</p>
+<!--************************************************************************-->
+<h4>10. TerminalEmulator/TerminalBase.cs</h4>
+<p>Create 関数の中身を XTerm ではなく RosaTerminal に変更する。</p>
+<p>
+それより下の方は、EscapeSequenceTerminal (VT100 の基底クラス) に対する変更であり、
+これは無かった事にして良い。(というか、RosaTerminal に移行した。)
+</p>
+<p>&gt;これについての差分は別に取っておく事にする。☆VT100.cs☆</p>
+<!--************************************************************************-->
+<h4>11. TerminalEmulator/TerminalControl.cs</h4>
+<p>入出力関係。
+序でで TerminalEmulator/TerminalOutput.cs も更新。
+序でで TerminalEmulator/TerminalUtil.cs も更新。
+</p>
+<!--************************************************************************-->
+<h4>12. TerminalEmulator/TerminalDocument.cs</h4>
+<p>何か変更点多い様な気がする。面倒くさい…
+と思ったけれど、よく見たら Remove 関数と ScrollDown 関数を書き換えただけだった。
+他は細かいコードスタイルの調整。
+</p>
+<!--************************************************************************-->
+<h4>13. /TerminalEmulator/VT100.cs, /TerminalEmulator/XTerm.cs</h4>
+<p>&gt;これについての差分は別に取っておく事にする。☆VT100.cs☆</p>
+<!--************************************************************************-->
+<h4>14. /TerminalSession/CygwinLoginDialog.cs</h4>
+<p>自分のコードでは、cygwin のターミナル・エンコーディングを指定する様に変更していた。
+然し 4.3 では、ダイアログでユーザが指定できるようになっていた。
+(ダイアログの選択された項目から設定する様になっていた。)
+</p>
+<p>ダイアログの既定値は、どうやら /TerminalEmulator/TerminalSettings.cs
+で指定されている様であったので、そちらに cygwin の情報に基づいて、
+ターミナル・エンコーディングを指定する様に変更する事にした。
+</p>
+<!--************************************************************************-->
+<h4>15. /Usability/EditEscapeSequenceColor.cs</h4>
+<p>これは、ターミナルの色設定についての画面。
+</p>
+<p>&gt;なんか、色が既定の色ではない様な気がする…??
+と思ったが、改めて画面を開いてみたら、
+ちゃんとプログラム中で指定した既定の色になっている。
+</p>
+<!--************************************************************************-->
+<h3>4.1.0-4.3.5b の間に Terminal に対して為された変更について</h3>
+<!--************************************************************************-->
+<h4>16. EscapeSequenceTerminal/ \e@..0 及び \e@..1</h4>
+<!--************************************************************************-->
+<h4>17. VT100/_bgColorHasbeenSet 関連</h4>
+<p>良く分からないが、Document の BackColor も変更している様である。
+以下の箇所で Document の BackColor に対する変更を実行している。
+</p>
+<ul>
+<li>SGR の背景設定</li>
+<li>Application/Normal mode の切替</li>
+<li>CSI J</li>
+</ul>
+<p>Document の BackColor の用途は何であるか。
+良く分からないが、参照を検索してみると、
+CharacterDocumentViewer.cs:345/CharacterDocumentViewer.OnPaint
+で this.BackColor = _document.BackColor; している。
+→と言う事は… \e[41m 等とする度に全体(未設定の部分)の背景色が変化するという事なのだろうか…。
+</p>
+<!--************************************************************************-->
+<h4>18. VT100/xterm 256 color に対応している。</h4>
+<p>XTerm.cs では OSC で色パレットに対する変更にもサポートしている。</p>
+<p>rosa の実装では、256 color は固定になっているが、
+こちらの実装に倣って、ESColorSet に 256 色保持して、それを参照する様に変更したいと思う。
+(その際に、標準 16 色と xterm 256 色は分離しておく様にしたい。
+但し、OSC で色パレットに対する変更を実行する際には、両方に適用をする。)
+</p>
+<!--************************************************************************-->
+<h4>19. VT100/Erase 関連</h4>
+<p>xterm 等では CSI J, CSI K 等の erase は現在の背景色の設定を適用する様になっている。
+それと同じ様な動作にする為に、FillSpace が TextDecoration を引数に要求するようになったようだ。
+これについては、既に RosaTerminal.cs を導入する際に、RosaTerminal に変更を適用してある。
+</p>
+<!--************************************************************************-->
+<h4>20. VT100/CSI 25h(SetMode 25) の処理を無視する様になっている。</h4>
+<p>4.1.0 では CSI 25h (SM25) に関しては定義されていなかった。
+RosaTerminal でも SM25 に対しては定義していない。
+因みに SM25 が何を意味するのかは不明である。(調べた物の中には無かった)
+</p>
+<!--************************************************************************-->
+<h4>21. XTerm/ProcessAfterOSC</h4>
+<!--************************************************************************-->
+<h4>22. XTerm/SM RM DECSET DECRST</h4>
+<ul>
+<li>Alternate Screen Buffer の実装
+  <p>これは RosaTerminal でも色々書いた様な機がする。
+  現在の所問題は起こっていないので、現状維持で問題ないと思う。
+  </p>
+</li>
+<li>Save Cursor/Restore Cursor
+  <p>これも RosaTerminal で独立に実装している。</p>
+</li>
+</ul>
+<p>他にも細かい変更など在るが、基本的な機能に変化はない。と思う。</p>
+<!--************************************************************************-->
+<h4>23. XTerm/ScrollUp, ScrollDown</h4>
+<p>TerminalDocument の関数名が逆転している問題。
+これは、RosaTerminal の方でも独自に修正してあったので問題はない。
+</p>
+<!--########################################################################-->
+<h2>計画4. キーボード操作とそれに対応する Escape sequence の見直し [20111108]</h2>
+<!--########################################################################-->
+<h3>P4.1 M-\\ (Alt+\) が効かない [解決]</h3>
+<p>VkKeyScan の返してくるキーコード (Oem5) と
+A- の時に実際に送られてくるコード (OemBackslash) が異なるのが原因だった。
+OemBackslash の設定を追加した。
+TerminalUtils.KeyboardInfo.Init
+</p>
+<!--************************************************************************-->
+<h3>P4.2 Control について</h3>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>C-&lt;&gt;_?,./ が効かない</h4>
+<p>何故か C-\ だけは効く
+他にも、C-+*}`{;:@ が効かない。
+だけど、C-[ C-] は効く
+</p>
+<ul>
+<li>C-\ : ok</li>
+<li>C-[ : ok</li>
+<li>C-] : ok</li>
+</ul>
+<p>以下の物は、どうもタイプライタ配列のキー位置を元にした対応になっている様である。</p>
+<ul>
+<li>C-@ : ng</li>
+<li>C-^ : ng</li>
+<li>C-_ : ng</li>
+<li>C-" : C-@</li>
+<li>C-& : C-^</li>
+<li>C-= : C-_</li>
+</ul>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>元々の Control の意味</h4>
+<p>元々 Control の意味は下 5 bit だけを取り出す事にあると考えれば、
+存在する C-? のペアは以下の 32 種類しかない。
+</p>
+<pre>
+C-@ C-A C-B C-C C-D C-E C-F C-G C-H C-I C-J C-K C-L C-M C-N C-O
+C-P C-Q C-R C-S C-T C-U C-V C-W C-X C-Y C-Z C-[ C-\ C-] C-^ C-_
+</pre>
+<p>以上に上げる物は、一応全部入力する事はできる様である。</p>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>それ以外の Control</h4>
+<h5>emacs の設定</h5>
+<p>然し、emacs の設定を見れば分かる様に、
+それ以外のキーについても Control 等を修飾し区別しても問題はない。
+</p>
+<ul>
+<li>C-a - C-z に関しては CapsLock で入れ替わると良く分からなくなってしまうので、
+  C-A - C-Z と区別はしない事にするのが普通であると思う。
+  CapsLock で入れ替わる事のない様な文字に関しては区別をしても良いのではないかと思う。
+</li>
+<li>C-SPC は伝統的に C-@ として使われる?
+  良く分からないが、emacs では C-@ に対する設定と同時に必ず C-SPC も定義されている。
+  という事は区別しうるという事なのかも知れないが、実用上は可換である様にしている。
+</li>
+<li>C-I は TAB に同値である。</li>
+<li>C-M は RET に同値である。</li>
+<li>C-/ は emacs に存在する</li>
+<li>C-- は emacs に存在する</li>
+<li>C-数字 は emacs に存在する</li>
+</ul>
+
+<h5>可能そうな物</h5>
+<p>以下区別をしても良いのではないかと思われる記号の類</p>
+<pre>
+    C-! C-" C-# C-$ C-% C-& C-' C-( C-) C-* C-+ C-, C-- C-. C-/
+C-0 C-1 C-2 C-3 C-4 C-5 C-6 C-7 C-8 C-9 C-: C-; C-&lt; C-= C-&gt; C-?
+C-`                                                            
+                                                  C-{ C-| C-} C-~ C-BS
+</pre>
+<p>区別できるように適当な escape sequence で送っておいて、
+アプリケーションの側のデコードの設定をしておけば OK である。
+但し、幾ら区別できるように送信したとしても
+それを emacs 等アプリケーション側で区別を認識出来ない場合、
+設定のしようがない。(C-! という token が用意されていない等)
+</p>
+
+<h5>emacs で他の物を設定?</h5>
+<p>案の定 C-! に何かを設定しようとしたら、</p>
+<pre class="agh-prog-el">(global-set-key "\C-!" "hello")</pre>
+<p class="resume">Invalid modifier in string と表示されて設定出来なかった。因みに、</p>
+<pre class="agh-prog-el">(global-set-key "\C-A" "hello")</pre>
+<p class="resume">としておけば大丈夫。
+</p>
+<p>ただ、存在しない変なキー(delete line や begin 等)に対して
+C-! やら C-- を割り当てる様にすれば区別する様にできる。
+が、設定の時に混乱するかも知れない。例:
+</p>
+<ul>
+<li>&lt;deleteline&gt;</li>
+<li>&lt;deletechar&gt;</li>
+</ul>
+<p>…と思って色々やってみたら、勝手に適当な token を作成できるみたいである。
+</p>
+<pre class="agh-prog-el">
+(global-set-key [C-delete] "hello")
+(global-set-key [C-deleteline] "hello")
+(global-set-key [C-delete-this-frame] "hello")
+(global-set-key [C-delington] "hello")
+(global-set-key [C-!] "hello") ; でもこれは C-! ではなく &lt;C-!&gt; と認識される。
+</pre>
+<p>他に分かった事: (kbd "M-s-C-S-H-&lt;delington&gt;") は &lt;C-H-M-S-s-delington&gt; になる。</p>
+<p>→emacs の場合には、その記号にあった token を勝手に定義してそれを使う事にすれば OK</p>
+
+<h5>C-backspace</h5>
+<p>所で今気が付いた事であるが、C-backspace が効かないのは、
+それが C-] に同値であるからと言う事だろうか…。
+とは言っても、実際に押しても C-] すら送られない様であるが。
+</p>
+<p>一方で emacs の場合は C-backspace はちゃんと定義出来る (勝手な token だから)
+それに backspace が DEL=0x7F というのは環境(端末)に依存する事であるから、
+勝手に C-backspace と C-] を同一視するのは良くない。
+</p>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>取り敢えず emacs が特別に認識している C- について</h4>
+<h5>C-数字 C-- C-/</h5>
+<p>これらは勝手に emacs が認識している物であって、対応する sequence はないと思われる。
+</p>
+
+<h5>C-数字 について</h5>
+<p><del>C-数字 が効かない
+→そもそもそんな物が存在しないのかも知れないと思ったが、
+Windows のメニューなどには Ctrl+数字 を割り当てる事ができる様である。</del>
+抑もその様な sequence は存在しないという事。
+唯、一方で、GUI では sequence など関係なく、キーボードの状態を読み取れるので、
+Control でどのキーでも修飾する事が可能である。
+</p>
+<p>なので勝手に独自の Control sequence を定義して送ってしまうと言うのも手である。</p>
+<p>というか C-A-1 を押すと現状 ESC C-q が入力される。</p>
+<ul>
+<li>C-A-1 : ESC C-q</li>
+<li>C-A-2 : ESC C-r</li>
+<li>C-A-3 : ESC C-s</li>
+</ul>
+
+<h5>C-- C-/ について</h5>
+<p>emacs ではこれらの組合せについてコマンドを割り当てる事が可能である。
+しかし、他の記号の類と同じように、C- できないとして置いた方が無難であると考える。
+今の所はこれに対応する control sequence は定義しない。
+</p>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>予定</h4>
+<ul>
+<li>&gt; C-数字   に対応する</li>
+<li>&gt; C-M-数字 に対応する
+  <p>これらは既存の実装は余り無い様なので、勝手に Escape sequence を定義する。</p>
+</li>
+<li>C-@ C-_ C-^ をその通りに入力できるようにする
+  <p><del>勿論 C-" C-= C-& でも入力出来るのはそのままにしておく</del></p>
+</li>
+</ul>
+<!--************************************************************************-->
+<h3>P4.3 C-数字 [2011/11/09 07:29:43 完 C-M-S-数字 に対して確認]</h3>
+<p>これは ProcessCmdKey に届いていた様である。
+全部 Terminal.SequenceKeyData 改め Terminal.EncodeInputKey で受け取って処理する様に書換。
+後は、Terminal.EncodeInputKey で処理を書くだけである
+</p>
+<p>勝手に sequence を決めなければならないが…
+色々見ていると、F1 = \e[11~ から始まっているので、
+\e[0~ - \e[9~ を勝手に 1-9 に割り当てても良さそう? と思ったら Home/End の類が使用していた
+調べ直すと ^ は Ctrl+F1 以外使っていないみたいなので \e[0^ - \e[9^ を使う事にする。
+</p>
+<!--************************************************************************-->
+<h3>P4.4 C-@ C-_ C-^</h3>
+<p>どうも C-" C-= C-& が効くのは OnKeyPress に \C-@ \C-_ \C-^ が送られてくるからの様である。
+これを正しく処理する為には、OnKeyPress に渡る前に自分で処理をしなければならない。
+</p>
+<p>うーん。というか Shift 以外の修飾キー (Alt, Ctrl) がついている場合、OnKeyPress に任せては駄目!
+現状 Alt がついている場合には自前で処理している。
+但し、KeyboardInfo.GetChar を使っているので不完全な部分はある。
+今後 KeyboardInfo.GetChar の実装をよくする→色々考えて書き直した。
+</p>
+<p>但し Ctrl+アルファベット だけは OK
+<del>TODO: Ctrl+アルファベット 以外の Ctrl 付は OnKeyPress の前に処理する。
+唯のアルファベット も自分で処理しても良い</del>
+→止めた。IME を通じて入力するとどうせ OnKeyPress に届く
+</p>
+<p>[2011/11/09 07:55:42 C-M-S 記号類確認済]</p>
+<p>Ctrl+KP/-*+ にも対応する[完]</p>
+<!--************************************************************************-->
+<h3>P4.5 C-A-文字 [完]</h3>
+<p>これはちゃんと効いていた。(cygwin @ cmd では効かなかったが。)</p>
+<!--************************************************************************-->
+<h3>P4.6 A-文字 A-S-文字</h3>
+<p>これらは一体どういう事になっているのか?
+大文字の方で送られていると言う事か? 確認する。
+→CapsLock に関係なく小文字/大文字で送られていた。
+この動作を今後もそのまま使う事にする。
+CapsLock の状態によってショートカットキー操作が変わるのは使いにくいので。
+</p>
+<!--************************************************************************-->
+<h3>P4.7 C-M-S-改行について</h3>
+<p>単純な改行については TerminalControl の側で、設定に応じた改行コードで送る。
+修飾子のついている改行については、現状何も対処されていない。
+</p>
+<h4>C-M-S-改行/Tab/SPC/BS について考える。</h4>
+<p>→取り敢えず対応した。一覧表参照。</p>
+<h4>C-backspace について。</h4>
+<p>これについても delete と同じようにシーケンスを定義したい。
+但し、backspace で何を送るかは設定で変更出来るので、
+その設定に応じてどの様に変えるかについても考えるべきである。
+場合によっては C-backspace 専用に新しいオプションを追加する必要があるかも知れない。
+</p>
+<p>→取り敢えず C-backspace 等についてもデフォルトの設定を与えた。
+backspace の設定を変えても、C-backspace で送る物は変更しない予定である。
+尚、C-backspace 自体についての設定オプションも追加しても良いかも知れない。
+</p>
+<!--************************************************************************-->
+<h3>P4.8 Tab が効かなくなっている事</h3>
+<h4>作業の途中で TerminalControl.cs に対する今迄の変更を一部失った。</h4>
+<p>どれぐらい失ったのか良く分からないが…。
+EncodeInputKey の変更に対する書換までは失われていない
+mwgSendSpecialKeyOrNL 改名までの変更も失われていない
+改行コード判定に対する冗長なコードの削除は失われていた
+ProcessCmdKey 内の無駄な条件判定 ch!=0 の削除が失われていた
+</p>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>何処で処理されているか</h4>
+<p>KeyboardInfo.Scan を KeyboardInfo.GetChar に置換したのだが、
+その後、410-435b の間に Tab 等についての判定が Scan に移動した様である。
+従って、Tab 等についての判定を何処かに入れる必要がある。
+と思ったけれど、GetChar を使っていても初めはちゃんと Tab が処理されていた様な…。
+</p>
+<ul>
+<li>Escape
+  <p>OnKeyPress で処理される</p>
+</li>
+<li>Back
+  <p>ProcessCmdKey で処理される。これは Custom シーケンスの設定に基づく
+  Custom の設定をスキップしても、ちゃんと OnKeyPress で処理される。
+  </p>
+</li>
+<li>Delete
+  <p>ProcessDialogKey で処理される。これは Terminal.EncodeKeyInput に基づく</p>
+</li>
+<li>Tab
+  <ul>
+  <li>ProcessCmdKey     X 処理されず</li>
+  <li>ProcessDialogKey  X 処理されず</li>
+  <li>OnKeyPress        は呼び出されない
+    <p>処理されていない。</p>
+  </li>
+  </ul>
+  <p>うーん。今迄は OnKeyPress が呼び出されていたという事だろうか…??
+  でも、Tab によるコントロールの間の移動は OnKeyPress の前に処理されて、
+  Tab は元々 OnKeyPress には回ってこないはず…。
+  </p>
+</li>
+</ul>
+<!--************************************************************************-->
+<h3>P4.9 KeyboardInfo.GetChar</h3>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>shift が使われていないように見える事 [これは勘違いだった]</h4>
+<p>key&gt;0xFF は即座に '\0' を返しているので、
+key&amp;Keys.Shift は常にゼロになっている。
+→つまり、Alt+! Alt+" 等は認識されないという事?
+と思ったけれど、ちゃんと処理されている…どういう事か?
+</p>
+<p>よく見たら、k&gt;0xFF は即座に \0 を返しているが、
+k&lt;=0xFF でも key&Keys.Shift は別にゼロではない。k!=key
+</p>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>使われている場所</h4>
+<p>これは Alt+(hoge) の時にしか実質使われていない。
+それと、手で TerminalControl#SendKey(なんとか) を呼び出した時。
+</p>
+<p>これらの時には Tab 等を送る事ができる様にしても良いだろうと思う。
+なので、KeyboardInfo.Init で Tab 等を登録する。
+</p>
+<p>将来的には Ctrl+(hoge) の時にも使用される様になるだろう。(参照 KeyPad 項)</p>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>KeyPad の 0-9 の翻訳?</h4>
+<p><del>KeyPad の 0-9 の翻訳にも対応する。但し、これには NumLock 状態が必要</del>
+良く考えたら、これは Ins や PgDn PgUp 等特殊なキーになり得るので、
+Ins/End/Down/PgDn 等と同様に Terminal.EncodeInputKey で処理するべきである。
+</p>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>CapsLock の状態</h4>
+<p>CapsLock の状態に応じた a-zA-Z 切替処理にも対応する?
+でも、修飾のある場合は切り替えたりするのは混乱の元でもある。
+二種類を使い分けるという手もある。
+</p>
+<ul>
+<li>修飾あり用→ GetCharToModify/GetKeyChar (CapsLock 等で変化しない)</li>
+<li>修飾為し用→ GetChar/GetActualChar (CapsLock に応じてちゃんと変化する)</li>
+</ul>
+<p>実装に関して。</p>
+<ul>
+<li>先ず、試してみた所 Vk なんたらは現在の CapsLock の状態は無視する様である。</li>
+<li>Control.IsKeyLocked(Keys.CapsLock) で状態を調べられる様である。</li>
+</ul>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>キーボードの種類に応じた記号類の変換</h4>
+<p>これは、現状対応出来ている筈。
+Win32.Vk なんたら関数がその様に実装されているのであれば。
+(というか、その様に実装しているのでなければ、抑もこの関数の存在意義も分からなくなる。)
+</p>
+<!--++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+<h4>KeyPad の 0-9 /*-=+ENT 等はどうなっているのか? [完]</h4>
+<p>修飾が付いていなければ OnKeyPress で処理される。
+修飾が付いている時は、どうも処理されていない様な気がする。
+</p>
+<p>やはり、Ins/End/Down/PgDn 等の為に KeyPad0-9 は EncodeInputKey で処理する必要がある。
+</p>
+<ul>
+<li>Control.IsKeyLocked(Keys.NumLock) で状態を調べられる様である。</li>
+</ul>
+<p>→KP0-9 を RosaTerminal.EncodeInputKey に実装した。</p>
+<ul>
+<li>KP1     : default</li>
+<li>C-KP1   : ok</li>
+<li>C-M-KP1 : ok</li>
+<li>M-KP1   : ok <del>抑も WM が送られてこないみたい?</del> と思ったら無視していた。バグ</li>
+</ul>
+<p>→KP/-*+ は C-記号 の場所で対応する事にした。</p>
+<!--************************************************************************-->
+<h3>P4.10 M-上下左右</h3>
+<p>何故か効かなかった様に思ったが…
+今、local で試してみた所ちゃんと効いている様子である。
+もしかするともう解決されているのかも知れないが、一応書いておく事にする。
+</p>
+<!--************************************************************************-->
+<h3>P4.11 大幅書き直し (EncodeInputByte/Key 統合)</h3>
+<p>以下の機能を追加した。</p>
+<ul>
+<li>C-記号 の類</li>
+<li>C-S-a 等の入力</li>
+</ul>
+<p class="resume">しかし C-M-S-a 等についての入力が正しく処理されていない。
+それに、段々とコードが汚くなってきたので大幅に書き換えて統合する事にする。
+</p>
+<p>元々ののコードでは、EncodeInputByte と EncodeInputKey の二つの関数で
+キー入力に対する処理が分割されていた。
+これによって一文字で送る事ができるシーケンスに関しては、
+TerminalControl の方で自動的に修飾が行われる様になっていた。
+しかし、キー入力に対する場合分けが複雑になるに連れて、
+処理が分割されている事により逆に実装が面倒になっていた。
+其処で、EncodeInputByte と EncodeInputKey の実装をくっつけて、
+キー修飾なども全て一つの関数 EncodeInputKey2 の中で実装できる様にした。
+</p>
+<p>結局 RosaTerminal.EncodeInputKey2 は一から全て書き上げる事になった。
+また、互換性の為に abstract EncodeInputKey 関数は残して、
+デフォルトでは EncodeInputByte, EncodeInputKey 関数を用いて
+EncodeInputKey2 が動作する様にした。
+</p>
+<pre class="diff agh-prog-cs">
+@@ TerminalControl.cs/Poderosa.Terminal.TerminalControl.ProcessCmdKey @@ 2012/10/09 23:12:31
+-        if((key&amp;Keys.Control)!=0){
+-          byte c=GetTerminal().EncodeInputByte(key);
+-          if(c!=0xFF){
+-            mwgSendCharBuff[0]=c;
+-            mwgSendBytes(mwgSendCharBuff,1);
+-            return true;
+-          }
+-        }
+-        if(this.mwgSendSpecialKeyOrNL(key))
+-          return true;
++        byte[] seq;
++        int len=GetTerminal().EncodeInputKey2(key,out seq);
++        if(len&gt;1||len==1&amp;&amp;(key&amp;Keys.Control)!=0){
++          mwgSendBytes(seq,len);
++          //System.Console.WriteLine("dbg20121009:ProcessCmdKey: sent {0}",key);
++          return true;
++        }else{
++          //System.Console.WriteLine("dbg20121009:ProcessCmdKey: skipped {0}",key);
++        }
+@@ TerminalControl.cs/Poderosa.Terminal.TerminalControl.mwgSendAltKey @@ 2012/10/09 23:32:03
+     private bool mwgSendAltKey(Keys key,AltKeyAction action){
+-      // 通常の文字
+-      byte ch=GetTerminal().EncodeInputByte(key&amp;~Keys.Alt);
+-      if(ch!=0xFF){
+-        if(action==AltKeyAction.Meta){
+-          mwgSendCharBuff[0]=(byte)(ch+0x80);
+-          mwgSendBytes(mwgSendCharBuff,1);
+-        }else{
+-          mwgSendCharBuff[0]=0x1B;
+-          mwgSendCharBuff[1]=(byte)ch;
+-          mwgSendBytes(mwgSendCharBuff,2);
+-        }
+-        return true;
+-      }
+-
+-      return mwgSendSpecialKeyOrNL(key);
++      if(action==AltKeyAction.Meta&amp;&amp;(key&amp;Mods.MetaE)!=0)
++        key=key&amp;~Mods.MetaE|Mods.Meta;
++
++      byte[] data;
++      int len=GetTerminal().EncodeInputKey2(key,out data);
++      if(len&gt;0){
++        mwgSendBytes(data,len);
++        return true;
++      }else
++        return false;
+     }
+@@ TerminalControl.cs/Poderosa.Terminal.TerminalControl.mwgSendKey @@ 2012/10/09 23:47:46
+     private bool mwgSendKey(Keys key){
+-      // 通常の文字
+-      byte ch=GetTerminal().EncodeInputByte(key&amp;~Keys.Alt);
+-      if(ch!=0xFF){
+-        if(0!=(key&amp;Keys.Alt)){
+-          // Meta オプションで選択できる様にする (暫定: LeftAltKey で分岐)
+-          switch(GEnv.Options.LeftAltKey){
+-            case AltKeyAction.Meta:
+-              mwgSendCharBuff[0]=(byte)(ch+0x80);
+-              mwgSendBytes(mwgSendCharBuff,1);
+-              return true;
+-            case AltKeyAction.ESC:
+-            default:
+-              mwgSendCharBuff[0]=0x1B;
+-              mwgSendCharBuff[1]=(byte)ch;
+-              mwgSendBytes(mwgSendCharBuff,2);
+-              return true;
+-          }
+-        }else{
+-          mwgSendCharBuff[0]=(byte)ch;
+-          mwgSendBytes(mwgSendCharBuff,1);
+-          return true;
+-        }
+-      }
+-
+-      return mwgSendSpecialKeyOrNL(key);
++      if(key==Keys.Return||key==Keys.Enter){
++        SendCharArray(TerminalUtil.NewLineChars(GetTerminalSettings().TransmitNL));
++        return true;
++      }
++
++      if((key&amp;Keys.Alt)!=0&amp;&amp;GEnv.Options.LeftAltKey==AltKeyAction.Meta)
++        key=key&amp;~Keys.Alt|Mods.MetaE;
++      byte[] data;
++      int len=GetTerminal().EncodeInputKey2(key,out data);
++      if(len&gt;0){
++        mwgSendBytes(data,len);
++        return true;
++      }else
++        return false;
+     }
+@@ TerminalControl.cs/Poderosa.Terminal.TerminalControl.ProcessDialogKey @@ 2012/10/10 00:15:30
+         switch(key){
+           case Keys.Enter:
+           case Keys.LineFeed:
+             _escForVI = false;
+             SendCharArray(TerminalUtil.NewLineChars(GetTerminalSettings().TransmitNL));
+             return true;
+           case Keys.Control|Keys.Space:
+             SendChar('\0');
+             return true;
+           case Keys.Tab:
+           case Keys.Tab|Keys.Shift:
+             SendChar('\t');
+             return true;
+         }
+
+-        if(mwgSendSpecialKey(key))
++        if(mwgSendKey(key))
+           return true;
+@@ TerminalControl.cs/Poderosa.Terminal.TerminalControl.OnMouseWheel @@ 2012/10/10 00:26:16
+       //アプリケーションモードでは通常処理をやめてカーソル上下と同等の処理にする
+       if(_session!=null &amp;&amp; !GEnv.Options.AllowsScrollInAppMode &amp;&amp; GetTerminal().TerminalMode==TerminalMode.Application) {
+         int m = GEnv.Options.WheelAmount;
+         for(int i=0; i&lt;m; i++)
+-          mwgSendSpecialKey(Keys.None|(e.Delta&gt;0? Keys.Up : Keys.Down));
++          mwgSendKey(Keys.None|(e.Delta&gt;0? Keys.Up : Keys.Down));
+         return;
+       }
+@@ TerminalControl.cs/Poderosa.Terminal.TerminalControl.mwgSendKeysCache @@ 2012/10/10 00:28:47
+-    private bool mwgSendSpecialKey(Keys key) {
+-      byte[] seq;
+-      int c=GetTerminal().EncodeInputKey1(key,out seq);
+-      if(c!=0){
+-        mwgSendBytes(seq,c);
+-        return true;
+-      }else
+-        return false;
+-    }
+-    private bool mwgSendSpecialKeyOrNL(Keys key){
+-      if(key==Keys.Enter){
+-        SendCharArray(TerminalUtil.NewLineChars(GetTerminalSettings().TransmitNL));
+-        return true;
+-      }
+-
+-      if(mwgSendSpecialKey(key))
+-        return true;
+-
+-      return false;
+-    }
+#------------------------------------------------------------------------------
+# 当初は特定のシーケンスになる物をキャッシュしようと考えていたが、良く考えてみ
+# るとその時の設定や状況によってシーケンスは変わりうる。現在は状況に依存しない
+# シーケンスについても、今後の拡張によって状況依存になる可能性もあるので、キャ
+# ッシュ機能は削除する。
+@@ TerminalControl.cs/Poderosa.Terminal.TerminalControl.mwgSendKeysCache @@ 2012/10/10 00:28:47
+-    //--------------------------------------------------------------------------
+-    // 設定に拘わらず一定のシーケンスになる SpecialKey はキャッシュする
+-    // →TerminalModes によっても変化するので、実際にキャッシュしても良い物は殆どない?
+-    //   今は、変化する事を想定せずにキャッシュしてしまっているが。
+-    private Gen::Dictionary&lt;Keys,byte[]&gt; mwgSendKeysCache=new Gen::Dictionary&lt;Keys,byte[]&gt;();
+-    private void mwgInitialize(){
+-      mwgSendKeysCache.Add(Keys.Space|Keys.Control,new byte[]{(byte)'\0'});
+-    }
+@@ TerminalControl.cs/Poderosa.Terminal.TerminalControl.TerminalControl @@ 2012/10/10 00:29:00
+     public TerminalControl() {
+       _instanceID = _instanceCount++;
+       _enableAutoScrollBarAdjustment = false;
+       _escForVI = false;
+       this.EnabledEx = false;
+
+       // この呼び出しは、Windows.Forms フォーム デザイナで必要です。
+       InitializeComponent();
+-      mwgInitialize();
+
+       _terminalEmulatorMouseHandler = new TerminalEmulatorMouseHandler(this);
+       _mouseHandlerManager.AddLastHandler(_terminalEmulatorMouseHandler);
+       //TODO タイマーは共用化？
+       _sizeTipTimer = new System.Windows.Forms.Timer();
+       _sizeTipTimer.Interval = 2000;
+       _sizeTipTimer.Tick += new EventHandler(this.OnHideSizeTip);
+
+       this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+     }
+</pre>
+
+<p>古いコードは整理する</p>
+<pre class="diff agh-prog-cs">
+@@ mwg.RosaTerm.RosaTerminal.EncodeInputByte,EncodeInputKey1 @@ 2012/10/10 00:53:55
+-    //--------------------------------------------------------------------------
+-    private static string[] FUNCTIONKEY_MAP = { 
+-    //   F1    F2    F3    F4    F5    F6    F7    F8    F9    F10   F11  F12
+-        "11", "12", "13", "14", "15", "17", "18", "19", "20", "21", "23", "24",
+-    //   F13   F14   F15   F16   F17  F18   F19   F20   F21   F22   F23   F24
+-        "25", "26", "28", "29", "31", "32", "33", "34", "23", "24", "25", "26"};
+-    internal override byte EncodeInputByte(Keys key){
+-      Keys code=key&amp;Keys.KeyCode;
+-      Keys mods=key&amp;Keys.Modifiers;
+-      
+-      // * "Meta = prefix \e" の設定にしている時は、
+-      //   Keys.Alt は別に処理されるのでここには来ない
+-
+-      if((int)Keys.NumPad0&lt;=(int)code&amp;&amp;(int)code&lt;=(int)Keys.NumPad9){
+-        // 仮定: Keys.NumPad0-Keys.NumPad9 は連続
+-
+-        // modifier: Shift 切替/Ctrl, Meta のない時に 0-9
+-        bool numlocked=System.Windows.Forms.Control.IsKeyLocked(Keys.NumLock);
+-        bool shifted=(mods&amp;Keys.Shift)!=0; // (普通来ない)
+-        if(numlocked!=shifted&amp;&amp;(mods&amp;~Keys.Shift)==0){
+-          return (byte)('0'+((int)code-(int)Keys.NumPad0));
+-        }else
+-          return 0xFF;
+-      }else if((int)Keys.D0&lt;=(int)code&amp;&amp;(int)code&lt;=(int)Keys.D9){
+-        // 仮定: Keys.D0-Keys.D9 は連続
+-
+-        if((mods&amp;Keys.Alt)!=0)return 0xFF;
+-
+-        if((mods&amp;Keys.Control)!=0)
+-          return 0xFF; // C-数字 C-S-数字
+-
+-        return base.EncodeInputByte(key);
+-      }else if((int)Keys.A&lt;=(int)code&amp;&amp;(int)code&lt;=(int)Keys.Z){
+-        if(mods==(Keys.Shift|Keys.Control))
+-          return 0xFF;
+-      }else{
+-        if((mods&amp;Keys.Control)!=0){
+-          byte ch=base.EncodeInputByte(key&amp;~Keys.Control);
+-          if(':'&lt;=ch&amp;&amp;ch&lt;='?'||'*'&lt;=ch&amp;&amp;ch&lt;='/'||ch=='`'||'{'&lt;=ch&amp;&amp;ch&lt;='~')
+-            return 0xFF;
+-        }
+-
+-        if(mods!=0){
+-          if(code==Keys.Enter||code==Keys.Tab||code==Keys.Escape){
+-            return 0xFF;
+-          }else if(code==Keys.Back||code==Keys.Space){
+-            if((mods&amp;~Keys.Alt)!=Keys.Control)return 0xFF;
+-          }
+-        }
+-
+-        System.Console.WriteLine("RosaTerminal.EncodeInputByte: key={0} mod={1}",code,mods);
+-      }
+-
+-      return base.EncodeInputByte(key);
+-    }
+-
+-    internal override int EncodeInputKey1(Keys key,out byte[] data){
+-      EncodeInputKeyImpl(key);
+-      data=inputseq.data;
+-      return inputseq.length;
+-    }
+-    internal void EncodeInputKeyImpl(Keys key){
+-      inputseq.Clear();
+-
+-      Keys mods=key&amp;Keys.Modifiers;
+-      Keys code=key&amp;Keys.KeyCode;
+-      if((int)Keys.F1&lt;=(int)code&amp;&amp;(int)code&lt;=(int)Keys.F24){
+-        int number=(int)code-(int)Keys.F1;
+-        if(tstat.EmulationType==Poderosa.ConnectionParam.TerminalType.XTerm
+-          ||tstat.EmulationType==Poderosa.ConnectionParam.TerminalType.KTerm){
+-          if(number&lt;4)
+-            inputseq.WriteSS3Sequence(mods,(char)('P'+number));
+-          else
+-            inputseq.WriteCSISequence(mods,FUNCTIONKEY_MAP[number],number&gt;20?'$':'~');
+-        }else{
+-          if((mods&amp;Keys.Shift)!=0&amp;&amp;number&lt;12){
+-            mods&amp;=~Keys.Shift;
+-            number+=12;
+-          }
+-          inputseq.WriteCSISequence(mods,FUNCTIONKEY_MAP[number],number&gt;20?'$':'~');
+-        }
+-        return;
+-      }else if((int)Keys.NumPad0&lt;=(int)code&amp;&amp;(int)code&lt;=(int)Keys.NumPad9){
+-        // 仮定: Keys.NumPad0-Keys.NumPad9 は連続
+-
+-        // mods: Shift 切替/Ctrl, Meta 此処で処理
+-        bool numlocked=System.Windows.Forms.Control.IsKeyLocked(Keys.NumLock);
+-        bool shifted=(mods&amp;Keys.Shift)!=0; // (普通来ない)
+-        mods&amp;=~Keys.Shift;
+-        if(numlocked!=shifted){
+-          if((mods&amp;Keys.Control)==0)return; // OnKeyPress
+-
+-          inputseq.WriteCSISequence(mods,(char)('0'+((int)code-(int)Keys.NumPad0)),'^'); // Ctrl+0-9
+-          return;
+-        }else switch(code){
+-          case Keys.NumPad2:inputseq.WriteCSISequence(mods,'B');return;//KPDown
+-          case Keys.NumPad4:inputseq.WriteCSISequence(mods,'D');return;//KPLeft
+-          case Keys.NumPad6:inputseq.WriteCSISequence(mods,'C');return;//KPRight
+-          case Keys.NumPad8:inputseq.WriteCSISequence(mods,'A');return;//KPUp
+-          case Keys.NumPad0:code=Keys.Insert;break;
+-          case Keys.NumPad7:code=Keys.Home;break;
+-          case Keys.NumPad1:code=Keys.End;break;
+-          case Keys.NumPad9:code=Keys.PageUp;break;
+-          case Keys.NumPad3:code=Keys.PageDown;break;
+-          case Keys.NumPad5:inputseq.WriteCSISequence(mods,'E');return;//Begin (普通来ない)
+-        }
+-      }else if((int)Keys.D0&lt;=(int)code&amp;&amp;(int)code&lt;=(int)Keys.D9){
+-        // 仮定: Keys.D0-Keys.D9 は連続
+-
+-        if((mods&amp;Keys.Control)==0)return; // OnKeyPress
+-
+-        if((mods&amp;Keys.Shift)==0){
+-          // [[ C-M?-0 ]]
+-
+-          // \e[48;5^
+-          int ch='0'-(int)Keys.D0+(int)code;
+-          inputseq.WriteCSISequence(mods&amp;~Keys.Shift,ch,'^');
+-
+-          //// \e[0;5^
+-          //inputseq.WriteCSISequence(mods,(char)('0'+((int)code-(int)Keys.D0)),'^'); // Ctrl+0-9
+-          return;
+-        }else{
+-          int ch=(int)base.EncodeInputByte(code|Keys.Shift);
+-          if(ch!=0xFF){
+-            // [[ C-M?-! ]]
+-            inputseq.WriteCSISequence(mods&amp;~Keys.Shift,ch,'^');
+-            return;
+-          }else{
+-            // [[ C-S-0 ]]
+-            return;
+-          }
+-        }
+-      }
+-
+-      if((int)Keys.A&lt;=(int)code&amp;&amp;(int)code&lt;=(int)Keys.Z){
+-        // [[ C-S-a ]]
+-        if(mods==(Keys.Shift|Keys.Control)){
+-          int ch='a'-(int)Keys.A+(int)code;
+-          inputseq.WriteCSISequence(mods,ch,'^');
+-          return;
+-        }
+-      }else if((mods&amp;Keys.Control)!=0){
+-        int ch=base.EncodeInputByte(key&amp;~Keys.Control);
+-        if(':'&lt;=ch&amp;&amp;ch&lt;='?'||'*'&lt;=ch&amp;&amp;ch&lt;='/'||ch=='`'||'{'&lt;=ch&amp;&amp;ch&lt;='~'){
+-          inputseq.WriteCSISequence(mods&amp;~Keys.Shift,ch,'^');
+-          return;
+-        }
+-      }
+-      
+-      if(mods!=0){
+-        if(code==Keys.Enter){
+-          inputseq.WriteCSISequence(mods,(int)'\r','^');
+-        }else if(code==Keys.Tab){
+-          inputseq.WriteCSISequence(mods,(int)'\t','^');
+-        }else if(code==Keys.Escape){
+-          inputseq.WriteCSISequence(mods,(int)'\x1b','^');
+-        }else if(code==Keys.Back){
+-          inputseq.WriteCSISequence(mods,(int)'\x8','^');
+-        }else if(code==Keys.Space){
+-          inputseq.WriteCSISequence(mods,(int)' ','^');
+-        }
+-      }
+-
+-      if(GUtil.IsCursorKey(code)){
+-        if((tstat.EmulationType==Poderosa.ConnectionParam.TerminalType.XTerm
+-          ||tstat.EmulationType==Poderosa.ConnectionParam.TerminalType.KTerm)
+-          &amp;&amp;tstat.DecCkm){
+-          switch(code){
+-            case Keys.Up:   inputseq.WriteSS3Sequence(mods,'A');return;
+-            case Keys.Down: inputseq.WriteSS3Sequence(mods,'B');return;
+-            case Keys.Right:inputseq.WriteSS3Sequence(mods,'C');return;
+-            case Keys.Left: inputseq.WriteSS3Sequence(mods,'D');return;
+-            default:
+-              throw new System.InvalidProgramException("unexpected_code_path: unexpected key "+code.ToString());
+-          }
+-        }
+-
+-        switch(code){
+-          case Keys.Up:   inputseq.WriteCSISequence(mods,'A');return;
+-          case Keys.Down: inputseq.WriteCSISequence(mods,'B');return;
+-          case Keys.Right:inputseq.WriteCSISequence(mods,'C');return;
+-          case Keys.Left: inputseq.WriteCSISequence(mods,'D');return;
+-          default:
+-            throw new System.InvalidProgramException("unexpected_code_path: unexpected key "+code.ToString());
+-        }
+-      }
+-
+-      if(tstat.EmulationType==Poderosa.ConnectionParam.TerminalType.XTerm
+-        ||tstat.EmulationType==Poderosa.ConnectionParam.TerminalType.KTerm
+-      ){
+-        // xterm kterm
+-        switch(code){
+-          case Keys.Home:
+-            if(tstat.DecCkm)
+-              inputseq.WriteSS3Sequence(mods,'H');
+-            else
+-              inputseq.WriteCSISequence(mods,'H');
+-            return;
+-          case Keys.Insert:   inputseq.WriteCSISequence(mods,'2','~');return;
+-          case Keys.Delete:   inputseq.WriteCSISequence(mods,'3','~');return;
+-          case Keys.End:
+-            if(tstat.DecCkm)
+-              inputseq.WriteSS3Sequence(mods,'F');
+-            else
+-              inputseq.WriteCSISequence(mods,'F');
+-            return;
+-          case Keys.PageUp:   inputseq.WriteCSISequence(mods,'5','~');return;
+-          case Keys.PageDown: inputseq.WriteCSISequence(mods,'6','~');return;
+-        }
+-      }else if(tstat.EmulationType==Poderosa.ConnectionParam.TerminalType.VT100){
+-        // vt100
+-        switch(code){
+-          case Keys.Home:     inputseq.WriteCSISequence(mods,'2','~');return;
+-          case Keys.Insert:   inputseq.WriteCSISequence(mods,'1','~');return;
+-          case Keys.Delete:   inputseq.WriteCSISequence(mods,'4','~');return;
+-          case Keys.End:      inputseq.WriteCSISequence(mods,'5','~');return;
+-          case Keys.PageUp:   inputseq.WriteCSISequence(mods,'3','~');return;
+-          case Keys.PageDown: inputseq.WriteCSISequence(mods,'6','~');return;
+-        }
+-      }else{
+-        // cygwin rosaterm
+-        switch(code){
+-          case Keys.Home:     inputseq.WriteCSISequence(mods,'1','~');return;
+-          case Keys.Insert:   inputseq.WriteCSISequence(mods,'2','~');return;
+-          case Keys.Delete:   inputseq.WriteCSISequence(mods,'3','~');return;
+-          case Keys.End:      inputseq.WriteCSISequence(mods,'4','~');return;
+-          case Keys.PageUp:   inputseq.WriteCSISequence(mods,'5','~');return;
+-          case Keys.PageDown: inputseq.WriteCSISequence(mods,'6','~');return;
+-        }
+-        //// vt52 rxvt
+-        //switch(code){
+-        //  case Keys.Home:     inputseq.WriteCSISequence(mods,'7','~');return;
+-        //  case Keys.Insert:   inputseq.WriteCSISequence(mods,'2','~');return;
+-        //  case Keys.Delete:   inputseq.WriteCSISequence(mods,'3','~');return;
+-        //  case Keys.End:      inputseq.WriteCSISequence(mods,'8','~');return;
+-        //  case Keys.PageUp:   inputseq.WriteCSISequence(mods,'5','~');return;
+-        //  case Keys.PageDown: inputseq.WriteCSISequence(mods,'6','~');return;
+-        //}
+-      }
+-    }
++    internal override int EncodeInputKey1(Keys key,out byte[] seq) {
++      return EncodeInputKey2(key,out seq);
++    }
+@@ mwg.RosaTerm.InputSequence.WriteCSISequence @@ 2012/10/10 00:59:55
+-    /// &lt;summary&gt;
+-    /// \e[1A の形式をしたシーケンスを生成します。
+-    /// &lt;/summary&gt;
+-    /// &lt;param name="modifier"&gt;&lt;/param&gt;
+-    /// &lt;param name="index"&gt;
+-    /// 例えば Up (\e[1A) の場合は、'1' を指定します。
+-    /// 例えば Home (\e[2~) の場合は、'2' を指定します。
+-    /// &lt;/param&gt;
+-    /// &lt;param name="t"&gt;
+-    /// 例えば Up (\e[1A) の場合は、'A' を指定します。
+-    /// 例えば Home (\e[2~) の場合は、'~' を指定します。
+-    /// &lt;/param&gt;
+-    public void WriteCSISequence(Forms::Keys modifier,char index,char t){
+-      //byte[] r=this.data;
+-
+-      // ESC if A
+-      if(0!=(modifier&amp;Forms::Keys.Alt))this.Add(0x1b);
+-      modifier&amp;=~Forms::Keys.Alt;
+-
+-      // CSI n
+-      this.Add(0x1b);
+-      this.Add('[');
+-      this.Add(index);
+-
+-      // MOD
+-      this.write_modifier(modifier);
+-
+-      this.Add(t);
+-    }
+-    public void WriteCSISequence(Forms::Keys modifier,string index,char t){
+-      //byte[] r=this.data;
+-
+-      // ESC if A
+-      if(0!=(modifier&amp;Forms::Keys.Alt))this.Add(0x1b);
+-      modifier&amp;=~Forms::Keys.Alt;
+-
+-      // CSI c
+-      this.Add(0x1b);
+-      this.Add('[');
+-      for(int j=0;j&lt;index.Length;j++)
+-        this.Add(index[j]);
+-
+-      // MOD
+-      this.write_modifier(modifier);
+-
+-      this.Add(t);
+-    }
+-    public void WriteCSISequence(Forms::Keys modifier,int index,char t){
+-      //byte[] r=this.data;
+-
+-      // ESC if A
+-      if(0!=(modifier&amp;Forms::Keys.Alt))this.Add(0x1b);
+-      modifier&amp;=~Forms::Keys.Alt;
+-
+-      // CSI c
+-      this.Add(0x1b);
+-      this.Add('[');
+-      {
+-        int m=1;
+-        while(m*10&lt;index)m*=10;
+-        for(;m&gt;0;m/=10)
+-          this.Add((byte)('0'+index/m%10));
+-      }
+-
+-      // MOD
+-      this.write_modifier(modifier);
+-
+-      this.Add(t);
+-    }
+-    public void WriteCSISequence(Forms::Keys modifier,char t){
+-      byte[] r=this.data;
+-
+-      // ESC if A
+-      if(0!=(modifier&amp;Forms::Keys.Alt))this.Add(0x1b);
+-      modifier&amp;=~Forms::Keys.Alt;
+-
+-      // CSI
+-      this.Add(0x1b);
+-      this.Add('[');
+-
+-      // 1;# if C/S
+-      if(modifier!=0){
+-        this.Add('1');
+-        this.write_modifier(modifier);
+-      }
+-
+-      this.Add(t);
+-    }
+-    public void WriteSS3Sequence(Forms::Keys modifier,char t){
+-      byte[] r=this.data;
+-
+-      // ESC if A
+-      if(0!=(modifier&amp;Forms::Keys.Alt))this.Add(0x1b);
+-      modifier&amp;=~Forms::Keys.Alt;
+-
+-      // CSI
+-      this.Add(0x1b);
+-
+-      // 1;# if C/S
+-      if(modifier!=0){
+-        this.Add('[');
+-        this.Add('1');
+-        this.write_modifier(modifier);
+-      }else{
+-        this.Add('O');
+-      }
+-
+-      this.Add(t);
+-    }
+</pre>
+
+<h4>[バグ] Shift+矢印 が送信されていない。</h4>
+<p>→変な所で mods&=~KeyModifiers.Shift; を実行していた。
+これは直ぐに修正した。
+</p>
+
+<h4>[バグ] C-backspace で '\b' (C-h) が送られる</h4>
+<p>C-h でも良いが、今迄は C-_ を送っていた。
+今迄はどういう経緯で C-_ になっていたのか分からない。
+もしかすると特別に C-_ を手で返す様にしていたかも知れないし、
+C- をつけない唯の backspace の時の値 0x7F に &amp;0x1F を適用した結果として、
+C-_ が返されていたのかも知れない。
+何れにしても、今回は手で C-_ を返す様に変更する事にした。
+</p>
+
+<h4>[バグ] C-S-d で '\e[00;6^' が返される</h4>
+<p>本来は \e[100;6^ になる筈の場所。
+他の番号の時はちゃんと動いているのに 100 の時だけ動いていない。
+と、思ったら、write_number 関数に欠陥があった。
+</p>
+<pre class="diff agh-prog-cs">
+@@ TerminalHelper.cs/mwg.RosaTerm.InputSequence.write_number @@ 2012/10/11 18:02:20
+     private void write_number(uint index){
+       int m=1;
+-      while(m*10&lt;index)m*=10;
++      while(m*10&lt;=index)m*=10;
+       for(;m&gt;0;m/=10)
+         this.Add((byte)('0'+index/m%10));
+     }
+</pre>
+
+</body>
+</html>

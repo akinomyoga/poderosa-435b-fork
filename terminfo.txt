@@ -1,0 +1,213 @@
+
+############################################################
+screen を通すと特殊な SGR コードは認識されないという事
+
+
+■sgr について
+
+-------------------------------------
+変数名  意味         例
+------  -----------  --------------
+none    none         \E[0m
+p1      standout     \E[0;1;7m
+p2      underline    \E[0;4m
+p3      reverse      \E[0;7m
+p4      blink        \E[0;5m
+p5      dim          not available
+p6      bold         \E[0;1m
+p7      invis        \E[0;8m
+p8      protect      not used
+p9      altcharset   ^O (off) ^N (on)
+-------------------------------------
+
+xterm  sgr=%?%p9%t\E(0%e\E(B%;\E[0%?%p6%t;1%;%?%p2%t;4%;%?%p1%p3%|%t;7%;%?%p4%t;5%;%?%p7%t;8%;m,
+
+  %? %p9 %t
+    \E(0
+  %e
+    \E(B
+  %;
+
+  \E[0
+
+  %? %p6 %t
+    ;1
+  %;
+
+  %? %p2 %t
+    ;4
+  %;
+
+  %? %p1 %p3 %| %t
+    ;7
+  %;
+
+  %? %p4 %t
+    ;5
+  %;
+
+  %? %p7 %t
+    ;8
+  %;
+
+  m
+
+cygwin sgr=\E[0;10%?%p1%t;7%;%?%p2%t;4%;%?%p3%t;7%;%?%p4%t;5%;%?%p6%t;1%;%?%p7%t;8%;%?%p9%t;11%;m,
+
+  \E[0;10
+
+  %? %p1 %t
+    ;7
+  %;
+
+  %? %p2 %t
+    ;4
+  %;
+
+  %? %p3 %t
+    ;7
+  %;
+
+  %? %p4 %t
+    ;5
+  %;
+
+  %? %p6 %t
+    ;1
+  %;
+
+  %? %p7 %t
+    ;8
+  %;
+
+  %? %p9 %t
+    ;11
+  %;
+
+  m
+
+screen sgr=\E[0%?%p6%t;1%;%?%p1%t;3%;%?%p2%t;4%;%?%p3%t;7%;%?%p4%t;5%;m%?%p9%t\016%e\017%;,
+
+  \E[0
+
+  %? %p1 %t
+    ;3
+  %;
+  %? %p2 %t
+    ;4
+  %;
+  %? %p3 %t
+    ;7
+  %;
+  %? %p4 %t
+    ;5
+  %;
+  %? %p6 %t
+    ;1
+  %;
+
+  m
+
+  %? %p9 %t
+    \016
+  %e
+    \017
+  %;
+
+
+? cygwin の terminfo には blink/bold は 5;1; で送信する様に指示がある。
+  screen も blink/bold は 5;1 で受け取る様になっている。
+  それなのに screen を介して \e[5m を送ると反転色になってしまう。
+  
+  所で、他にも沢山の指定があって、
+    変数名  短縮              説明
+    ------  ----  -------     --------------
+    smso    so    standout    
+    smul    us    underline   
+    rev     mr    reverse     
+            mb    blink       
+    dim     mh    dim         
+            md    bold        
+    sshm    mk    invis       secure mode
+    prot    mp    protect     
+            p9    altcharset  
+
+            ZM    shadow      shadow-print mode
+
+
+? rosa \e[1m を送っても、太字にもならないし明るくもならない。
+  と思ったら、明るくなるのは基本 8 色の時のみであって、
+  既定色は基本 8 色ではなく直接色で指定されていた。
+  なので明るくはならない。この動作は何とかするべきではないか…?
+
+■というか…そもそも screen はそんなに沢山の状態を保持していない
+
+  良く考えてみれば、screen は画面切替の為に全ての状態を記録しておかなければならない。
+  その為には受け付ける事のできる SGR の種類を限定して
+  screen の中に記録しておかなければならないのである。
+
+  display.c:1799/SetAttr(int new)
+    new が状態を保持する flags
+    flags の中身は ansi.h で定義されている。
+    
+    bit mode
+    0   dim
+    1   underscore
+    2   bold
+    3   reverse
+    4   standout
+    5   blinking
+    
+    #define NATTR 6 は mode の数
+    
+    6   bright foreground
+    7   bright background
+    
+    色情報を一体何処に記録しているのかは不明。
+    
+
+  GNU screen を書き換えるか?
+    取り敢えず、書き換えちゃう人はいる様である。
+    取り敢えず、以下の殆どは 4.0.3/4.0.2 に対するパッチである。
+    
+    http://bogytech.blogspot.com/2011/06/gnu-screen-jis-x-0213-utf-8.html
+      これは JISX 文字コードに対応させるパッチ
+    http://yak3.myhome.cx:8080/junks/#cygwin.screen
+      これは色々な修正を含んでいるパッチ
+    http://homepage3.nifty.com/clavelito/screen_w3m/
+      これは機能追加: ウィンドウ状態を出力する物?
+      何の役に立つのか良く分からないが、機能拡張をする時の参考になるかも
+    http://d.hatena.ne.jp/wocota/20090824/1251129515
+      これは日本語utf8環境に於ける文字幅の修正
+      4.1.0 ではこの patch も取り込まれる様子 http://d.hatena.ne.jp/macks/20090304/p1
+    
+    でも 4.1.0 がその内に release される…(いつ?)。
+    http://yskwkzhr.blogspot.com/2011/01/gnu-screen.html
+    http://git.savannah.gnu.org/cgit/screen.git
+    
+    
+
+################################################################
+terminfo
+
+■terminfo
+http://invisible-island.net/ncurses/man/terminfo.5.html
+
+■xterm
+
+setb=\E[4%?%p1%{1}%=%t4%e%p1%{3}%=%t6%e%p1%{4}%=%t1%e%p1%{6}%=%t3%e%p1%d%;m,
+\E[4
+%? %p1 %{1} %= %t
+  4
+%e %p1 %{3} %= %t
+  6
+%e %p1 %{4} %= %t
+  1
+%e %p1 %{6} %= %t
+  3
+%e
+  %p1 %d
+%;
+m
+
+setf=\E[3%?%p1%{1}%=%t4%e%p1%{3}%=%t6%e%p1%{4}%=%t1%e%p1%{6}%=%t3%e%p1%d%;m,

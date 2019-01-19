@@ -1,0 +1,487 @@
+﻿2015-03-13
+
+  タブに表示しているタイトルに日本語が含まれていると文字化けする。
+  そればかりか特定の文字列を含んでいると途中で切れて画面の方に続きが出力される。
+  これは OSC シーケンスの読み取りの部分における問題だろう。
+  
+  と思ったら、これは GNU screen 側の問題の様だ。
+  Poderosa で直接 OSC に日本語を入れて出力しても問題ないが、
+  GNU screen のタイトルへの設定を介して出力させると日本語が文字化けする。
+
+-------------------------------------------------------------------------------
+2013-11-20
+
+* GLine.cs(GLine.InverseRange): bugfix, 選択範囲開始点の色などが選択終了点に適用されていた。
+
+正しく変数 original を更新する必要がある。
+
+-      {
+-#if ORIGINAL
+-        for(int i=from+1; i<to; i++) {
+-          if(i<dec.Length&&dec[i]!=null){
+-            dec[i]=dec[i].GetInvertedCopy();
+-          }
+-        }
+-#else
+-        TextDecoration dec_prev=null;
+-        TextDecoration dec_inv=null;
+-        for(int i=from+1,iN=to<dec.Length?to:dec.Length; i<iN; i++) {
+-          if(dec[i]!=null){
+-            if(dec[i]!=dec_prev){
+-              dec_prev=dec[i];
+-              dec_inv =dec_prev.GetInvertedCopy();
+-            }
+-            dec[i]=dec_inv;
+-          }
+-        }
+-#endif
+-      }
++      for(int i=from+1,iN=to<dec.Length?to:dec.Length; i<iN; i++){
++        if(dec[i]==null)continue;
++
++        if(dec[i]==original){
++          dec[i]=null;
++          continue;
++        }
++
++        original=dec[i];
++        dec[i]=original.GetInvertedCopy();
++      }
+
+
+* GLine.cs(GLine.InverseRange): bugfix, 選択領域が日本語の途中にある場合、日本語の表示が辺になる。
+
+これは全角文字の途中に from,to の to が来た場合に起こる事が分かった。
+_text[to] が WIDECHAR_PAD を指している場合は、その次の文字に original の dec を設定する事にした。
+
+
+-------------------------------------------------------------------------------
+2013-06-08
+
+* [bugfix] CapsLock を設定しても大文字・小文字が反転しない。 [2013/06/08 04:24:21]
+
+  これはアルファベットのキーを WM_CHAR としてではなく、
+  全てキー入力として受け取っている事による。
+  受け取った文字ではなく「実際に押したキー」を見て送る文字を決めている為。
+  
+  A - Z のキーに関して、
+  System.Windows.Forms.Control.IsKeyLocked(System.Windows.Forms.Keys.CapsLock)
+  を用いて現在の CapsLock の状態を取得し、CapsLock が有効になっていたら、
+  Shift キー修飾の状態を反転する様に変更する事にした。
+  
+* C-S-a 等のキー入力を xterm と同様のシーケンスで表現する事にした [2013/06/08 04:24:30]
+
+  xterm ではこれらの操作を "CSI 2 7 ; 修飾 ; 文字コード ~" で送信する。
+  しかし、rosaterm では今迄、シーケンスが長くなるのが余り嬉しくないという理由で
+  勝手に "CSI 文字コード ; 修飾 ^" というシーケンスを使ってきた。
+  所が、"CSI 数値 ; 修飾 ^" の形式は rxvt などで既に使われている形式
+  (Control + Function Key を表す) であり、文字コードの番号的に被っている部分がある。
+  この様な重複が沢山あるとキー入力の情報を受信するプログラムを書く上で場合分けが大変になる。
+  
+  滅多に入力されない特殊な修飾をされたキー入力が 2 7 ; の高が 3 bytes をけちっても
+  余り意味がないように思われるし、xterm 互換にしておいた方が色々なプログラムで共通に
+  使う事が出来ると考えられるので、ここでは xterm の方に統一する方向にしたいと考える。
+  
+  因みにこの書き換えによる影響は .emacs.d/lisp/rosaterm に及ぶ程度である。
+  terminfo にはこの様な特殊なキーは登録していない。
+  また、~/prog/ledit/ledit.ttx のデータベースも書き換えが必要である。
+  後、bashrc_interactive.pp の書き換えも行った。
+  
+  既存のホストに対して適用する必要があるのは
+  rosaterm と mshex の二つである。
+  
+* TerminalControl.OnMouseWheel, TerminalControl.OnMouseDown, TerminalControl.OnMouseUp:
+  マウスの座標がずれている様だったので修正。
+  Poderosa の内部では原点は (0,0) で扱っているが、
+  恐らく、端末の原点は (1,1) と扱うべきという事。
+  [2013/06/09 05:23:45]
+
+-------------------------------------------------------------------------------
+■変更済
+
+□Cygwin のレジストリからのパス探索を修正。cygwin1.7 以降にも対応。
+
+□太字の代わりにハイライトで表示できるようにする。
+  ハイライトの時の色を設定できるようにする。
+  太字細字などの設定も各々指定できるようにする。
+  点滅の代わりに背景ハイライトに設定できるようにする?
+  →色々設定をできる様にした。
+    詳細については mwg.Term のエスケープシーケンスの解説に。
+
+  その儘の設定だと、明るい色が、明るすぎて見えない。
+  従って明るい色に関しては適度に輝度を下げて使用すると良い。
+  自分が気に入っている色の変更設定は:
+    R 
+    G 0:200:0
+    B 
+    C 0:220:220
+    M
+    Y 180:180:0
+
+□キーボード入力
+  AbstractTerminal#SequenceKeyData の辺りを見れば良い。
+  >Shift+Delete 等を入力できるようにする
+  >Ctrl+Space (\0) を何故か受け取る事ができない。
+    socket.Send 迄はちゃんとできている。
+    何処か、cygterm の中などで消滅しているのだろうか?
+    →理由は良く分からないが、cygterm が怪しいという事で、
+      コンパイルをやり直したら、ちゃんと Ctrl+Space が送られる様になった。
+
+
+  オプションについて
+    - Bell は鳴らす
+    - Alt+? ショートカットキーは全部消す
+    - backspace で 0x7F を送る (C-h と区別する為)
+    - キャレットは下太線
+    
+□
+
+■解決済
+
+変更
+~~~~
+1. 入力関連
+1.1 Home End Insert PgUp PgDn Delete Backspace のキーにデフォルトで対応する [完]
+1.2 Alt+上下左右 Alt+F1 等が効かない [完]
+1.3 [バグ] Meta-Key が入力出来ない [完]
+1.4 右クリックだけで、コピー・貼り付けができる様にする。 [完]
+1.5 Terminal マウス位置判定の修正 [完]
+1.6 選択範囲のコピー機能の拡張
+
+  ■現在は選択が終わった瞬間にコピーをするオプションにしているから問題になっていないが、
+  選択する時とコピーする時の修飾キーが異なると反転範囲と実際にコピーされる範囲に不整合が生じる。
+  修飾キーは最後に選択が行われた瞬間の物を覚えておいてそれを利用するのが適切ではないか。
+  →TextSelection.ExpandTo に引数を追加して、Control.Modifiers を受け取る様にする。
+    TextSelection はその Modifiers を内部に保持するべき。
+    
+
+■メニュー内に Alt+ のショートカットキーが設定されている。
+  →メニューは元々 Alt+ で操作出来るはずである。
+    わざわざ別の指定の方法を追加する事の意味は何であるか?
+    
+    更に、これによって、一部のメニューを Alt+ で選択できなくなっている。
+    例えば、Alt+C で [コンソール(C)] を選択したいのに、勝手にコピーになってしまう。
+    或いは、Alt+W で [ウィンドウ(W)] を選択したいのに、勝手に接続が切断されてしまう。
+    
+    A-n -> A-f A-n
+    A-c -> A-e A-y
+    A-v -> A-e A-p
+    A-r -> A-c A-r
+    A-w -> A-c A-c
+    A-h -> A-w A-h
+    A-j -> A-w A-v
+    A-u -> A-w A-u
+    
+    何処で設定されているのか?
+      デザイナによって設計されているのかと思っていたが、
+      MainWindow.cs を見ても何も書かれていない…。
+      
+      一部は BasicMenus.cs で初期化されているという事が分かった。
+      →オプションを探していたら、実は設定可能だという事が分かった。
+        取り敢えず、Alt+? の設定を全て削除する事にした。
+      
+      問題は、既定の設定の Alt+? でメニューの文字と被っている物があると言う事である。
+      既定の設定を指定しているのは何処であろうか…。■
+  
+  後もう一つ。コンソールを閉じるというのが Alt-W または
+  [メニュー]-[コンソール]-[閉じる] に割り当てられているが、
+  普通こういう操作をする場合には、本当に閉じるかどうかの確認ダイアログを出す物である。
+    エディタならば保存されていなければ確認する
+    シェルならばバックグラウンドジョブがあれば確認する
+    無条件で何の確認も無しで、いきなり閉じてしまうのは、危険である。
+  
+  それから一つ前に見ていたコンソールを覚えておいて、
+  Alt-W Alt-W で一つ前のコンソールに戻れる様にすると良い。
+
+
+  
+- 複数の terminal type で実験していたら、どうも動作が可笑しい。
+  →と思ったら、TerminalControl の中で Key を cache していたのが良くなかった。
+    実は TerminalControl は session 毎に作成されるのではなくて、
+    ウィンドウ毎に一つずつで複数の session で共有している。
+    
+    一方で、キーシーケンスは session 毎にキャッシュしなければならない。
+  
+- マウス関連の実装 [完 2011/11/14]
+    マウスホイールの設定
+      マウスホイールに対して sequence を送る様なコードがあった様な気がするが、
+      使用されていない様な気がする。
+      →Application Mode にならなければ使えない。
+      
+    マウストラッキングモードに対応する?
+      マウストラッキングに関する状態は 1000/1001/1002/1003 であり、
+      既に状態変化だけには対応している。
+        decXshift[1000]=(byte)DecXFlags.IDX_XTERM_SendMouse;
+        decXshift[1001]=(byte)DecXFlags.IDX_XTERM_MMHilite;
+        decXshift[1002]=(byte)DecXFlags.IDX_XTERM_MMCell;
+        decXshift[1003]=(byte)DecXFlags.IDX_XTERM_MMAll;
+        それぞれが具体的に何を意味するのかは後で調べる必要がある。
+        <del>現在の所、IDX_XTERM_MMHilite が送られてきている様である。</del>
+        送られてきているのは、IDX_XTERM_SendMouse であった。
+      
+    マウスホイールについても一緒に実装した。
+      rosaterm のマウストラッキングモードの時には、
+      マウス操作は全て escape sequence にして送信する。
+      それ以外の場合には、Poderosa の中で処理する。
+      但し、Shift を押しながらした操作は無条件に Poderosa 側で処理する(これは xterm の真似である)。
+      Normal モードならばウィンドウの中のスクロールになるし、
+      Application モード且つウィンドウのスクロールが向こうになっている時には、
+      &lt;up&gt または &lt;down&gt; をスクロール量だけ送信する。
+      
+    マウス機能が働いて欲しくない時がある。
+      というか、寧ろ普通はマウスは使わない。
+      マウスを使いたい時にだけ ScrollLock を on にするというのはどうだろう。
+      
+      
+
+I2. 出力関連
+I2.2
+  □
+    \e[0M \e[1K \e[1J \e[H\e[A\e[B の動作が
+    現在の RosaTerminal でも正しいか確認する。
+  
+  ■
+    TERM=xterm emacs で背景色を(デフォルト以外の色に)設定していると画面の右端まで塗り潰されるのだが、
+    その時に行の位置が乱れてしまう。cygwin/rosaterm (terminfo xenl なし) の場合には問題は生じていない。
+
+I2.3 [バグ] less で上に移動する事ができない [完 2011/11/05]
+I2.4 [バグ] ScrollDown の動作 [完 2011/11/06]
+I2.5 ACS
+  ■
+    文字の形をもっと増しな物にする
+    特に罫線などについては自前で描画する?
+I2.6 色
+  ■16色パレットの選択肢をオプションから選択できるようにしたい。
+  ■initc に対応する。
+
+I2.7 描画モードの設定と terminfo
+  > Xterm 256 Colors の表示に対応
+  ■イタリックの実装
+  ■standout (terminfo smso, rmso) を反転以外の物に設定する??
+
+I2.8 背景画像メモリリーク [ほぼ完了]
+  一緒に大量のフォントとブラシもリソースリークしていた。
+  取り敢えず、応急処置は完了。完全な修正は不可能に近い。Poderosa 全体に及ぶ。
+I2.8.9
+  □以下の二つのクラスがメンバとして保持している RenderProfile (IDisposeable) の処置
+    これらのクラスを IDisposeable にして、その Dispose の中で RenderProfile を解放するか、別の方法を考える。
+  * TerminalSettings.cs/Poderosa.Terminal.TerminalSettings
+  * TerminalParam.cs/Poderosa.ConnectionParam.TerminalParam
+I2.9 [バグ] ApplicationMode で画面が跳ぶ [完 2012/10/10]
+
+I2.10 文字描画で ExtTextOut を使用
+  * 半角・全角の判定をより詳しく
+    > 取り敢えず emacs-24.2.1 に合わせた実装を追加 TerminalHelper.cs/UnicodeCharacterSet.EmacsCharWidth
+    > 従来の文字幅判定は UnicodeCharacterSet.SimpleCharWidth に移動
+    * Unicode の文字幅指定 (ambiguous 幅の物など) → UnicodeCharacterSet.CharWidth(char,bool) ■
+      世の中的にはこちらの方が普通なのかも。emacs のデフォルトは普通じゃない。
+    
+    char-width 0 の文字が正しく表示されない問題 [保留]
+      emacs で char-width-table で 0 となっていた文字は表示の際には幅 1 になっている様に見えたが、
+      実はそうではなくて、それ自体の表示の幅は 1 と想定しながら、
+      直前に「空白」を挿入して幅 1 を稼いでいるという事だった。
+      この様な動作は rosaterm 側で対処するには大幅に書き換える必要があるし、
+      (そもそも「半角一文字」が本体の文字と修飾文字からなる複数の文字列によって表現されるという状況)
+      更に screen の側でも大幅な書き直しが必要になる事から、この類の文字には対応しない事にする。
+    
+  * 半角の描画を ExtTextOut を用いて実行■
+    <a href="http://msdn.microsoft.com/ja-jp/library/cc428620.aspx">ExtTextOut 関数</a>
+    <a href="http://support.microsoft.com/kb/71230/en-us">INFO: ExtTextOut() Instead of TextOut() to Improve Performance</a>
+    ↑これによると ExtTextOut の方が速いらしい。TextOut は中で、余分な引数に全て 0 を指定して ExtTextOut を呼び出しているそうだ。
+      これで速くなると言うのは余り納得できないけれど。関数呼出 (多分 dynamic link) が一回増えた程度でそんなに変わるか?
+      
+    ピッチの配列を毎回用意しなければならない。
+    a 一つの方法は thread local な変数にキャッシュする方法。
+      この方法の場合 thread local な変数にアクセスする為の overhead が気になる。
+      また、thread local 変数を使ってしまうのは設計上微妙な気がする。
+    b もう一つの方法は RenderProfile にキャッシュする方法。
+      この方法の場合 RenderProfile のインスタンスの数だけ配列を確保しなければならない。
+      →見てみた所、RenderProfile は CharacterDocument 毎に設定される物であった。
+        TextDecoration の様に、単語毎や行毎に設定される物ではなかったので、
+        RenderProfile にキャッシュするのは現実的な方法である。
+    c また別の方法は毎回 stackalloc で確保した配列にピッチを書き込むという方法。
+      これは毎回初期化を行う為に時間が掛かるかも知れないが、
+      fixed だとか thread local だとか複雑な同期や解決をする必要がないという面では速い。
+      また、この方法は毎回初期化を実行するので、全角文字列が混ざっている場合への転用が容易である。
+    
+    色々時間を計ってみたりしたが、何れの方法も特に遅いと言う事もない。
+    現実的な使用法の範囲では三つの速さの違いは分からなかった。
+    取り敢えずはコードの量的にコンパクトな c の方法で行く事にする。
+    
+  * 全角の描画なども同様にする■
+  
+    描画関連は、その内に一から書き直した方が良いかも知れない。
+    特に描画の実装が GLine の中にあるというのが気にくわない。
+    例えば背景を全部描画してから上に文字を書くなど? (太字の右端が欠ける事の対策)
+  
+
+I2.* 他
+
+  タイトルを設定する為のエスケープシーケンスを読む
+
+  \e[?1047h/l \e[?1049h/l は Alt Screen Buff の中身しかクリアしないとか…?
+    Poderosa フォーラムの投稿
+
+  Bell を鳴らす設定 [解決]
+    タスクが終了した時に \a をプリントする様にしたりして使用する事がある。
+    なので、全く鳴らないと不便である。
+    
+    設定を色々見ていたら、既にそういう設定は存在していた。
+
+■変更予定
+
+Cygwin 既定の文字コード (utf-8) を設定できるようにする。
+  →自動的に Cygwin のレジストリの形式からエンコーディングを判定する様にした。
+  上の方法で判定したエンコーディングを既定としながら、
+    自分で指定したエンコーディングも使用できるようにすると良い。
+
+Caret
+  下線の太さと位置を指定できるようにする。
+  或いは、下線の大きさと太さを勝手に好みにハード改造する。
+  点滅の早さを設定できるようにする。
+    既定の設定だと、コマンドプロンプトのそれよりも早いので何か気になる。
+    使っていれば慣れる事だとは思うが。
+    →caretInterval という値があって、それを設定すれば変更可能になっていた。
+      然し、分かり易い GUI (スピンボタン等) は用意されていない様である。
+  Core\CharacterDocumentViewer.cs\DrawUnderLineCaret
+
+拡張
+  HTML や TeX 等で書かれた物を解釈して表示できるようにする?
+  TerminalEmulator\TerminalBase.cs\class EscapeSequenceTerminal::ProcessChar
+  TerminalEmulator\TerminalBase.cs\class EscapeSequenceTerminal::ProcessEscapeSequence
+  →これを実現する為には GNU screen 等も拡張する必要が生じる。
+
+メモリ漏洩?
+  一回だけ、プログラムを走らせて放置していたら、
+  1.4GB メモリを食ってメモリ不足の例外を出した事がある。
+  それっぽい事をやっても再現しないので、何が原因かは分からない。
+
+計画
+~~~~
+
+1. 根本的な設計から
+
+  CharacterDocument, TerminalDocument
+    どうやら、各行を双方向リストで保持している様である。
+    或る特定の行にアクセスするのに線形時間掛かる。
+    これは、将来修正したい事の一つである
+    
+    リスト構造になっているのはそもそも、
+    大量の行がある場合でも高速に更新できるようにするためである。
+    然し現状の実装では、行本体が行番号を保持しているので結局その行番号の更新に時間が掛かってしまう。
+    
+    データ構造を考え直すべきである。
+    配列を階層的に使用すると良いのではないか?
+    
+    1. 一つの配列の要素数に上限を定める
+    2. 配列は子配列を保持し、
+      自分自身に格納しきれない物は子配列に任せる。
+    
+    class array_elem{
+      array_elem parent;
+      int offset; // リスト中の何番目の要素から含んでいるか
+      int length; // リスト中の何番目の要素から含んでいるか
+      
+      line[] data; // data
+      int dlen; // data 中の要素数
+      
+      array_elem[] subarr;
+      int alen; // subarr 中の要素数
+    };
+    
+    3. 要素アクセスは二分探索
+    4. 要素は array_elem に対する参照を保持し、
+      それの offset を用いて自分の index を知る。
+      
+    class elem{
+      array_elem parent;
+      int index; // array_elem 内の index
+    };
+
+  一から作り直す前に
+    CharacterDocument が実際にどの様に使われているのかを調べて、
+    新しい Document を表示できるようにしながら作っていった方が良い。
+
+
+2. Poderosa-4.3.5b に移行
+2.3. RosaTerminal
+  ■TODO:
+    但し、\e[?1047h 等が SM/RM 内で追加されている。
+    OSC Sequence のカラーパレットの設定等も追加されている。
+    また、こちらから向こうに送る Sequence 等にも変更があるかも知れない。
+    
+    VT100.cs XTerm.cs の差分を RosaTerminal にも適用する。
+    
+
+2.4. CharacterDocumentViewer
+  ■TODO:
+  ・現在、背景画像が濃すぎると文字が見えなくなってしまうのを避ける為に、背景画像を薄くしている。
+    この様な処理を行うか行わないか、薄くするか濃くするか、のオプションを作った方が良い。
+  
+    Caret の色の指定のオプションを作成する。
+      反転色チェック
+
+2.5 GLine
+  ■
+    反転表示関係がちゃんと動いているかどうか確認する。
+
+2.5 RenderProfile.cs
+  ■
+    将来的には色々な明るさの 16 色を選択できるようにしたい。
+    
+    OSC 4;index;color ST に対応する。
+      CSI 38;5;index m で設定される色を、こちらの変更可能な色にする。
+
+2.16 \e@..0 及び \e@..1
+  ■
+    \e@0 及び \e@1 を escape sequence として読み取る様になっている様である。
+    具体的に何をする為の物なのかは今後調べる事にする ■
+
+2.19 
+  ■コントロールの背景色と、現在の背景色が同一の時の動作について確認
+    背景の絵が塗り潰されない様にしたい。
+    (まあ、実際にそうなっている様な気がする。)
+    →実際にそうなっている。dec.RetainBackColor().IsDefault で確認されている。
+
+2.21. XTerm/ProcessAfterOSC
+  ■よく見たら、RosaTerminal は OSC をまるっきり処理していない。
+    4.1.0 の時点でも幾らかは XTerm で実装されていたのに。
+    機を見て実装するべきである。
+
+3. エスケープシーケンスの纏め
+
+  エスケープシーケンスに関する情報が段々増えてきたので、
+  再度整理し直す事にする。
+  
+  以下に分類して説明する
+  * C0/C1 Character
+  * ESC Sequence
+  * CSI Sequence
+  * SM/RM Modes
+  * 文字コード選択コマンド
+  
+  各項目に対して以下の情報を保持する。
+  * Escape Sequence
+  * 典拠、リンク
+  * 対応している環境
+  * 名前
+  * 動作、説明
+  典拠毎にデータを作成して、それを自動で統合する様にした方が管理がしやすいのではないかと思う。
+  
+  詳しい説明の他に簡単に纏めた表を作成する
+  (現在のページに存在している様な物。)
+
+4.キーボード
+  ■
+    設定で日本語配列と英語配列を切り替える事ができる様だが…?
+    これに応じて、C-@ C-^ 等のキー操作の結果を切り替える様にするべきなのか確認する。
+4.4 C-@ C-_ C-^
+  □C+KP/-*+ 動作確認
+4.7 C-M-S-改行
+  □C-backspace 等のオプションUI?
+4.10 M-上下左右
+  □正しく効いているか?
+4.11 再度書き直し
+  ■その内に EncodeInputByte, EncodeInputKey1 は全面的に廃止したい。
+  ■xterm のシーケンスに対応
+    xterm.el が参考になる。
