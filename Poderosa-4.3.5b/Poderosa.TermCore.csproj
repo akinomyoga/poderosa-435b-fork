@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4CADA8CD-E49E-4FFF-A8EE-A43AF561F258}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Poderosa</RootNamespace>
+    <AssemblyName>Poderosa.TermCore</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\Poderosa.TermCore.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;WIN32PINVOKE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\Poderosa.TermCore.XML</DocumentationFile>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'UIDesign|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\UIDesign\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;UIDESIGN</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <DocumentationFile>bin\UIDesign\Poderosa.TermCore.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'UnitTest|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\UnitTest\</OutputPath>
+    <DefineConstants>TRACE;UNITTEST</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\UnitTest\Poderosa.TermCore.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Poderosa.TermCore\AssemblyInfo.cs" />
+    <Compile Include="mwg.Rosa\Core.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\AboutBoxEx.cs" />
+    <Compile Include="Core\BasicCommands.cs" />
+    <Compile Include="Core\BasicMenus.cs" />
+    <Compile Include="Core\Caret.cs" />
+    <Compile Include="Core\CharacterDocument.cs" />
+    <Compile Include="Core\CharacterDocumentViewer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\CommandEx.cs" />
+    <Compile Include="Core\CommandManager.cs" />
+    <Compile Include="Core\CommandPositionEx.cs" />
+    <Compile Include="Core\CommandPositionT.cs" />
+    <Compile Include="Core\CoreServicesEx.cs" />
+    <Compile Include="Core\Credits.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\DocActivationCommands.cs" />
+    <Compile Include="Core\DocumentAndViewEx.cs" />
+    <Compile Include="Core\ExtensionPointList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\ExtensionPointList.Designer.cs">
+      <DependentUpon>ExtensionPointList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\GenericsUtil.cs" />
+    <Compile Include="Core\GLine.cs" />
+    <Compile Include="Core\ListenerList.cs" />
+    <Compile Include="Core\MacroEngineEx.cs" />
+    <Compile Include="Core\MainWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\MenuUtil.cs" />
+    <Compile Include="Core\PluginList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\PluginList.Designer.cs">
+      <DependentUpon>PluginList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Core\PopupViewContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Core\RenderProfileSerialize.cs" />
+    <Compile Include="Core\Selection.cs" />
+    <Compile Include="Core\SelectionEx.cs" />
+    <Compile Include="Core\Serialize.cs" />
+    <Compile Include="Core\SerializeEx.cs" />
+    <Compile Include="Core\SplittableView.cs" />
+    <Compile Include="Core\TextSelection.cs" />
+    <Compile Include="Core\ToolBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\ToolBarEx.cs" />
+    <Compile Include="Core\UIEventHandler.cs" />
+    <Compile Include="Core\WindowManagerEx.cs" />
+    <Compile Include="Core\MainWindowMenu.cs" />
+    <Compile Include="Core\MainWindowMenuT.cs" />
+    <Compile Include="Core\Preferences.cs" />
+    <Compile Include="Core\PreferencesEx.cs" />
+    <Compile Include="Core\PreferencesT.cs" />
+    <Compile Include="Core\RenderProfile.cs" />
+    <Compile Include="Core\Session.cs" />
+    <Compile Include="Core\SessionEx.cs" />
+    <Compile Include="Core\StatusBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Core\TextDecoration.cs" />
+    <Compile Include="Core\WindowManager.cs" />
+    <Compile Include="Core\WindowPreference.cs" />
+    <Compile Include="Core\PoderosaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <EmbeddedResource Include="Core\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\Credits.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>Credits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\icons.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\PluginList.resx">
+      <DependentUpon>PluginList.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Core\strings_ja.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Plugin\AdapterEx.cs" />
+    <Compile Include="Plugin\AdpaterManager.cs" />
+    <Compile Include="Plugin\CollectionUtil.cs" />
+    <Compile Include="Plugin\EnumDescription.cs" />
+    <Compile Include="Plugin\ExtensionPoint.cs" />
+    <Compile Include="Plugin\Plugin.cs" />
+    <Compile Include="Plugin\PluginEx.cs" />
+    <Compile Include="Plugin\PluginT.cs" />
+    <Compile Include="Plugin\PoderosaLog.cs" />
+    <Compile Include="Plugin\PoderosaLogEx.cs" />
+    <Compile Include="Plugin\PoderosaStartup.cs" />
+    <Compile Include="Plugin\PoderosaWorld.cs" />
+    <Compile Include="Plugin\PoderosaWorldEx.cs" />
+    <Compile Include="Plugin\StringResource.cs" />
+    <Compile Include="Plugin\StructuredText.cs" />
+    <Compile Include="Plugin\StructuredTextXML.cs" />
+    <Compile Include="Plugin\Tracer.cs" />
+    <Compile Include="Plugin\Util.cs" />
+    <Compile Include="Plugin\VersionInfo.cs" />
+    <Compile Include="Plugin\Win32.cs" />
+    <EmbeddedResource Include="Plugin\strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Plugin\strings_ja.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="UI\ColorButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\ColorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ColorUtil.cs" />
+    <Compile Include="UI\DrawUtil.cs" />
+    <Compile Include="UI\GButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\GMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\HotKey.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\PaneDivision.cs" />
+    <Compile Include="UI\PaneSplitter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\TabBar.cs" />
+    <Compile Include="UI\ThreeButtonMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Util.cs" />
+    <Compile Include="UI\Win32.cs" />
+    <Compile Include="UI\WinFormsUtil.cs" />
+    <EmbeddedResource Include="UI\ThreeButtonMessageBox.resx">
+      <DependentUpon>ThreeButtonMessageBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Pipe\EnvironmentVariablesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pipe\EnvironmentVariablesDialog.Designer.cs">
+      <DependentUpon>EnvironmentVariablesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Pipe\EditVariableDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pipe\EditVariableDialog.Designer.cs">
+      <DependentUpon>EditVariableDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Pipe\OpenPipeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Pipe\OpenPipeDialog.Designer.cs">
+      <DependentUpon>OpenPipeDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Pipe\PipePlugin.cs" />
+    <Compile Include="Pipe\PipeTerminalParameterSerializer.cs" />
+    <Compile Include="Pipe\PipeTerminalParameter.cs" />
+    <Compile Include="Pipe\PipeTerminalSettings.cs" />
+    <Compile Include="Pipe\PipeConnection.cs" />
+    <Compile Include="Pipe\PipeTerminalOutput.cs" />
+    <Compile Include="Pipe\PipeSocket.cs" />
+    <Compile Include="Pipe\PipeCreator.cs" />
+    <Compile Include="Pipe\Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Pipe\Win32Exception.cs" />
+    <Compile Include="Pipe\PipedProcess.cs" />
+    <Compile Include="Pipe\PipeTerminalSettingsSerializer.cs" />
+    <EmbeddedResource Include="Pipe\EnvironmentVariablesDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>EnvironmentVariablesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pipe\EditVariableDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>EditVariableDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pipe\OpenPipeDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>OpenPipeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pipe\Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pipe\strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pipe\strings_ja.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Pipe\Resources\Icon16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TerminalSession\AutoShellExecutor.cs" />
+    <Compile Include="TerminalSession\CopyPaste.cs" />
+    <Compile Include="TerminalSession\CygwinLoginDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TerminalSession\CygwinPlugin.cs" />
+    <Compile Include="TerminalSession\LoginDialogBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TerminalSession\PaneBridge.cs" />
+    <Compile Include="TerminalSession\Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TerminalSession\Reproduce.cs" />
+    <Compile Include="TerminalSession\ShortcutFile.cs" />
+    <Compile Include="TerminalSession\ShortcutFileCommands.cs" />
+    <Compile Include="TerminalSession\SSHShortcutLoginDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TerminalSession\StartCommands.cs" />
+    <Compile Include="TerminalSession\TelnetSSHLoginDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TerminalSession\TelnetSSHPlugin.cs" />
+    <Compile Include="TerminalSession\TerminalSession.cs" />
+    <Compile Include="TerminalSession\TerminalSessionEx.cs" />
+    <Compile Include="TerminalSession\TerminalSessionOptions.cs" />
+    <Compile Include="TerminalSession\TerminalSessionPlugin.cs" />
+    <EmbeddedResource Include="TerminalSession\CygwinLoginDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>CygwinLoginDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalSession\Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalSession\SSHShortcutLoginDialog.resx">
+      <DependentUpon>SSHShortcutLoginDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalSession\strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalSession\strings_ja.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalSession\TelnetSSHLoginDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>TelnetSSHLoginDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="TerminalSession\Resources\Cygwin16x16.png" />
+    <None Include="TerminalSession\Resources\NewConnection16x16.png" />
+    <None Include="TerminalSession\Resources\Open16x16.png" />
+    <None Include="TerminalSession\Resources\Save16x16.png" />
+    <None Include="TerminalSession\Resources\SFU16x16.png" />
+    <None Include="TerminalSession\Resources\Single16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TerminalEmulator\CharDecoder.cs" />
+    <Compile Include="TerminalEmulator\CommandResultEx.cs" />
+    <Compile Include="TerminalEmulator\CommandResultPopup.cs" />
+    <Compile Include="TerminalEmulator\CommandResultPopupSession.cs" />
+    <Compile Include="TerminalEmulator\Encoding.cs" />
+    <Compile Include="TerminalEmulator\GEnv.cs" />
+    <Compile Include="TerminalEmulator\IntelliSense.cs" />
+    <Compile Include="TerminalEmulator\IntelliSenseCommand.cs" />
+    <Compile Include="TerminalEmulator\IntelliSenseEx.cs" />
+    <Compile Include="TerminalEmulator\IntelliSenseItem.cs" />
+    <Compile Include="TerminalEmulator\IntelliSenseWindow.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TerminalEmulator\KeepAlive.cs" />
+    <Compile Include="TerminalEmulator\KeyFunction.cs" />
+    <Compile Include="TerminalEmulator\Logger.cs" />
+    <Compile Include="TerminalEmulator\LoggerEx.cs" />
+    <Compile Include="TerminalEmulator\ModalTaskEx.cs" />
+    <Compile Include="TerminalEmulator\OldTerminalParam.cs" />
+    <Compile Include="TerminalEmulator\Options.cs" />
+    <Compile Include="TerminalEmulator\PromptRecognizer.cs" />
+    <Compile Include="TerminalEmulator\Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TerminalEmulator\ShellScheme.cs" />
+    <Compile Include="TerminalEmulator\TerminalBase.cs" />
+    <Compile Include="TerminalEmulator\TerminalCommands.cs" />
+    <Compile Include="TerminalEmulator\TerminalDocument.cs" />
+    <Compile Include="TerminalEmulator\TerminalEmulatorEx.cs" />
+    <Compile Include="TerminalEmulator\TerminalEmulatorPlugin.cs" />
+    <Compile Include="TerminalEmulator\TerminalControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TerminalEmulator\TerminalOutput.cs" />
+    <Compile Include="TerminalEmulator\TerminalSettings.cs" />
+    <Compile Include="TerminalEmulator\TerminalSettingsEx.cs" />
+    <Compile Include="TerminalEmulator\TerminalSettingsSerialize.cs" />
+    <Compile Include="TerminalEmulator\TerminalToolBar.cs" />
+    <Compile Include="TerminalEmulator\TerminalUtil.cs" />
+    <Compile Include="TerminalEmulator\Util.cs" />
+    <Compile Include="TerminalEmulator\VT100.cs" />
+    <Compile Include="TerminalEmulator\WarningWithDisableOption.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TerminalEmulator\XmlLogger.cs" />
+    <Compile Include="TerminalEmulator\XTerm.cs" />
+    <EmbeddedResource Include="TerminalEmulator\Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalEmulator\rulechars.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalEmulator\strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalEmulator\strings_ja.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalEmulator\WarningWithDisableOption.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>WarningWithDisableOption.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="TerminalEmulator\Resources\Bell16x16.png" />
+    <None Include="TerminalEmulator\Resources\CommentLog16x16.png" />
+    <None Include="TerminalEmulator\Resources\Info16x16.png" />
+    <None Include="TerminalEmulator\Resources\Intellisense16x16.png" />
+    <None Include="TerminalEmulator\Resources\LineFeed16x16.png" />
+    <None Include="TerminalEmulator\Resources\LocalEcho16x16.png" />
+    <None Include="TerminalEmulator\Resources\Poderosa16x16.png" />
+    <None Include="TerminalEmulator\Resources\SuspendLog16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="mwg.Rosa\Colors.cs" />
+    <Compile Include="mwg.Rosa\Experimental\Doc2.cs" />
+    <Compile Include="mwg.Rosa\Experimental\Document.cs" />
+    <Compile Include="mwg.Rosa\RosaTerminal.cs" />
+    <Compile Include="mwg.Rosa\TerminalHelpers.cs" />
+    <Compile Include="mwg.Rosa\TerminalState.cs" />
+    <Compile Include="mwg.Rosa\TerminalState.gen.cs" />
+    <Compile Include="mwg.Rosa\Utils.cs" />
+    <Compile Include="mwg.Rosa\View.BackgroundDrawer.cs" />
+    <Compile Include="Protocols\CommunicationUtil.cs" />
+    <Compile Include="Protocols\Connector.cs" />
+    <Compile Include="Protocols\HostKeyCheckerEx.cs" />
+    <Compile Include="Protocols\InterruptableConnector.cs" />
+    <Compile Include="Protocols\LocalShell.cs" />
+    <Compile Include="Protocols\NetUtil.cs" />
+    <Compile Include="Protocols\ProtocolComponent.cs" />
+    <Compile Include="Protocols\ProtocolComponentEx.cs" />
+    <Compile Include="Protocols\ProtocolOptions.cs" />
+    <Compile Include="Protocols\ProtocolsEx.cs" />
+    <Compile Include="Protocols\ProtocolsPlugin.cs" />
+    <Compile Include="Protocols\SimpleStringEncrypt.cs" />
+    <Compile Include="Protocols\socks.cs" />
+    <Compile Include="Protocols\SSH.cs" />
+    <Compile Include="Protocols\SSHSocket.cs" />
+    <Compile Include="Protocols\Telnet.cs" />
+    <Compile Include="Protocols\TerminalConnection.cs" />
+    <Compile Include="Protocols\TerminalConnectionEx.cs" />
+    <Compile Include="Protocols\TerminalParameter.cs" />
+    <Compile Include="Protocols\TerminalParameterEx.cs" />
+    <Compile Include="Protocols\TerminalParameterSerialize.cs" />
+    <EmbeddedResource Include="Protocols\strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Protocols\strings_ja.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Granados\Granados.csproj">
+      <Project>{4E6838A6-9255-4673-A322-4522B8C896AB}</Project>
+      <Name>Granados</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

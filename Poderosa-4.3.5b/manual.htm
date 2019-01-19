@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <title>Manual Page of Poderosa/mwg</title>
+  <meta name="Mwg-Kick-Type" content="text.color" />
+  <link rel="stylesheet" type="text/css" href="http://myoga.web.fc2.com/mwg3/mwg.std.css" />
+  <link rel="stylesheet" type="text/css" href="http://myoga.web.fc2.com/mwg3/prog.std.css" />
+  <script type="text/javascript" charset="utf-8" src="http://tkynt2.phys.s.u-tokyo.ac.jp/~murase/mwg3/mwg.kick.jgz"></script>
+  <style type="text/css">
+  table.normal>*>tr>th{background-color:#eee;}
+  </style>
+</head>
+<body>
+<h1>Manual Page of Poderosa/mwg</h1>
+
+<h2>操作</h2>
+<h3>選択操作</h3>
+<p>選択範囲をコピーする時、修飾キーによって様々な振る舞いをする。</p>
+<ul>
+<li>-Ctrl : 行末の空白を削除する</li>
+<li>+Ctrl : 行末の空白を削除しない</li>
+<li>-Alt  : 範囲選択</li>
+<li>+Alt  : 矩形選択</li>
+<li>-Shift: 折り返しを改行として扱う</li>
+<li>+Shift: 折り返しを改行として扱わない (折り返しで複数行に跨る場合、行を結合する)</li>
+</ul>
+<!--2012/10/07 15:22:14-->
+
+<h2>コントロールシーケンス</h2>
+<h3>SGR (Set Graphics Rendition)</h3>
+<table class="normal center">
+<tr><th>名前</th><th>シーケンス</th><th>対応</th></tr>
+<tr><td>SGR</td><td>\e[<strong>#</strong>;<strong>#</strong>;<strong>...</strong>m</td><td>○</td></tr>
+</table>
+<p>複数の番号を指定して文字描画の様々な設定を行います。
+一つも番号を指定しなかった場合は 0 を指定したものと見做されます。
+</p>
+
+<table class="normal center">
+<tr><th>番号</th><th>説明</th><th>対応</th></tr>
+<tr><td>0</td> <td>既定の設定に戻す</td><td>○</td></tr>
+<tr><td>10</td><td>文字コード既定</td><td>×</td></tr>
+<tr><td>11</td><td>文字コード Win (sjis)</td><td>×</td></tr>
+<tr><td>12</td><td>(未定)</td><td>×</td></tr>
+<!--
+<tr><td>1</td> <td></td><td>○</td></tr>
+-->
+</table>
+<table class="normal center">
+<tr>
+  <th rowspan="2">説明</th>
+  <th colspan="2">On</th>
+  <th colspan="2">Off</th>
+</tr>
+<tr>
+  <th>番号</th><th>対応</th>
+  <th>番号</th><th>対応</th>
+</tr>
+<tr><td>太字</td>  <td>6</td> <td>○</td><td>26</td><td>○</td></tr>
+<tr><td>反転</td>  <td>7</td> <td>○</td><td>27</td><td>○</td></tr>
+<tr><td>不可視</td><td>8</td> <td>○</td><td>28</td><td>○</td></tr>
+<tr><td>打消線</td><td>9</td> <td>○</td><td>29</td><td>○</td></tr>
+<tr><td>下線</td><td>4</td> <td>○</td>
+  <td rowspan="2">24</td><td rowspan="2">○</td>
+</tr>
+<tr><td>二重下線</td><td>21</td><td>○</td></tr>
+<tr><td>上線</td>  <td>53</td><td>○</td><td>55</td><td>○</td></tr>
+<tr><td>斜体</td>  <td>3</td> <td>×</td><td>23</td><td>×</td></tr>
+</table>
+
+<p>前景色 (文字を描画するのに使われる色)
+と背景色 (地を描画するのに使われる色) は以下の番号で指定できます。
+</p>
+<table class="normal center">
+<tr>
+  <th colspan="3">前景色</th>
+  <th colspan="3">背景色</th>
+</tr>
+<tr>
+  <th>番号</th><th>説明</th><th>対応</th>
+  <th>番号</th><th>説明</th><th>対応</th>
+</tr>
+<tr><td>39</td> <td>既定</td><td>○</td><td>49</td> <td>既定</td><td>○</td></tr>
+<tr><td>22</td> <td colspan="4">前景色・背景色既定</td><td>○</td></tr>
+<tr><td>1</td>  <td>明 (obsolete)</td><td>○</td><td>5</td>  <td>明 (obsolete)</td><td>○</td></tr>
+<tr><td>2</td>  <td>暗 (obsolete)</td><td>○</td><td>25</td> <td>暗 (obsolete)</td><td>○</td></tr>
+<tr><td>30</td> <td>黒</td><td>○</td><td>40</td> <td>黒</td><td>○</td></tr>
+<tr><td>31</td> <td>茶</td><td>○</td><td>41</td> <td>茶</td><td>○</td></tr>
+<tr><td>32</td> <td>緑</td><td>○</td><td>42</td> <td>緑</td><td>○</td></tr>
+<tr><td>33</td> <td>焦</td><td>○</td><td>43</td> <td>焦</td><td>○</td></tr>
+<tr><td>34</td> <td>紺</td><td>○</td><td>44</td> <td>紺</td><td>○</td></tr>
+<tr><td>35</td> <td>紫</td><td>○</td><td>45</td> <td>紫</td><td>○</td></tr>
+<tr><td>36</td> <td>碧</td><td>○</td><td>46</td> <td>碧</td><td>○</td></tr>
+<tr><td>37</td> <td>灰</td><td>○</td><td>47</td> <td>灰</td><td>○</td></tr>
+<tr><td>90</td> <td>鈍</td><td>○</td><td>100</td><td>鈍</td><td>○</td></tr>
+<tr><td>91</td> <td>赤</td><td>○</td><td>101</td><td>赤</td><td>○</td></tr>
+<tr><td>92</td> <td>草</td><td>○</td><td>102</td><td>草</td><td>○</td></tr>
+<tr><td>93</td> <td>黄</td><td>○</td><td>103</td><td>黄</td><td>○</td></tr>
+<tr><td>94</td> <td>青</td><td>○</td><td>104</td><td>青</td><td>○</td></tr>
+<tr><td>95</td> <td>菫</td><td>○</td><td>105</td><td>菫</td><td>○</td></tr>
+<tr><td>96</td> <td>水</td><td>○</td><td>106</td><td>水</td><td>○</td></tr>
+<tr><td>97</td> <td>白</td><td>○</td><td>107</td><td>白</td><td>○</td></tr>
+<tr>
+  <td>38;5;<strong>#</strong></td><td>X11 colors</td><td>○</td>
+  <td>48;5;<strong>#</strong></td><td>X11 colors</td><td>○</td>
+</tr>
+</table>
+<h2>キーシーケンス</h2>
+<p>端末にキーボード入力をした時のキーシーケンス。</p>
+<ul>
+<li>M- (Meta 修飾) は基本的に ESC で送る様に設定すると良い。</li>
+</ul>
+
+<table class="normal center">
+<tr><th colspan="5">通常キー (キー配列 = ロジカルペアリング)</th></tr>
+<tr><th>Key</th><th>k</th><th>C-k</th><th>S-k</th><th>C-S-k</th></tr>
+<tr><th>:</th>  <td><code>:</code></td> <td><code>\e[58;5^</code> </td><td><code>*</code></td>   <td><code>\e[42;5^</code></td></tr>
+<tr><th>;</th>  <td><code>;</code></td> <td><code>\e[59;5^</code> </td><td><code>+</code></td>   <td><code>\e[43;5^</code></td></tr>
+<tr><th>,</th>  <td><code>,</code></td> <td><code>\e[44;5^</code> </td><td><code>&lt;</code></td><td><code>\e[60;5^</code></td></tr>
+<tr><th>-</th>  <td><code>-</code></td> <td><code>\e[45;5^</code> </td><td><code>=</code></td>   <td><code>\e[61;5^</code></td></tr>
+<tr><th>.</th>  <td><code>.</code></td> <td><code>\e[46;5^</code> </td><td><code>&gt;</code></td><td><code>\e[62;5^</code></td></tr>
+<tr><th>/</th>  <td><code>/</code></td> <td><code>\e[47;5^</code> </td><td><code>?</code></td>   <td><code>\e[63;5^</code></td></tr>
+<tr><th>@</th>  <td><code>@</code></td> <td><code>\C-@</code></td>   <td><code>`</code></td><td><code>\e[96;5^</code></td>  </tr>
+<tr><th>0</th>  <td><code>0</code></td> <td><code>\e[0;5^</code></td><td>--</td>            <td>--</td>                               </tr>
+<tr><th>1</th>  <td><code>1</code></td> <td><code>\e[1;5^</code></td><td><code>!</code></td><td><code>\e[33;5^</code></td>  </tr>
+<tr><th>2</th>  <td><code>2</code></td> <td><code>\e[2;5^</code></td><td><code>"</code></td><td><code>\e[34;5^</code></td>  </tr>
+<tr><th>3</th>  <td><code>3</code></td> <td><code>\e[3;5^</code></td><td><code>#</code></td><td><code>\e[35;5^</code></td>  </tr>
+<tr><th>4</th>  <td><code>4</code></td> <td><code>\e[4;5^</code></td><td><code>$</code></td><td><code>\e[36;5^</code></td>  </tr>
+<tr><th>5</th>  <td><code>5</code></td> <td><code>\e[5;5^</code></td><td><code>%</code></td><td><code>\e[37;5^</code></td>  </tr>
+<tr><th>6</th>  <td><code>6</code></td> <td><code>\e[6;5^</code></td><td><code>&</code></td><td><code>\e[38;5^</code></td>  </tr>
+<tr><th>7</th>  <td><code>7</code></td> <td><code>\e[7;5^</code></td><td><code>'</code></td><td><code>\e[39;5^</code></td>  </tr>
+<tr><th>8</th>  <td><code>8</code></td> <td><code>\e[8;5^</code></td><td><code>(</code></td><td><code>\e[40;5^</code></td>  </tr>
+<tr><th>9</th>  <td><code>9</code></td> <td><code>\e[9;5^</code></td><td><code>)</code></td><td><code>\e[41;5^</code></td>  </tr>
+<tr><th>A-Z</th><td><code>a</code></td> <td><code>\C-a</code></td>   <td><code>A</code></td><td><code>\e[97;6^</code></td></tr>
+<tr><th>[</th>  <td><code>[</code></td> <td><code>\C-[</code></td>   <td><code>{</code></td><td><code>\e[123;5^</code></td></tr>
+<tr><th>\ (1)</th><td><code>\\</code></td><td><code>\C-\\</code></td>  <td><code>|</code></td><td><code>\e[124;5^</code></td></tr>
+<tr><th>\ (2)</th><td><code>\\</code></td><td><code>\C-\\</code></td>  <td><code>_</code></td><td><code>\C-_</code></td></tr>
+<tr><th>]</th>  <td><code>]</code></td> <td><code>\C-]</code></td>   <td><code>}</code></td><td><code>\e[125;5^</code></td></tr>
+<tr><th>^</th>  <td><code>^</code></td> <td><code>\C-^</code></td>   <td><code>~</code></td><td><code>\e[126;5^</code></td></tr>
+<tr><th colspan="5">特別なキー</th></tr>
+<tr><th>Key</th><th>k</th><th>C-k</th><th>S-k</th><th>C-S-k</th></tr>
+<tr><th>backspace</th><td><code>\C-?</code></td>              <td class="markA"><code>\C-_</code></td> <td><code>\e[8;2^</code> </td><td><code>\e[8;6^ </code></td></tr>
+<tr><th>return</th>   <td class="markA"><code>\C-m</code></td><td><code>\e[13;5^</code></td>           <td><code>\e[13;2^</code></td><td><code>\e[13;6^</code></td></tr>
+<tr><th>tab</th>      <td class="markA"><code>\C-i</code></td><td><code>\e[9;5^</code></td>            <td><code>\e[9;2^</code> </td><td><code>\e[9;6^</code> </td></tr>
+<tr><th>space</th>    <td><code>' '</code></td>               <td class="markA"><code>\C-@</code></td> <td><code>\e[32;2^</code></td><td><code>\e[32;6^</code></td></tr>
+<tr><th>escape</th>   <td class="markA"><code>\C-[</code></td><td><code>\e[27;5^</code> ※1</td>       <td><code>\e[27;2^</code></td><td><code>\e[27;6^</code> ※1</td></tr>
+</table>
+<ul>
+<li>※1: Windows によってこの入力は横取りされるので、実際には入力できない。</li>
+</ul>
+
+<table class="normal center">
+<tr><th>Key</th><th>Normal</th><th>Application</th></tr>
+<tr><th>up</th>      <td><code>\e[A</code></td><td><code>\eOA</code></td></tr>
+<tr><th>down</th>    <td><code>\e[B</code></td><td><code>\eOB</code></td></tr>
+<tr><th>right</th>   <td><code>\e[C</code></td><td><code>\eOC</code></td></tr>
+<tr><th>left</th>    <td><code>\e[D</code></td><td><code>\eOD</code></td></tr>
+<tr><th>home</th>    <td colspan="2"><code>\e[1~</code></td></tr>
+<tr><th>insert</th>  <td colspan="2"><code>\e[2~</code></td></tr>
+<tr><th>delete</th>  <td colspan="2"><code>\e[3~</code></td></tr>
+<tr><th>end</th>     <td colspan="2"><code>\e[4~</code></td></tr>
+<tr><th>pageup</th>  <td colspan="2"><code>\e[5~</code></td></tr>
+<tr><th>pagedown</th><td colspan="2"><code>\e[6~</code></td></tr>
+<tr><th>F1-F5</th>   <td colspan="2"><code>\e[11~</code></td></tr>
+<tr><th>F6-F10</th>  <td colspan="2"><code>\e[17~</code></td></tr>
+<tr><th>F11-F14</th> <td colspan="2"><code>\e[23~</code></td></tr>
+<tr><th>F15-F16</th> <td colspan="2"><code>\e[28~</code></td></tr>
+<tr><th>F17-F20</th> <td colspan="2"><code>\e[31~</code></td></tr>
+<tr><th>F21-F24</th> <td colspan="2"><code>\e[23$</code></td></tr>
+</table>
+<!--2012/10/07 15:55:20-->
+
+
+
+
+
+
+<div class="address2">
+  <span class="left">起稿 2012/10/07</span>
+  <span class="right">Copyright &copy; 2010-2012, Koichi Murase (murase at nt.phys.s.u-tokyo.ac.jp)</span>
+</div>
+</body>
+</html>

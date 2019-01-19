@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+$Id: stringresource.xml,v 1.1 2010/11/19 15:41:03 kzmi Exp $
+-->
+<string-resource>
+<record name="Command.PortForwarding">
+  <ja>SSHポートフォワーディングツールの起動</ja>
+  <en>Start SSH port forwarding tool</en>
+</record>
+<record name="Menu.PortForwarding">
+  <ja>ポートフォワーディングツールの起動(&amp;F)...</ja>
+  <en>Start port&amp;forwarding tool...</en>
+</record>
+</string-resource>

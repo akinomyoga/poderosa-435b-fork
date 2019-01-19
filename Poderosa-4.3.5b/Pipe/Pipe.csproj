@@ -1,0 +1,121 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BA5ADFF2-747A-4090-B758-44C70FC1544F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Poderosa.Pipe</RootNamespace>
+    <AssemblyName>Poderosa.Pipe</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Poderosa.Pipe.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Poderosa.Pipe.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EnvironmentVariablesDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EnvironmentVariablesDialog.Designer.cs">
+      <DependentUpon>EnvironmentVariablesDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditVariableDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EditVariableDialog.Designer.cs">
+      <DependentUpon>EditVariableDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OpenPipeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OpenPipeDialog.Designer.cs">
+      <DependentUpon>OpenPipeDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PipePlugin.cs" />
+    <Compile Include="PipeTerminalParameterSerializer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PipeTerminalParameter.cs" />
+    <Compile Include="PipeTerminalSettings.cs" />
+    <Compile Include="PipeConnection.cs" />
+    <Compile Include="PipeTerminalOutput.cs" />
+    <Compile Include="PipeSocket.cs" />
+    <Compile Include="PipeCreator.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Win32Exception.cs" />
+    <Compile Include="PipedProcess.cs" />
+    <Compile Include="PipeTerminalSettingsSerializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="EnvironmentVariablesDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>EnvironmentVariablesDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="EditVariableDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>EditVariableDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OpenPipeDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>OpenPipeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="strings_ja.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Icon16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Poderosa.TermCore.csproj">
+      <Project>{4CADA8CD-E49E-4FFF-A8EE-A43AF561F258}</Project>
+      <Name>Poderosa.TermCore</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

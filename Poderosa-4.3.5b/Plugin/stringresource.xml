@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+$Id: stringresource.xml,v 1.1 2010/11/19 15:40:51 kzmi Exp $
+-->
+<string-resource>
+
+<!-- PoderosaWorld -->
+<record name="PoderosaWorld.Messages.DuplicatedMessageLoopExtension">
+  <ja>IGUIMessageLoopを備えた２つの Extension {0}, {1} を同時に起動しようとしました。後者は無視されます。</ja>
+  <en>It started starting two Extension{0} and {1} that had IGUIMessageLoop at the same time. The latter 
+is disregarded. </en>
+</record>
+
+
+<!-- Plug-In loading -->
+<record name="PluginManager.Messages.TypeLoadError">
+  <ja>アセンブリ {0} から 型 {1} をロードできませんでした。</ja>
+  <en>Fail to load type {1} of assembly {0}. </en>
+</record>
+
+<record name="PluginManager.Messages.IPluginIsNotImplemented">
+  <ja>型 {0} は IPlugin を実装していないためロードできません。</ja>
+  <en>Fail to load  type {0} because IPlugin is not implemented</en>
+</record>
+
+<record name="PluginManager.Messages.PluginInfoAttributeNotFound">
+  <ja>型 {0} は PluginInfoAttribute を備えていないためロードできません。</ja>
+  <en>Fail to load type {0} because PluginInfoAttribute is not provided. </en>
+</record>
+
+<record name="PluginManager.Messages.AssemblyLoadError">
+  <ja>アセンブリ {0} をロードできませんでした。</ja>
+  <en>Assembly {0} was not able to be loaded. </en>
+  <en>Fail to load assembly. </en>
+</record>
+
+<record name="PluginManager.Messages.BootWithoutThisPlugin">
+  <ja>プラグイン {0} を無視してPoderosaを起動します。</ja>
+  <en>Poderosa is started ignoreing plug-in {0}. </en>
+</record>
+
+<record name="PluginManager.Messages.IDNotFound">
+  <ja>プラグイン {0} にIDが指定されていません。無視してPoderosaを起動します。</ja>
+  <en>ID is not specified for plug-in {0}. Poderosa is started ignoring it. </en>
+</record>
+
+<record name="PluginManager.Messages.IDDuplication">
+  <ja>プラグイン {0} の ID {1} は重複しています。無視してPoderosaを起動します。</ja>
+  <en>ID:{1} of plug-in {0} overlaps. Poderosa is started ignoreing it. </en>
+</record>
+
+<record name="PluginManager.Messages.DependencyNotFound">
+  <ja>プラグイン {0} の依存先 {1} が見つかりません。無視してPoderosaを起動します。</ja>
+  <en>It is not found depending ahead {1} of plug-in {0}. Poderosa is started disregarding it. </en>
+</record>
+
+<record name="PluginManager.Messages.DependencyLoopError">
+  <ja>次のプラグイン群に循環依存があるためロードできません。{0}</ja>
+  <en>It is not possible to load it because there is circulation dependence in the following plug-in group. {0}</en>
+</record>
+
+<record name="PluginManager.Messages.PluginInitializeFailed">
+  <ja>プラグイン {0} の初期化に失敗しました。</ja>
+  <en>Fail to initialize plug-in {0}. </en>
+</record>
+
+<record name="PluginManager.Messages.DuplicatedExtensionPointID">
+  <ja>拡張ポイント {0} が重複しています。</ja>
+  <en>Extension point {0} overlaps. </en>
+</record>
+
+<record name="PluginManager.Messages.NewExtensionPointOutsideInit">
+  <ja>プラグインの初期化中以外で新しい拡張ポイントが定義されようとしました。</ja>
+  <en>A new extension point tried to be defined excluding while initializing the plug-in. </en>
+</record>
+
+<record name="Message.Util.InternalError">
+  <ja>内部エラーです。{0}を参照してください。
+{1}</ja>
+  <en>An internal error occurred. Please check {0} file. 
+{1}</en>
+</record>
+
+
+<!--
+<record name="PluginManager.Messages.">
+  <ja></ja>
+  <en></en>
+</record>
+
+[設定漏れを探す正規表現]
+".*(:Id|:Hi|:Ka).*"
+
+-->
+
+</string-resource>

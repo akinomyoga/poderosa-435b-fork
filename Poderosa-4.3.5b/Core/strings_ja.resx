@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Enum.Language.English" xml:space="preserve">
+    <value>英語</value>
+  </data>
+  <data name="Enum.Language.Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Form.AboutBox.Text" xml:space="preserve">
+    <value>バージョン情報</value>
+  </data>
+  <data name="Form.AboutBox._creditButton" xml:space="preserve">
+    <value>クレジット..,</value>
+  </data>
+  <data name="Menu.File" xml:space="preserve">
+    <value>ファイル(&amp;F)</value>
+  </data>
+  <data name="Menu.NewWindow" xml:space="preserve">
+    <value>新しいウィンドウ(&amp;W)</value>
+  </data>
+  <data name="Menu.Quit" xml:space="preserve">
+    <value>終了(&amp;X)</value>
+  </data>
+  <data name="Menu.Edit" xml:space="preserve">
+    <value>編集(&amp;E)</value>
+  </data>
+  <data name="Menu.Copy" xml:space="preserve">
+    <value>コピー(&amp;Y)</value>
+  </data>
+  <data name="Menu.Paste" xml:space="preserve">
+    <value>貼り付け(&amp;P)</value>
+  </data>
+  <data name="Menu.CopyAsLook" xml:space="preserve">
+    <value>表示イメージをコピー(&amp;L)</value>
+  </data>
+  <data name="Menu.CopyToFile" xml:space="preserve">
+    <value>ファイルへコピー(&amp;T)...</value>
+  </data>
+  <data name="Menu.PasteFromFile" xml:space="preserve">
+    <value>ファイルから貼り付け(&amp;F)...</value>
+  </data>
+  <data name="Menu.SelectAll" xml:space="preserve">
+    <value>すべて選択(&amp;A)</value>
+  </data>
+  <data name="Menu.FreeSelectionMode" xml:space="preserve">
+    <value>フリー選択モード(&amp;S)</value>
+  </data>
+  <data name="Menu.AutoSelectionMode" xml:space="preserve">
+    <value>自動選択モード(&amp;U)</value>
+  </data>
+  <data name="Menu.Console" xml:space="preserve">
+    <value>コンソール(&amp;C)</value>
+  </data>
+  <data name="Menu.ConsoleClose" xml:space="preserve">
+    <value>閉じる(&amp;C)</value>
+  </data>
+  <data name="Menu.Tool" xml:space="preserve">
+    <value>ツール(&amp;T)</value>
+  </data>
+  <data name="Menu.KeyGen" xml:space="preserve">
+    <value>SSH鍵作成ウィザード(&amp;K)...</value>
+  </data>
+  <data name="Menu.ChangePassphrase" xml:space="preserve">
+    <value>秘密鍵のパスフレーズ変更(&amp;P)...</value>
+  </data>
+  <data name="Menu.LaunchPortforwarding" xml:space="preserve">
+    <value>ポートフォワーディングツールの起動(&amp;F)...</value>
+  </data>
+  <data name="Menu.Macro" xml:space="preserve">
+    <value>マクロ(&amp;M)</value>
+  </data>
+  <data name="Menu.Option" xml:space="preserve">
+    <value>オプション(&amp;O)...</value>
+  </data>
+  <data name="Menu.MacroConfig" xml:space="preserve">
+    <value>環境設定(&amp;C)...</value>
+  </data>
+  <data name="Menu.StopMacro" xml:space="preserve">
+    <value>実行中のマクロの停止(&amp;S)</value>
+  </data>
+  <data name="Menu.Window" xml:space="preserve">
+    <value>ウィンドウ(&amp;W)</value>
+  </data>
+  <data name="Menu.DivideFrameHorizontal" xml:space="preserve">
+    <value>上下に分割(&amp;H)</value>
+  </data>
+  <data name="Menu.DivideFrameVertical" xml:space="preserve">
+    <value>左右に分割(&amp;V)</value>
+  </data>
+  <data name="Menu.UnifyFrame" xml:space="preserve">
+    <value>分割を結合(&amp;U)</value>
+  </data>
+  <data name="Menu.UnifyAllFrame" xml:space="preserve">
+    <value>すべての分割を結合(&amp;A)</value>
+  </data>
+  <data name="Menu.CloseAll" xml:space="preserve">
+    <value>すべて閉じる(&amp;C)</value>
+  </data>
+  <data name="Menu.CloseAllDisconnected" xml:space="preserve">
+    <value>切断しているすべてを閉じる(&amp;D)</value>
+  </data>
+  <data name="Menu.SetTabRowCount" xml:space="preserve">
+    <value>タブの段数(&amp;T)</value>
+  </data>
+  <data name="Menu.Plugin" xml:space="preserve">
+    <value>プラグイン(&amp;P)</value>
+  </data>
+  <data name="Menu.PluginList" xml:space="preserve">
+    <value>プラグインリスト(&amp;P)...</value>
+  </data>
+  <data name="Menu.ExtensionPointList" xml:space="preserve">
+    <value>拡張ポイントリスト(&amp;E)...</value>
+  </data>
+  <data name="Menu.Help" xml:space="preserve">
+    <value>ヘルプ(&amp;H)</value>
+  </data>
+  <data name="Menu.AboutBox" xml:space="preserve">
+    <value>バージョン情報(&amp;A)...</value>
+  </data>
+  <data name="Menu.PoderosaWeb" xml:space="preserve">
+    <value>PoderosaのWebを開く(&amp;W)...</value>
+  </data>
+  <data name="CommandCategory.Application" xml:space="preserve">
+    <value>アプリケーション</value>
+  </data>
+  <data name="CommandCategory.Edit" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="CommandCategory.Window" xml:space="preserve">
+    <value>ウィンドウ</value>
+  </data>
+  <data name="CommandCategory.Dialog" xml:space="preserve">
+    <value>ダイアログ</value>
+  </data>
+  <data name="Command.NewWindow" xml:space="preserve">
+    <value>新しいウィンドウを開く</value>
+  </data>
+  <data name="Command.Quit" xml:space="preserve">
+    <value>Poderosaの終了</value>
+  </data>
+  <data name="Command.Copy" xml:space="preserve">
+    <value>コピー</value>
+  </data>
+  <data name="Command.Paste" xml:space="preserve">
+    <value>貼り付け</value>
+  </data>
+  <data name="Command.CloseDocument" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="Command.CloseAll" xml:space="preserve">
+    <value>すべて閉じる</value>
+  </data>
+  <data name="Command.SplitHorizontal" xml:space="preserve">
+    <value>上下に分割</value>
+  </data>
+  <data name="Command.SplitVertical" xml:space="preserve">
+    <value>左右に分割</value>
+  </data>
+  <data name="Command.SplitUnify" xml:space="preserve">
+    <value>分割の結合</value>
+  </data>
+  <data name="Command.UnifyAll" xml:space="preserve">
+    <value>すべての分割の結合</value>
+  </data>
+  <data name="Command.NextTab" xml:space="preserve">
+    <value>次のタブ</value>
+  </data>
+  <data name="Command.PreviousTab" xml:space="preserve">
+    <value>前のタブ</value>
+  </data>
+  <data name="Command.PluginList" xml:space="preserve">
+    <value>プラグインリストの表示</value>
+  </data>
+  <data name="Command.ExtensionPointList" xml:space="preserve">
+    <value>拡張ポイントリストの表示</value>
+  </data>
+  <data name="Command.AboutBox" xml:space="preserve">
+    <value>バージョン情報</value>
+  </data>
+  <data name="Command.PoderosaWeb" xml:space="preserve">
+    <value>PoderosaのWebを開く</value>
+  </data>
+  <data name="Form.PluginList.Text" xml:space="preserve">
+    <value>プラグインリスト</value>
+  </data>
+  <data name="Form.PluginList._enableHeader" xml:space="preserve">
+    <value>有効</value>
+  </data>
+  <data name="Form.PluginList._versionHeader" xml:space="preserve">
+    <value>バージョン</value>
+  </data>
+  <data name="Form.PluginList._venderHeader" xml:space="preserve">
+    <value>ベンダー</value>
+  </data>
+  <data name="Form.ExtensionPointList.Text" xml:space="preserve">
+    <value>拡張ポイントリスト</value>
+  </data>
+  <data name="Form.ExtensionPointList._ownerHeader" xml:space="preserve">
+    <value>オーナプラグインID</value>
+  </data>
+  <data name="Form.ExtensionPointList._countHeader" xml:space="preserve">
+    <value>拡張の数</value>
+  </data>
+  <data name="Enum.ImageStyle.Center" xml:space="preserve">
+    <value>中央</value>
+  </data>
+  <data name="Enum.ImageStyle.TopLeft" xml:space="preserve">
+    <value>左上</value>
+  </data>
+  <data name="Enum.ImageStyle.TopRight" xml:space="preserve">
+    <value>右上</value>
+  </data>
+  <data name="Enum.ImageStyle.BottomLeft" xml:space="preserve">
+    <value>左下</value>
+  </data>
+  <data name="Enum.ImageStyle.BottomRight" xml:space="preserve">
+    <value>右下</value>
+  </data>
+  <data name="Enum.ImageStyle.Scaled" xml:space="preserve">
+    <value>伸縮</value>
+  </data>
+  <data name="Enum.ImageStyle.HorizontalFit" xml:space="preserve">
+    <value>横幅に合わせる</value>
+  </data>
+  <data name="Enum.ImageStyle.VerticalFit" xml:space="preserve">
+    <value>高さに合わせる</value>
+  </data>
+  <data name="Message.ValueMustBePositive" xml:space="preserve">
+    <value>値は正でなければなりません</value>
+  </data>
+  <data name="Message.ValueMustBeContainedRange" xml:space="preserve">
+    <value>値は {0} と {1} の間でなければなりません</value>
+  </data>
+  <data name="Enum.ImageStyle.MaximalFit" xml:space="preserve">
+    <value>短辺フィット</value>
+  </data>
+  <data name="Enum.ImageStyle.MinimalFit" xml:space="preserve">
+    <value>長辺フィット</value>
+  </data>
+</root>

@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Enum.Language.English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Enum.Language.Japanese" xml:space="preserve">
+    <value>Japanese</value>
+  </data>
+  <data name="Form.AboutBox.Text" xml:space="preserve">
+    <value>About Poderosa</value>
+  </data>
+  <data name="Form.AboutBox._creditButton" xml:space="preserve">
+    <value>Credit...</value>
+  </data>
+  <data name="Menu.File" xml:space="preserve">
+    <value>&amp;File</value>
+  </data>
+  <data name="Menu.NewWindow" xml:space="preserve">
+    <value>&amp;New Window</value>
+  </data>
+  <data name="Menu.Quit" xml:space="preserve">
+    <value>E&amp;xit</value>
+  </data>
+  <data name="Menu.Edit" xml:space="preserve">
+    <value>&amp;Edit</value>
+  </data>
+  <data name="Menu.Copy" xml:space="preserve">
+    <value>Cop&amp;y</value>
+  </data>
+  <data name="Menu.Paste" xml:space="preserve">
+    <value>&amp;Paste</value>
+  </data>
+  <data name="Menu.CopyAsLook" xml:space="preserve">
+    <value>Copy as you &amp;Look</value>
+  </data>
+  <data name="Menu.CopyToFile" xml:space="preserve">
+    <value>Copy &amp;to File...</value>
+  </data>
+  <data name="Menu.PasteFromFile" xml:space="preserve">
+    <value>Paste &amp;from File...</value>
+  </data>
+  <data name="Menu.SelectAll" xml:space="preserve">
+    <value>Select &amp;All</value>
+  </data>
+  <data name="Menu.FreeSelectionMode" xml:space="preserve">
+    <value>Free &amp;selection mode</value>
+  </data>
+  <data name="Menu.AutoSelectionMode" xml:space="preserve">
+    <value>A&amp;uto selection mode</value>
+  </data>
+  <data name="Menu.Console" xml:space="preserve">
+    <value>&amp;Console</value>
+  </data>
+  <data name="Menu.ConsoleClose" xml:space="preserve">
+    <value>&amp;Close</value>
+  </data>
+  <data name="Menu.Tool" xml:space="preserve">
+    <value>&amp;Tools</value>
+  </data>
+  <data name="Menu.KeyGen" xml:space="preserve">
+    <value>SSH &amp;key generation wizard...</value>
+  </data>
+  <data name="Menu.ChangePassphrase" xml:space="preserve">
+    <value>Change &amp;passphrase of private key...</value>
+  </data>
+  <data name="Menu.LaunchPortforwarding" xml:space="preserve">
+    <value>Start port&amp;forwarding tool...</value>
+  </data>
+  <data name="Menu.Macro" xml:space="preserve">
+    <value>&amp;Macro</value>
+  </data>
+  <data name="Menu.Option" xml:space="preserve">
+    <value>&amp;Options...</value>
+  </data>
+  <data name="Menu.MacroConfig" xml:space="preserve">
+    <value>&amp;Environment...</value>
+  </data>
+  <data name="Menu.StopMacro" xml:space="preserve">
+    <value>&amp;Stop executing macro</value>
+  </data>
+  <data name="Menu.Window" xml:space="preserve">
+    <value>&amp;Window</value>
+  </data>
+  <data name="Menu.DivideFrameHorizontal" xml:space="preserve">
+    <value>Split &amp;Horizontally</value>
+  </data>
+  <data name="Menu.DivideFrameVertical" xml:space="preserve">
+    <value>Split &amp;Vertically</value>
+  </data>
+  <data name="Menu.UnifyFrame" xml:space="preserve">
+    <value>&amp;Unify</value>
+  </data>
+  <data name="Menu.UnifyAllFrame" xml:space="preserve">
+    <value>Reset &amp;all splits</value>
+  </data>
+  <data name="Menu.CloseAll" xml:space="preserve">
+    <value>&amp;Close All</value>
+  </data>
+  <data name="Menu.CloseAllDisconnected" xml:space="preserve">
+    <value>Close All &amp;Disconnected</value>
+  </data>
+  <data name="Menu.SetTabRowCount" xml:space="preserve">
+    <value>Number&amp; of Tab Rows</value>
+  </data>
+  <data name="Menu.Plugin" xml:space="preserve">
+    <value>&amp;Plug-in</value>
+  </data>
+  <data name="Menu.PluginList" xml:space="preserve">
+    <value>&amp;Plug-in list...</value>
+  </data>
+  <data name="Menu.ExtensionPointList" xml:space="preserve">
+    <value>&amp;Extension point list...</value>
+  </data>
+  <data name="Menu.Help" xml:space="preserve">
+    <value>&amp;Help</value>
+  </data>
+  <data name="Menu.AboutBox" xml:space="preserve">
+    <value>&amp;About Poderosa...</value>
+  </data>
+  <data name="Menu.PoderosaWeb" xml:space="preserve">
+    <value>Open Poderosa &amp;web site...</value>
+  </data>
+  <data name="CommandCategory.Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="CommandCategory.Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="CommandCategory.Window" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="CommandCategory.Dialog" xml:space="preserve">
+    <value>Dialog</value>
+  </data>
+  <data name="Command.NewWindow" xml:space="preserve">
+    <value>Open a new window</value>
+  </data>
+  <data name="Command.Quit" xml:space="preserve">
+    <value>Quit Poderosa</value>
+  </data>
+  <data name="Command.Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Command.Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="Command.CloseDocument" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Command.CloseAll" xml:space="preserve">
+    <value>Close All</value>
+  </data>
+  <data name="Command.SplitHorizontal" xml:space="preserve">
+    <value>Make a horizontal split</value>
+  </data>
+  <data name="Command.SplitVertical" xml:space="preserve">
+    <value>Make a vertical split</value>
+  </data>
+  <data name="Command.SplitUnify" xml:space="preserve">
+    <value>Unify split</value>
+  </data>
+  <data name="Command.UnifyAll" xml:space="preserve">
+    <value>Unify all splits</value>
+  </data>
+  <data name="Command.NextTab" xml:space="preserve">
+    <value>Next tab</value>
+  </data>
+  <data name="Command.PreviousTab" xml:space="preserve">
+    <value>Previous tab</value>
+  </data>
+  <data name="Command.PluginList" xml:space="preserve">
+    <value>Show plug-in list</value>
+  </data>
+  <data name="Command.ExtensionPointList" xml:space="preserve">
+    <value>Show extension point list</value>
+  </data>
+  <data name="Command.AboutBox" xml:space="preserve">
+    <value>Version information</value>
+  </data>
+  <data name="Command.PoderosaWeb" xml:space="preserve">
+    <value>Open Poderosa web site</value>
+  </data>
+  <data name="Form.PluginList.Text" xml:space="preserve">
+    <value>Plug-in list</value>
+  </data>
+  <data name="Form.PluginList._enableHeader" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Form.PluginList._versionHeader" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="Form.PluginList._venderHeader" xml:space="preserve">
+    <value>Vender</value>
+  </data>
+  <data name="Form.ExtensionPointList.Text" xml:space="preserve">
+    <value>Extension point list</value>
+  </data>
+  <data name="Form.ExtensionPointList._ownerHeader" xml:space="preserve">
+    <value>Owner plug-in ID</value>
+  </data>
+  <data name="Form.ExtensionPointList._countHeader" xml:space="preserve">
+    <value>Number of extension point.</value>
+  </data>
+  <data name="Enum.ImageStyle.Center" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="Enum.ImageStyle.TopLeft" xml:space="preserve">
+    <value>UpperLeft</value>
+  </data>
+  <data name="Enum.ImageStyle.TopRight" xml:space="preserve">
+    <value>UpperRight</value>
+  </data>
+  <data name="Enum.ImageStyle.BottomLeft" xml:space="preserve">
+    <value>BottomLeft</value>
+  </data>
+  <data name="Enum.ImageStyle.BottomRight" xml:space="preserve">
+    <value>LowerRight</value>
+  </data>
+  <data name="Enum.ImageStyle.Scaled" xml:space="preserve">
+    <value>Scaled</value>
+  </data>
+  <data name="Enum.ImageStyle.HorizontalFit" xml:space="preserve">
+    <value>Horizontal Fit</value>
+  </data>
+  <data name="Enum.ImageStyle.VerticalFit" xml:space="preserve">
+    <value>Vertical Fit</value>
+  </data>
+  <data name="Message.ValueMustBePositive" xml:space="preserve">
+    <value>The values must be positive</value>
+  </data>
+  <data name="Message.ValueMustBeContainedRange" xml:space="preserve">
+    <value>The value must be between {0} and {1}.</value>
+  </data>
+  <data name="Enum.ImageStyle.MaximalFit" xml:space="preserve">
+    <value>Maximal Fit</value>
+  </data>
+  <data name="Enum.ImageStyle.MinimalFit" xml:space="preserve">
+    <value>Minimal Fit</value>
+  </data>
+</root>

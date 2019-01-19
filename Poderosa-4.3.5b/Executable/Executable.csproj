@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E8021FDF-730E-4D82-853C-7825B617E93D}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Executable</RootNamespace>
+    <AssemblyName>Poderosa</AssemblyName>
+    <StartupObject>Poderosa.Executable.Root</StartupObject>
+    <ApplicationIcon>poderosa.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;EXECUTABLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Poderosa.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;EXECUTABLE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Poderosa.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'UnitTest|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\UnitTest\</OutputPath>
+    <DefineConstants>TRACE;EXECUTABLE,UNITTEST</DefineConstants>
+    <DocumentationFile>bin\UnitTest\Poderosa.XML</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Granados\Granados.csproj">
+      <Project>{4E6838A6-9255-4673-A322-4522B8C896AB}</Project>
+      <Name>Granados</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Macro\Macro.csproj">
+      <Project>{55C7D90F-BFD3-4D7E-990B-8D6D0A0CF951}</Project>
+      <Name>Macro</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Poderosa.TermCore.csproj">
+      <Project>{4CADA8CD-E49E-4FFF-A8EE-A43AF561F258}</Project>
+      <Name>Poderosa.TermCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PortForwardingCommand\PortForwardingCommand.csproj">
+      <Project>{C9B6C0FE-904C-4809-887D-2AAA168AB1E1}</Project>
+      <Name>PortForwardingCommand</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SerialPort\SerialPort.csproj">
+      <Project>{81770BDF-2F29-421D-AC02-10B647FC101A}</Project>
+      <Name>SerialPort</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Usability\Usability.csproj">
+      <Project>{7B6BA4DA-8390-4605-B979-C2D1CC09BD9A}</Project>
+      <Name>Usability</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XZModem\XZModem.csproj">
+      <Project>{94D36612-2006-49F3-802E-A7C59E9AFF12}</Project>
+      <Name>XZModem</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIRoot.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="poderosa.ico" />
+  </ItemGroup>
+</Project>

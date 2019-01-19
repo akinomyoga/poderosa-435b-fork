@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Message.SSHConnector.Cancelled" xml:space="preserve">
+    <value>Abort the connection.</value>
+  </data>
+  <data name="Form.CygwinLoginDialog._homeDirectoryLabel" xml:space="preserve">
+    <value>&amp;Home directory</value>
+  </data>
+  <data name="Form.CygwinLoginDialog._lMessage" xml:space="preserve">
+    <value>If you cannot start the shell, please re-compile CygTerm.</value>
+  </data>
+  <data name="Form.CygwinLoginDialog._advancedOptionCheck" xml:space="preserve">
+    <value>&amp;Advanced configuration</value>
+  </data>
+  <data name="Form.CygwinLoginDialog._shellLabel" xml:space="preserve">
+    <value>&amp;Shell</value>
+  </data>
+  <data name="Form.CygwinLoginDialog.TextCygwin" xml:space="preserve">
+    <value>Connection to cygwin</value>
+  </data>
+  <data name="Form.CygwinLoginDialog.TextSFU" xml:space="preserve">
+    <value>Connection to SFU</value>
+  </data>
+  <data name="Form.CygwinLoginDialog._logTypeLabel" xml:space="preserve">
+    <value>Log &amp;type</value>
+  </data>
+  <data name="Form.CygwinLoginDialog._logFileLabel" xml:space="preserve">
+    <value>&amp;Log file</value>
+  </data>
+  <data name="Message.CygwinLoginDialog.EmptyHomeDirectory" xml:space="preserve">
+    <value>The home directory is empty.</value>
+  </data>
+  <data name="Message.CygwinLoginDialog.EmptyShell" xml:space="preserve">
+    <value>The shell is empty.</value>
+  </data>
+  <data name="Caption.CygwinLoginDialog.ConnectingCygwin" xml:space="preserve">
+    <value>Connection to cygwin - Connecting... (Ctrl+C to Stop)</value>
+  </data>
+  <data name="Caption.CygwinLoginDialog.ConnectingSFU" xml:space="preserve">
+    <value>Connection to SFU - Connecting... (Ctrl+C to Stop)</value>
+  </data>
+  <data name="Message.CygwinLoginDialog.ConnectionError" xml:space="preserve">
+    <value>Connection error</value>
+  </data>
+  <data name="Message.AddressNotResolved" xml:space="preserve">
+    <value>The IP address of the host {0} was not obtained.</value>
+  </data>
+  <data name="Message.FailedToConnectPort" xml:space="preserve">
+    <value>Failed to connect the port {1} of the host {0}.</value>
+  </data>
+  <data name="Message.FailedToConnectAddress" xml:space="preserve">
+    <value>Failed to connect the host {0}.</value>
+  </data>
+  <data name="Message.ConnectionTimedOut" xml:space="preserve">
+    <value>Timed out to connect.</value>
+  </data>
+  <data name="Message.CygwinUtil.KeyNotFound" xml:space="preserve">
+    <value>Cygwin registry key is not found. Cygwin may be not installed correctly.</value>
+  </data>
+  <data name="Message.SFUUtil.KeyNotFound" xml:space="preserve">
+    <value>The registry key {0} is not found. Services for Unix may be not installed correctly.</value>
+  </data>
+  <data name="Message.CygwinUtil.FailedToRunCygterm" xml:space="preserve">
+    <value>Failed to run cygterm</value>
+  </data>
+  <data name="Message.CygwinUtil.FailedToConnect" xml:space="preserve">
+    <value>An error occurred while connecting to cygwin.
+</value>
+  </data>
+  <data name="Message.SFUUtil.FailedToConnect" xml:space="preserve">
+    <value>An error occurred while connecting to Services for Unix.
+</value>
+  </data>
+  <data name="Message.HostKeyChecker.AskHostKeyRegister" xml:space="preserve">
+    <value>The public key of the SSH server is not cached in ssh_known_hosts. Do you wish to register it and continue?</value>
+  </data>
+  <data name="Message.HostKeyChecker.AskHostKeyRenew" xml:space="preserve">
+    <value>The public key of the SSH server differs from the old key in ssh_known_hosts. Do you wish to renew it and continue?</value>
+  </data>
+  <data name="Message.Telnet.FailedToSendTerminalType" xml:space="preserve">
+    <value>Failed to specify terminal type.</value>
+  </data>
+  <data name="Message.Telnet.FailedToSendWidnowSize" xml:space="preserve">
+    <value>Failed to specify window size.</value>
+  </data>
+  <data name="Message.Telnet.FailedToSendSuppressGoAhead" xml:space="preserve">
+    <value>Failed to specify SuppressGoAhead option.</value>
+  </data>
+  <data name="Caption.TCPTerminalConnection.UsingSOCKS" xml:space="preserve">
+    <value>(Using SOCKS)</value>
+  </data>
+  <data name="Message.SSHTerminalconnection.BreakError" xml:space="preserve">
+    <value>Failed to send break signal. Please check whether the SSH server supports break signals.</value>
+  </data>
+  <data name="Message.SSHTerminalConnection.ReproduceErrorOnSSH1" xml:space="preserve">
+    <value>The "Memory Passphrase until the Application Quits" option in the SSH tab of the option dialog must be set when you reproduce SSH1 connections.</value>
+  </data>
+  <data name="Message.SSHTerminalConnection.ReproduceErrorOnSSH2" xml:space="preserve">
+    <value>The "Memory Passphrase until the Application Quits" option in the SSH tab of the option dialog must be set when you reproduce closed SSH2 connections.</value>
+  </data>
+  <data name="Message.SerialTerminalConnection.ReproduceError" xml:space="preserve">
+    <value>Serial connections can not be reproduced.</value>
+  </data>
+  <data name="Message.SerialTerminalConnection.ConfigError" xml:space="preserve">
+    <value>Failed to configure serial port.</value>
+  </data>
+  <data name="Message.SSHTerminalConnection.CloseError" xml:space="preserve">
+    <value>An error occurred while closing the connection.</value>
+  </data>
+  <data name="Enum.IPVersionPriority.Both" xml:space="preserve">
+    <value>No restriction</value>
+  </data>
+  <data name="Enum.IPVersionPriority.V4Only" xml:space="preserve">
+    <value>Use IPv4 Only</value>
+  </data>
+  <data name="Enum.IPVersionPriority.V6Only" xml:space="preserve">
+    <value>Use IPv6 Only</value>
+  </data>
+  <data name="Message.CygwinUtil.KeyNotFound2" xml:space="preserve">
+    <value>Neither the registry value {0} nor {1} (REG_SZ) is found. Cygwin may not be properly installed.</value>
+  </data>
+</root>

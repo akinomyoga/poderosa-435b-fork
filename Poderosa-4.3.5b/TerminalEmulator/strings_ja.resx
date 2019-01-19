@@ -1,0 +1,446 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Common.OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Common.MessageBoxTitle" xml:space="preserve">
+    <value>Poderosa</value>
+  </data>
+  <data name="Message.GUtil.InternalError" xml:space="preserve">
+    <value>内部エラーです。{0}を参照してください。
+{1}</value>
+  </data>
+  <data name="Message.CheckLogFileName.EmptyPath" xml:space="preserve">
+    <value>パスが指定されていません。</value>
+  </data>
+  <data name="Message.CheckLogFileName.NotWritable" xml:space="preserve">
+    <value>{0}に書き込みできません。</value>
+  </data>
+  <data name="Message.CheckLogFileName.BadPathName" xml:space="preserve">
+    <value>{0}は正しいパス名ではありません。</value>
+  </data>
+  <data name="Message.CheckLogFileName.AlreadyExist" xml:space="preserve">
+    <value>ファイル {0} は既に存在します。</value>
+  </data>
+  <data name="Util.CheckLogFileName.Caption" xml:space="preserve">
+    <value>ログファイル</value>
+  </data>
+  <data name="Util.CheckLogFileName.OverWrite" xml:space="preserve">
+    <value>上書きする(&amp;O)</value>
+  </data>
+  <data name="Util.CheckLogFileName.Append" xml:space="preserve">
+    <value>追記する(&amp;A)</value>
+  </data>
+  <data name="Util.CheckLogFileName.Cancel" xml:space="preserve">
+    <value>キャンセル(&amp;C)</value>
+  </data>
+  <data name="Message.AbstractTerminal.UnsupportedCharSet" xml:space="preserve">
+    <value>未サポートのキャラクタセット {0} が検出されました。画面表示が乱れるかもしれません。</value>
+  </data>
+  <data name="Message.AbstractTerminal.UnexpectedChar" xml:space="preserve">
+    <value>現在のエンコーディング {0} に合わないデータを受信しました。エンコーディング設定を確認してください。</value>
+  </data>
+  <data name="Message.EscapesequenceTerminal.UnsupportedSequence" xml:space="preserve">
+    <value>未サポートのエスケープシーケンスを見つけました。
+</value>
+  </data>
+  <data name="Message.ConnectionCommandTarget.CloseError" xml:space="preserve">
+    <value>接続を閉じるときにエラーが発生しました。</value>
+  </data>
+  <data name="Message.ConnectionCommandTarget.AreYouThereCondition" xml:space="preserve">
+    <value>AreYouThereを実行できるのはTelnetだけです。</value>
+  </data>
+  <data name="Message.ConnectionCommandTarget.BreakCondition" xml:space="preserve">
+    <value>Break送信を実行できるのはシリアル,Telnet,SSH2です。</value>
+  </data>
+  <data name="Message.ConnectionCommandTarget.SendError" xml:space="preserve">
+    <value>送信に失敗しました。</value>
+  </data>
+  <data name="Caption.ConnectionCommandTarget.DuringPaste" xml:space="preserve">
+    <value>貼り付け中</value>
+  </data>
+  <data name="Message.TerminalControl.FailedToSend" xml:space="preserve">
+    <value>送信に失敗しました。</value>
+  </data>
+  <data name="Enum.WarningOption.Ignore" xml:space="preserve">
+    <value>無視</value>
+  </data>
+  <data name="Enum.WarningOption.StatusBar" xml:space="preserve">
+    <value>ステータスバーに表示</value>
+  </data>
+  <data name="Enum.WarningOption.MessageBox" xml:space="preserve">
+    <value>メッセージボックスを表示</value>
+  </data>
+  <data name="Enum.DisconnectNotification.MessageBox" xml:space="preserve">
+    <value>メッセージボックスを表示</value>
+  </data>
+  <data name="Enum.DisconnectNotification.StatusBar" xml:space="preserve">
+    <value>ステータスバーに表示</value>
+  </data>
+  <data name="Enum.AltKeyAction.Menu" xml:space="preserve">
+    <value>メニューとショートカット</value>
+  </data>
+  <data name="Enum.AltKeyAction.ESC" xml:space="preserve">
+    <value>ESC &lt;x&gt;</value>
+  </data>
+  <data name="Enum.AltKeyAction.Meta" xml:space="preserve">
+    <value>Metaキー</value>
+  </data>
+  <data name="Enum.MouseButtonAction.None" xml:space="preserve">
+    <value>何もしない</value>
+  </data>
+  <data name="Enum.MouseButtonAction.ContextMenu" xml:space="preserve">
+    <value>コンテキストメニュー</value>
+  </data>
+  <data name="Enum.MouseButtonAction.Paste" xml:space="preserve">
+    <value>貼り付け</value>
+  </data>
+  <data name="Enum.KeyboardStyle.None" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="Enum.KeyboardStyle.Default" xml:space="preserve">
+    <value>英語キーボード用</value>
+  </data>
+  <data name="Enum.KeyboardStyle.Japanese" xml:space="preserve">
+    <value>日本語キーボード用</value>
+  </data>
+  <data name="Enum.KeyboardStyle.Chinese" xml:space="preserve">
+    <value>中国語キーボード用</value>
+  </data>
+  <data name="CommandCategory.Terminal" xml:space="preserve">
+    <value>ターミナル</value>
+  </data>
+  <data name="CommandCategory.TerminalEdit" xml:space="preserve">
+    <value>編集-ターミナル</value>
+  </data>
+  <data name="Command.CopyAsLook" xml:space="preserve">
+    <value>表示イメージをコピー</value>
+  </data>
+  <data name="Command.CopyToFile" xml:space="preserve">
+    <value>ファイルへコピー</value>
+  </data>
+  <data name="Command.PasteFromFile" xml:space="preserve">
+    <value>ファイルから貼り付け</value>
+  </data>
+  <data name="Command.ClearScreen" xml:space="preserve">
+    <value>スクリーンのクリア</value>
+  </data>
+  <data name="Command.ClearBuffer" xml:space="preserve">
+    <value>バッファのクリア</value>
+  </data>
+  <data name="Command.SelectAll" xml:space="preserve">
+    <value>すべて選択</value>
+  </data>
+  <data name="Command.ToggleLocalEcho" xml:space="preserve">
+    <value>ローカルエコーの切り替え</value>
+  </data>
+  <data name="Command.ToggleCharTriggerIntelliSense" xml:space="preserve">
+    <value>文字入力に伴うシェル補完の切り替え</value>
+  </data>
+  <data name="Command.ResetTerminal" xml:space="preserve">
+    <value>ターミナルのリセット</value>
+  </data>
+  <data name="Command.SendBreak" xml:space="preserve">
+    <value>ブレイク信号送信</value>
+  </data>
+  <data name="Command.AreYouThere" xml:space="preserve">
+    <value>AreYouThereの送信</value>
+  </data>
+  <data name="Command.ReceiveLineBreak" xml:space="preserve">
+    <value>受信時の改行設定</value>
+  </data>
+  <data name="Command.IntelliSense" xml:space="preserve">
+    <value>シェル補完</value>
+  </data>
+  <data name="Caption.SelectPasteFile" xml:space="preserve">
+    <value>ペーストするファイルの選択</value>
+  </data>
+  <data name="Menu.PopupCommandResult" xml:space="preserve">
+    <value>コマンド結果をポップアップ(&amp;P)</value>
+  </data>
+  <data name="Menu.CopyCommandResult" xml:space="preserve">
+    <value>コマンド結果をコピー(&amp;C)</value>
+  </data>
+  <data name="Menu.Copy" xml:space="preserve">
+    <value>コピー(&amp;C)</value>
+  </data>
+  <data name="Menu.CopyAsLook" xml:space="preserve">
+    <value>表示イメージをコピー(&amp;L)</value>
+  </data>
+  <data name="Menu.CopyToFile" xml:space="preserve">
+    <value>ファイルへコピー(&amp;T)...</value>
+  </data>
+  <data name="Menu.Paste" xml:space="preserve">
+    <value>貼り付け(&amp;P)</value>
+  </data>
+  <data name="Menu.PasteFromFile" xml:space="preserve">
+    <value>ファイルから貼り付け(&amp;F)...</value>
+  </data>
+  <data name="Menu.ClearScreen" xml:space="preserve">
+    <value>スクリーンのクリア(&amp;C)</value>
+  </data>
+  <data name="Menu.ClearBuffer" xml:space="preserve">
+    <value>バッファのクリア(&amp;B)</value>
+  </data>
+  <data name="Menu.SelectAll" xml:space="preserve">
+    <value>すべて選択(&amp;A)</value>
+  </data>
+  <data name="Menu.NewLine" xml:space="preserve">
+    <value>改行の送信(&amp;N)</value>
+  </data>
+  <data name="Menu.Encoding" xml:space="preserve">
+    <value>エンコーディング(&amp;E)</value>
+  </data>
+  <data name="Menu.LineFeedRule" xml:space="preserve">
+    <value>受信時の改行設定(&amp;B)...</value>
+  </data>
+  <data name="Menu.LocalEcho" xml:space="preserve">
+    <value>ローカルエコー(&amp;O)</value>
+  </data>
+  <data name="Menu.SendSpecial" xml:space="preserve">
+    <value>特殊(&amp;S)</value>
+  </data>
+  <data name="Menu.SendBreak" xml:space="preserve">
+    <value>Break信号送信(&amp;B)</value>
+  </data>
+  <data name="Menu.AreYouThere" xml:space="preserve">
+    <value>Are You There送信(&amp;A)</value>
+  </data>
+  <data name="Menu.SerialConfig" xml:space="preserve">
+    <value>シリアルポート再設定(&amp;S)...</value>
+  </data>
+  <data name="Menu.ResetTerminal" xml:space="preserve">
+    <value>ターミナルのリセット(&amp;R)</value>
+  </data>
+  <data name="Menu.SuspendLog" xml:space="preserve">
+    <value>ログの一時停止(&amp;U)</value>
+  </data>
+  <data name="Menu.CommentLog" xml:space="preserve">
+    <value>ログにコメントをつける(&amp;G)...</value>
+  </data>
+  <data name="Menu.ChangeLog" xml:space="preserve">
+    <value>ログの設定(&amp;L)...</value>
+  </data>
+  <data name="Menu.ServerInfo" xml:space="preserve">
+    <value>ホスト情報(&amp;H)...</value>
+  </data>
+  <data name="Menu.ToggleCharTriggerIntelliSense" xml:space="preserve">
+    <value>文字入力でシェル補完(&amp;H)</value>
+  </data>
+  <data name="Menu.SelectIntelliSenseScheme" xml:space="preserve">
+    <value>シェルスキーム(&amp;C)</value>
+  </data>
+  <data name="Menu.DocumentClose" xml:space="preserve">
+    <value>閉じる(&amp;C)</value>
+  </data>
+  <data name="Form.ToolBar._encodingLabel" xml:space="preserve">
+    <value>エンコーディング</value>
+  </data>
+  <data name="Form.ToolBar._newLineLabel" xml:space="preserve">
+    <value>改行</value>
+  </data>
+  <data name="Caption.CurrentShellScheme" xml:space="preserve">
+    <value>現在のシェルスキーム</value>
+  </data>
+  <data name="Enum.AuthType.Password" xml:space="preserve">
+    <value>パスワード</value>
+  </data>
+  <data name="Enum.AuthType.PublicKey" xml:space="preserve">
+    <value>公開鍵</value>
+  </data>
+  <data name="Enum.AuthType.KeyboardInteractive" xml:space="preserve">
+    <value>Keyboard Interactive</value>
+  </data>
+  <data name="Enum.EncodingType.ISO8859_1" xml:space="preserve">
+    <value>iso-8859-1</value>
+  </data>
+  <data name="Enum.EncodingType.UTF8" xml:space="preserve">
+    <value>utf-8</value>
+  </data>
+  <data name="Enum.EncodingType.EUC_JP" xml:space="preserve">
+    <value>euc-jp</value>
+  </data>
+  <data name="Enum.EncodingType.SHIFT_JIS" xml:space="preserve">
+    <value>shift-jis</value>
+  </data>
+  <data name="Enum.EncodingType.BIG5" xml:space="preserve">
+    <value>big5</value>
+  </data>
+  <data name="Enum.EncodingType.EUC_CN" xml:space="preserve">
+    <value>euc-cn</value>
+  </data>
+  <data name="Enum.EncodingType.EUC_KR" xml:space="preserve">
+    <value>euc-kr</value>
+  </data>
+  <data name="Enum.EncodingType.GB2312" xml:space="preserve">
+    <value>gb2312</value>
+  </data>
+  <data name="Enum.LogType.None" xml:space="preserve">
+    <value>なし</value>
+  </data>
+  <data name="Enum.LogType.Default" xml:space="preserve">
+    <value>標準</value>
+  </data>
+  <data name="Enum.LogType.Binary" xml:space="preserve">
+    <value>バイナリ</value>
+  </data>
+  <data name="Enum.LogType.Xml" xml:space="preserve">
+    <value>デバッグ</value>
+  </data>
+  <data name="Enum.NewLine.CR" xml:space="preserve">
+    <value>CR</value>
+  </data>
+  <data name="Enum.NewLine.LF" xml:space="preserve">
+    <value>LF</value>
+  </data>
+  <data name="Enum.NewLine.CRLF" xml:space="preserve">
+    <value>CR+LF</value>
+  </data>
+  <data name="Enum.TerminalType.KTerm" xml:space="preserve">
+    <value>kterm</value>
+  </data>
+  <data name="Enum.TerminalType.XTerm" xml:space="preserve">
+    <value>xterm</value>
+  </data>
+  <data name="Enum.TerminalType.VT100" xml:space="preserve">
+    <value>vt100</value>
+  </data>
+  <data name="Message.TCPTerminalParam.PropCannotBeSet" xml:space="preserve">
+    <value>このプロパティは設定できません。</value>
+  </data>
+  <data name="Mesage.SSHTerminalParam.MethodSetError" xml:space="preserve">
+    <value>SSH1またはSSH2を指定してください。</value>
+  </data>
+  <data name="Form.WarningWithDisableOption.Text" xml:space="preserve">
+    <value>注意</value>
+  </data>
+  <data name="Form.WarningWithDisableOption._disableCheckBox" xml:space="preserve">
+    <value>次回からこのメッセージを表示しない(&amp;N)</value>
+  </data>
+  <data name="Enum.TerminalType.Cygwin" xml:space="preserve">
+    <value>cygwin</value>
+  </data>
+  <data name="Enum.TerminalType.Rosa" xml:space="preserve">
+    <value>rosaterm</value>
+  </data>
+</root>
