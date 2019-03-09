@@ -168,26 +168,27 @@ namespace mwg.RosaTerm{
     //--------------------------------------------------------------------------
     #region 突貫工事
     //**************************************************************************
-    protected void ProcessNormalChar(char c){
+    protected void ProcessNormalChar(char c) {
       //TODO: リファクタリング (Xterm overrided functions も考慮)
 
-      TerminalDocument doc=GetDocument();
-      int tw = doc.TerminalWidth;
+      TerminalDocument doc = GetDocument();
+      int term_width = doc.TerminalWidth;
 
-      if(!this.tstat.DecAwm&&_manipulator.CaretColumn+1>=tw)return;
+      int char_width = GLine.CalcDisplayLength(c);
+      if (!this.tstat.DecAwm && _manipulator.CaretColumn + char_width >= term_width) return;
 
       // 挿入モードの時は、予め余白を作っておく
       // TODO: 挿入によって右端からはみ出た部分はどうなるのか?
-      if(this.tstat.SmIrm)
-        _manipulator.InsertBlanks(_manipulator.CaretColumn,GLine.CalcDisplayLength(c),_currentdecoration);
+      if (this.tstat.SmIrm)
+        _manipulator.InsertBlanks(_manipulator.CaretColumn, char_width, _currentdecoration);
 
       //既に画面右端にキャレットがあるのに文字が来たら改行をする
-      if(tstat.DecAwm&&_manipulator.CaretColumn+GLine.CalcDisplayLength(c)>tw)
+      if (tstat.DecAwm && _manipulator.CaretColumn + char_width > term_width)
         ProcessNormalChar_Wrap();
 
       //画面のリサイズがあったときは、_manipulatorのバッファサイズが不足の可能性がある
-      if(tw > _manipulator.BufferSize)
-        _manipulator.ExpandBuffer(tw);
+      if (term_width > _manipulator.BufferSize)
+        _manipulator.ExpandBuffer(term_width);
 
       //通常文字の処理
       _manipulator.PutChar(c, _currentdecoration);
@@ -195,7 +196,7 @@ namespace mwg.RosaTerm{
       // 一番右端にいたら、新しい文字が来なくても、下の行へ移動する
       // これがないと、cygwin emacs/vi で表示が崩れる (行がずれる)
       // cf terminfo の xenl capability
-      if(!tstat.TerminfoXenlCap&&tstat.DecAwm&&_manipulator.CaretColumn>=tw)
+      if(!tstat.TerminfoXenlCap&&tstat.DecAwm&&_manipulator.CaretColumn>=term_width)
           ProcessNormalChar_Wrap();
     }
     void ProcessNormalChar_Wrap(){
@@ -675,7 +676,7 @@ namespace mwg.RosaTerm{
     // CSI X: ECH
     static void ProcECH(RosaTerminal t){
       int n = t.cutter.CSIArguments[0];
-      if (n < 0) n = 1;
+      if (n < 1) n = 1;
       int oc = t._manipulator.CaretColumn;
 
       int cM = oc + n;
@@ -688,7 +689,7 @@ namespace mwg.RosaTerm{
     // CSI P: DCH
     static void ProcDCH(RosaTerminal t){
       int len = t.cutter.CSIArguments[0];
-      if (len < 0) len = 1;
+      if (len < 1) len = 1;
       t._manipulator.DeleteChars(
         t._manipulator.CaretColumn,
         len,

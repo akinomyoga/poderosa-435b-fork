@@ -1098,7 +1098,7 @@ namespace Poderosa.Document
 					}
 				}
 				else {
-					_text[_caretColumn-1] = ' ';
+					if (_caretColumn > 0) _text[_caretColumn - 1] = ' ';
 					_text[_caretColumn]   = ch;
 					_decorations[_caretColumn] = dec;
 					if(GLine.CalcDisplayLength(ch)==2) {
