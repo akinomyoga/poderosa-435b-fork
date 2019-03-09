@@ -674,23 +674,25 @@ namespace mwg.RosaTerm{
     }
     // CSI X: ECH
     static void ProcECH(RosaTerminal t){
-      int n=t.cutter.CSIArguments.GetOrDefault(0,1);
-      int oc=t._manipulator.CaretColumn;
+      int n = t.cutter.CSIArguments[0];
+      if (n < 0) n = 1;
+      int oc = t._manipulator.CaretColumn;
 
-      int cM=oc+n;
-      if(cM>t._manipulator.BufferSize)cM=t._manipulator.BufferSize;
-      for(int c=oc;c<cM;c++)
-        t._manipulator.PutChar(' ',t._currentdecoration);
+      int cM = oc + n;
+      if (cM > t._manipulator.BufferSize) cM = t._manipulator.BufferSize;
+      for (int c = oc; c < cM; c++)
+        t._manipulator.PutChar(' ', t._currentdecoration);
 
-      t._manipulator.CaretColumn=oc;
+      t._manipulator.CaretColumn = oc;
     }
     // CSI P: DCH
     static void ProcDCH(RosaTerminal t){
+      int len = t.cutter.CSIArguments[0];
+      if (len < 0) len = 1;
       t._manipulator.DeleteChars(
         t._manipulator.CaretColumn,
-        t.cutter.CSIArguments.GetOrDefault(0,1),
-        t._currentdecoration
-        );
+        len,
+        t._currentdecoration);
     }
     //--------------------------------------------------------------------------
     // CSI J

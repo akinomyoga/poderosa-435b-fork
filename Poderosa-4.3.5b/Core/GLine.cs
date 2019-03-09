@@ -1255,19 +1255,29 @@ namespace Poderosa.Document
 				if (fillDec.IsDefault) {
 					fillDec = null;
 					fillChar = '\0';
-				}
-				else {
+				} else {
 					fillChar = ' ';
 				}
-			}
-			else {
+			} else {
 				fillChar = '\0';
 			}
+
+      bool preceding_widechar_pad = true;
 			for(int i = start; i<_text.Length; i++) {
 				int j = i + count;
-				if(j < _text.Length) {
-					_text[i] = _text[j];
-					_decorations[i] = _decorations[j];
+				if (j < _text.Length) {
+          char src_ch = _text[j];
+          TextDecoration src_dec = _decorations[j];
+          if (preceding_widechar_pad) {
+            if (src_ch == GLine.WIDECHAR_PAD) {
+              src_ch = ' ';
+              src_dec = fillDec;
+            } else {
+              preceding_widechar_pad = false;
+            }
+          }
+          _text[i] = src_ch;
+					_decorations[i] = src_dec;
 				}
 				else {
 					_text[i] = fillChar;
